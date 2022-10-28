@@ -1,39 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/const/theme_data.dart';
+import 'package:sporent/provider/dark_theme_provider.dart';
 import 'package:sporent/screens/home_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // const MyApp({super.key});
+  DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+
+  void getCurrentAppTheme() async {
+    themeChangeProvider.setDarkTheme = await themeChangeProvider.darkThemePref.getTheme();
+  }
+
+  void initState(){
+    getCurrentAppTheme();
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    bool isDark = true;
-    return MaterialApp(
-      title: 'Sporent',
-      debugShowCheckedModeBanner: false,
-      // theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-      //   primarySwatch: Colors.blue,
-      // ),
-      theme: Styles.themeData(isDark,context),
-      // theme: ThemeData(
-      //   scaffoldBackgroundColor: Colors.white,
-      //   primarySwatch: Colors.red
-      // ),
-      home: const HomeScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_){
+          return themeChangeProvider;
+        })
+      ],
+      child: Consumer<DarkThemeProvider>(
+        builder: (context , themeProvider , child) {
+
+          return MaterialApp(
+            title: 'Sporent',
+            debugShowCheckedModeBanner: false,
+
+            theme: Styles.themeData(themeChangeProvider.getDarkTheme,context),
+            home: const HomeScreen(),
+          );
+        }
+      ),
     );
   }
 }
