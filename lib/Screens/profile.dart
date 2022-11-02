@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:skripsi_sporent/change-password.dart';
 import 'firebase_options.dart';
 import 'package:skripsi_sporent/edit-personal-info.dart';
 
@@ -219,10 +220,16 @@ class DetailPassword extends StatelessWidget {
       decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
       child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const EditPassword(),
+              ),
+            );
+          },
           child: Row(
             children: [
-              const SizedBox(width: 60),
+              const SizedBox(width: 59),
               Padding(
                 padding: const EdgeInsets.only(right: 16),
                 child: Column(
@@ -256,7 +263,7 @@ class DetailHelp extends StatelessWidget {
           onPressed: () {},
           child: Row(
             children: [
-              const SizedBox(width: 60),
+              const SizedBox(width: 55),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
                 child: Column(
