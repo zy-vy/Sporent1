@@ -8,7 +8,7 @@
             "name": "skripsi_sporent",
             "request": "launch",
             "type": "dart",
-            "program": "lib/profile.dart"
+            "program": "lib/screens/profile.dart"
         },
         {
             "name": "skripsi_sporent (profile mode)",

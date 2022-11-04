@@ -4,8 +4,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:skripsi_sporent/Screens/color.dart';
 
-class EditPassword extends StatelessWidget {
+class EditPassword extends StatefulWidget {
   const EditPassword({super.key});
+
+  @override
+  State<EditPassword> createState() => _EditPasswordState();
+}
+
+class _EditPasswordState extends State<EditPassword> {
+  bool hidePassword = true;
+  bool hidePasswordConfirm = true;
+  TextEditingController passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +40,52 @@ class EditPassword extends StatelessWidget {
             const SizedBox(height: 20),
             Text("Create a new strong password for your email",
                 style: TextStyle(fontSize: 13, color: HexColor("979797"))),
-            const SizedBox(height: 30),
-            const TextField(
+            const SizedBox(height: 15),
+            TextField(
+              controller: passController,
+              obscureText: hidePassword,
               decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
+                  border: const UnderlineInputBorder(),
                   labelText: 'Enter new password',
+                  suffixIcon: IconButton(
+                      padding: const EdgeInsets.all(0),
+                      onPressed: () {
+                        setState(() {
+                          hidePassword = !hidePassword;
+                        });
+                      },
+                      icon: FaIcon(
+                          hidePassword == true
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.eyeSlash,
+                          size: 20)),
                   errorText: "Minimum 8 characters",
-                  errorBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black
-                    ),
-                  )),
-                  obscureText: true,
+                  errorStyle: const TextStyle(color: Colors.grey),
+                  errorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedErrorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueAccent)) 
+                  ),
             ),
-            const SizedBox(height: 30),
-            const TextField(
+            const SizedBox(height: 20),
+            TextField(
+              obscureText: hidePasswordConfirm,
               decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Confirm new password',),
-                  obscureText: true,
+                  border: const UnderlineInputBorder(),
+                  labelText: 'Confirm new password',
+                  suffixIcon: IconButton(
+                      padding: const EdgeInsets.all(0),
+                      onPressed: () {
+                        setState(() {
+                          hidePasswordConfirm = !hidePasswordConfirm;
+                        });
+                      },
+                      icon: FaIcon(
+                          hidePasswordConfirm == true
+                              ? FontAwesomeIcons.eye
+                              : FontAwesomeIcons.eyeSlash,
+                          size: 20))),
             ),
             const SizedBox(height: 40),
             SizedBox(
@@ -59,7 +95,6 @@ class EditPassword extends StatelessWidget {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: HexColor("4164DE"),
-                    // padding: const EdgeInsets.only(right: 300, bottom: 40)
                   ),
                   child: const Text("Confirm", textAlign: TextAlign.center),
                 ))
@@ -68,4 +103,11 @@ class EditPassword extends StatelessWidget {
       ),
     );
   }
+}
+
+String? validatePassword(String value) {
+  if (!(value.length > 8)) {
+    return "Password is too short, should more than 8 characters";
+  }
+  return null;
 }

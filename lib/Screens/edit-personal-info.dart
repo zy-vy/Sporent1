@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:skripsi_sporent/edit-phone.dart';
-import 'package:skripsi_sporent/edit-username.dart';
-import 'firebase_options.dart';
-import 'package:skripsi_sporent/color.dart';
-import 'package:skripsi_sporent/edit-name.dart';
+import 'package:skripsi_sporent/screens/edit-phone.dart';
+import 'package:skripsi_sporent/screens/edit-username.dart';
+import '/firebase_options.dart';
+import 'package:skripsi_sporent/screens/color.dart';
+import 'package:skripsi_sporent/screens/edit-name.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:skripsi_sporent/edit-email.dart';
-import 'package:skripsi_sporent/edt-gender.dart';
-import 'package:skripsi_sporent/edit-birhdate.dart';
+import 'package:skripsi_sporent/screens/edit-email.dart';
+import 'package:skripsi_sporent/screens/edt-gender.dart';
+import 'package:skripsi_sporent/screens/edit-birhdate.dart';
 
 class EditPersonalInfo extends StatelessWidget {
   const EditPersonalInfo({super.key});

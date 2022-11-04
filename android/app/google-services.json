@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "741097230737",
-    "project_id": "sporent-99abd",
-    "storage_bucket": "sporent-99abd.appspot.com"
+    "project_number": "741669962898",
+    "project_id": "sporent-80b28",
+    "storage_bucket": "sporent-80b28.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:741097230737:android:48137f634c1c5fe10f8a30",
+        "mobilesdk_app_id": "1:741669962898:android:97d032ad4891307e67924b",
         "android_client_info": {
           "package_name": "com.example.skripsi_sporent"
         }
       },
       "oauth_client": [
         {
-          "client_id": "741097230737-qrvs5che2aj4cp2089vkaksd19o0ljls.apps.googleusercontent.com",
+          "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDb0y41mIsKwUgVVyMQRVq_fqUyahtsCEA"
+          "current_key": "AIzaSyA2x1V7uqc0TEoejpFFr3dNj-KPvc4L7-k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "741097230737-qrvs5che2aj4cp2089vkaksd19o0ljls.apps.googleusercontent.com",
+              "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "741097230737-pfjvu94hgafmkkkgdt7ekdbo11aq669i.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.sporent"
-              }
             }
           ]
         }
@@ -43,35 +36,36 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:741097230737:android:efa8c7a75ce3b2c80f8a30",
+        "mobilesdk_app_id": "1:741669962898:android:a2e49a38b60e84d867924b",
         "android_client_info": {
-          "package_name": "com.example.sporent"
+          "package_name": "com.sporent.sporent"
         }
       },
       "oauth_client": [
         {
-          "client_id": "741097230737-qrvs5che2aj4cp2089vkaksd19o0ljls.apps.googleusercontent.com",
+          "client_id": "741669962898-0t825qs551snn7k89tl3f7afk76bf336.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sporent.sporent",
+            "certificate_hash": "c8943a5c33f27e67bc48a84c43243af9e9cb1e12"
+          }
+        },
+        {
+          "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDb0y41mIsKwUgVVyMQRVq_fqUyahtsCEA"
+          "current_key": "AIzaSyA2x1V7uqc0TEoejpFFr3dNj-KPvc4L7-k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "741097230737-qrvs5che2aj4cp2089vkaksd19o0ljls.apps.googleusercontent.com",
+              "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "741097230737-pfjvu94hgafmkkkgdt7ekdbo11aq669i.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.sporent"
-              }
             }
           ]
         }

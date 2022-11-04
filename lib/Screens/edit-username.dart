@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'firebase_options.dart';
-import 'package:skripsi_sporent/color.dart';
+import '/firebase_options.dart';
+import 'package:skripsi_sporent/screens/color.dart';
 
 class EditUsername extends StatelessWidget {
   const EditUsername({super.key});
@@ -17,7 +17,7 @@ class EditUsername extends StatelessWidget {
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
             child: const Text("Edit Username"),
           ),  
-          backgroundColor: hexStringToColor("4164DE"),
+          backgroundColor: HexColor("4164DE"),
         ),
         body: Padding(
       padding: const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),

@@ -3,8 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'firebase_options.dart';
-import 'package:skripsi_sporent/color.dart';
+import 'package:skripsi_sporent/Screens/color.dart';
 
 class EditBirthdate extends StatefulWidget {
   const EditBirthdate({super.key});
