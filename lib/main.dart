@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sporent/screens/bottom_bar.dart';
+import 'package:sporent/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,12 +14,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'SPorent',
       theme: ThemeData(
 
         primarySwatch: Colors.blue
       ),
-      home: ButtomBarScreen(),
+      home: const HomeScreen(),
     );
   }
 }

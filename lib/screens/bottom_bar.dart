@@ -38,7 +38,7 @@ class _ButtomBarScreenState extends State<ButtomBarScreen> {
             ),
             BottomNavigationBarItem(
                 icon: Icon(IconlyLight.category),
-                label: "Category"
+                label: "Transaction"
             ),
           ]),
     );
