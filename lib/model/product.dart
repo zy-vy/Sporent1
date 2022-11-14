@@ -16,4 +16,5 @@ class Product {
       json['img']
     );
   }
+
 }

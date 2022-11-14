@@ -15,7 +15,6 @@ class ProductRecommendation extends StatefulWidget {
 class _ProductRecommendationState extends State<ProductRecommendation> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  List<Product> listProduct = [];
 
   @override
   void initState() {

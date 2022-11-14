@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:sporent/screens/category_screen.dart';
 import 'package:sporent/screens/test_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue
       ),
-      home: const HomeScreen(),
+      home: const CategoryScreen(),
     );
   }
 }
