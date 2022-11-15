@@ -7,42 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:741669962898:android:97d032ad4891307e67924b",
-        "android_client_info": {
-          "package_name": "com.example.skripsi_sporent"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA2x1V7uqc0TEoejpFFr3dNj-KPvc4L7-k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "741669962898-9tbp0k2e7tpui6n04lnfq456tda9mtpi.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.sporent.ios"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:741669962898:android:a2e49a38b60e84d867924b",
         "android_client_info": {
           "package_name": "com.sporent.sporent"
