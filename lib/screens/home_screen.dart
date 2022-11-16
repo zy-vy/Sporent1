@@ -30,10 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.fromLTRB(_size.width/25, _size.height/20, _size.width/25, 0),
             child: Column(
               children: [
-                SearchBarProduct(),
-                PopularCategory(),
+                const SearchBarProduct(),
+                const PopularCategory(),
                 HeadingRecommend(size: _size),
-                ProductRecommendation()
+                const ProductRecommendation()
 
               ],
             ),

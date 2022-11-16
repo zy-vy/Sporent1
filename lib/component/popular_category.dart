@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sporent/screens/category_screen.dart';
 
 class PopularCategory extends StatefulWidget {
   const PopularCategory({Key? key}) : super(key: key);
@@ -22,22 +23,7 @@ class _PopularCategoryState extends State<PopularCategory> {
       ),
       child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: _size.width / 30, vertical: _size.height / 75),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text("Popular Categories",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20)),
-                Text(
-                  "see all",
-                  style: TextStyle(color: Colors.grey),
-                )
-              ],
-            ),
-          ),
+          Heading(size: _size),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
@@ -110,6 +96,42 @@ class _PopularCategoryState extends State<PopularCategory> {
                   ],
                 ),
               ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class Heading extends StatelessWidget {
+  const Heading({
+    Key? key,
+    required Size size,
+  }) : _size = size, super(key: key);
+
+  final Size _size;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+          horizontal: _size.width / 30, vertical: _size.height / 75),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children:  [
+          const Text("Popular Categories",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 20)),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder:(context) => const CategoryScreen(), ));
+            },
+
+            child: const Text(
+              "see all",
+              style: TextStyle(color: Colors.grey),
             ),
           )
         ],
