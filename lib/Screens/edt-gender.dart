@@ -15,7 +15,7 @@ class EditGender extends StatelessWidget {
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Edit E-mail"),
+            child: const Text("Edit Gender"),
           ),  
           backgroundColor: hexStringToColor("4164DE"),
         ),
