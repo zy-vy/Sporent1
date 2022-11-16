@@ -17,7 +17,7 @@ class _CategoryListState extends State<CategoryList> {
   @override
   void initState() {
     // TODO: implement initState
-    test();
+    // test();
     super.initState();
   }
 
@@ -45,34 +45,42 @@ class _CategoryListState extends State<CategoryList> {
       child: StreamBuilder(
         stream: firestore.collection('category').snapshots(),
         builder: (context, snapshot) {
-          var itemCount = snapshot.data!.docs.length;
-          return GridView.builder(
-            itemCount: itemCount,
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          else {
+            var itemCount = snapshot.data!.docs.length;
+            return GridView.builder(
+              itemCount: itemCount,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
+                crossAxisCount: 4,
 
-            childAspectRatio: 1.0,
-          ),
-          itemBuilder: (context, index) {
+                childAspectRatio: 1.0,
+              ),
+              itemBuilder: (context, index) {
 
                 Category category = Category.fromDocument( snapshot.data!.docs[index].data());
-             return
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ImageIcon(AssetImage("assets/icons/${category.olahraga}.png")),
-                      Text(category.olahraga)
-                    ],
+                return
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ImageIcon(AssetImage("assets/icons/${category.olahraga}.png")),
+                        Text(category.olahraga)
+                      ],
 
-                  ),
-                );
+                    ),
+                  );
 
 
-          },
+              },
 
-          );
+            );
+          }
+
         },
       ),
     );
