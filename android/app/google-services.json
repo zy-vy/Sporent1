@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "741669962898",
+    "project_id": "sporent-80b28",
+    "storage_bucket": "sporent-80b28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741669962898:android:a2e49a38b60e84d867924b",
+        "android_client_info": {
+          "package_name": "com.sporent.sporent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741669962898-0t825qs551snn7k89tl3f7afk76bf336.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sporent.sporent",
+            "certificate_hash": "c8943a5c33f27e67bc48a84c43243af9e9cb1e12"
+          }
+        },
+        {
+          "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2x1V7uqc0TEoejpFFr3dNj-KPvc4L7-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "741669962898-9tbp0k2e7tpui6n04lnfq456tda9mtpi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sporent.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
