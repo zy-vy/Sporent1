@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:sporent/screens/profile.dart';
 import 'package:sporent/screens/cart_screen.dart';
 import 'package:sporent/screens/home_screen.dart';
 import 'package:sporent/screens/profile_screen.dart';
@@ -18,7 +19,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     const HomeScreen(),
     const TransactionScreen(),
     const CartScreen(),
-    const ProfileScreen()
+    const TopProfile()
   ];
 
   void selectedPage(int index){

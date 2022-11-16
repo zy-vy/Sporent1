@@ -39,6 +39,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   cloud_firestore: ^4.0.5
   firebase_core: ^2.2.0
+  firebase_storage: ^11.0.2
+  font_awesome_flutter: ^10.2.1
+  hexcolor: ^3.0.1
+  intl_phone_field: ^3.1.0
+  intl: ^0.17.0
+  image_picker: ^0.8.6
+  google_fonts: ^3.0.1
+  firebase_auth: ^4.1.1
+  fluttertoast: ^8.1.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +75,7 @@ flutter:
   assets:
      - assets/icons/
      - assets/images/
+     - images/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
