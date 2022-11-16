@@ -18,8 +18,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   final List pageList = [
     const HomeScreen(),
     const TransactionScreen(),
-    const CartScreen(),
-    const TopProfile()
+    const CartPage(),
+    const ProfilePage()
   ];
 
   void selectedPage(int index){
