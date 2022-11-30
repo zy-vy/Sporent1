@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sporent/model/category.dart';
+import 'package:sporent/screens/type_screen.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({Key? key}) : super(key: key);
@@ -50,6 +52,7 @@ class _CategoryListState extends State<CategoryList> {
               child: CircularProgressIndicator(),
             );
           }
+
           else {
             var itemCount = snapshot.data!.docs.length;
             return GridView.builder(
@@ -61,17 +64,22 @@ class _CategoryListState extends State<CategoryList> {
               ),
               itemBuilder: (context, index) {
 
-                Category category = Category.fromDocument( snapshot.data!.docs[index].data());
+                Category category = Category.fromDocument( snapshot.data!.docs[index].id, snapshot.data!.docs[index].data());
                 return
-                  Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ImageIcon(AssetImage("assets/icons/${category.olahraga}.png")),
-                        Text(category.olahraga)
-                      ],
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => TypeScreen(category: category),));
+                    },
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ImageIcon(AssetImage("assets/icons/${category.olahraga}.png")),
+                          Text(category.olahraga??"")
+                        ],
 
+                      ),
                     ),
                   );
 

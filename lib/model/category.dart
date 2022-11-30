@@ -1,17 +1,18 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Category {
-  String olahraga;
+  String? id;
+  String? olahraga;
 
-  Category(this.olahraga);
+  Category(this.id, this.olahraga);
 
-  static Category fromDocument(Map<String, dynamic> data) {
-    return Category(data['olahraga']);
+  static Category fromDocument(String id, Map<String, dynamic> data) {
+    return Category( id,data['olahraga']);
   }
 
-  static List<Category> fromSnapshot(List categorySnapshot) {
-    return categorySnapshot.map((e) {
-      return Category.fromDocument(e);
+  static List<Category> fromSnapshot(List<QueryDocumentSnapshot<Map<String, dynamic>>> snapshots) {
+    return snapshots.map((e) {
+      return Category.fromDocument(e.id,e.data());
     }).toList();
   }
 }
