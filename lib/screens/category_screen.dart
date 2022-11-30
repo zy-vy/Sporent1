@@ -11,7 +11,7 @@ class CategoryScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         margin: EdgeInsets.fromLTRB(_size.width/25, _size.height/20, _size.width/25, 0),
-          child: CategoryList()),
+          child: const CategoryList()),
     );
   }
 }

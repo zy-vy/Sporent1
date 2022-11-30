@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../model/product.dart';
+import 'package:sporent/component/product_gridview.dart';
 
 class ProductRecommendation extends StatefulWidget {
   const ProductRecommendation({Key? key}) : super(key: key);
@@ -29,15 +28,15 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: _size.height / 100),
-      height: _size.height * 0.6,
+      height: _size.height * 0.49,
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(15),
       ),
       child: Container(
-          decoration: BoxDecoration(border: Border.all()),
+          // decoration: BoxDecoration(border: Border.all()),
           padding: EdgeInsets.symmetric(
-              horizontal: _size.width / 30, vertical: _size.height / 75),
+              horizontal: _size.width / 30, vertical: _size.width / 30),
           child: StreamBuilder(
               stream: firestore.collection('product').snapshots(),
               builder: (context, snapshot) {
@@ -62,28 +61,11 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                           snapshot.data?.docs;
                       inspect(listDocs);
                       int? productCount = listDocs?.length;
-                      return GridView.builder(
-                          physics: const ScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          controller: ScrollController(),
-                          shrinkWrap: true,
-                          itemCount: productCount,
-                          gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10),
-                          itemBuilder: (context, index) {
-                            // Product p = Product.fromJson(listDocs![index].data());
-                            return Center(
-                              child: Text(
-                                  "name: ${listDocs![index].data().toString()}"),
-                            );
-                          });
+                      return ProductGridview(productCount: productCount, listDocs: listDocs);
                     }
 
                   case ConnectionState.done:
-                    return new Text('Streaming is done');
+                    return const Text('Streaming is done');
                 }
               })
 
@@ -114,10 +96,10 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
     firestore.collection('product').snapshots().forEach((element) {
       log("=== elements: ${element.toString()}");
       inspect(element);
-      element.docs.forEach((element1) {
+      for (var element1 in element.docs) {
         log("=== doc element: ${element1.toString()}");
         inspect(element1);
-      });
+      }
     });
   }
 
@@ -127,3 +109,5 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
     inspect(result);
   }
 }
+
+
