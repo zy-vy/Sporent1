@@ -17,6 +17,8 @@ class _DepositInformationState extends State<DepositInformation> {
   TextEditingController dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -27,22 +29,19 @@ class _DepositInformationState extends State<DepositInformation> {
           backgroundColor: hexStringToColor("4164DE"),
         ),
         body: Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 35),
+            padding: EdgeInsets.only(top: _size.height/30),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
+                  padding: EdgeInsets.only(bottom: _size.height/30),
                   child: DecoratedBox(
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: HexColor("CCCCCC")))),
                       child: SizedBox(
-                        height: 200,
+                        height: _size.height/4.5,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 35,
-                          ),
+                          padding: EdgeInsets.symmetric(horizontal: _size.width/20),
                           child: TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(
@@ -57,12 +56,10 @@ class _DepositInformationState extends State<DepositInformation> {
                                   children: [
                                     Image.asset(
                                       "images/tennis-racket.png",
-                                      width: 150,
-                                      height: 150,
+                                      width: _size.width/3,
+                                      height: _size.height/5.8,
                                     ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
+                                    SizedBox(width: _size.width/15),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -73,9 +70,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                               fontSize: 18,
                                               color: Colors.black),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                        SizedBox(height: _size.height/90),
                                         const Text(
                                           "Raket Tenis",
                                           style: TextStyle(
@@ -83,9 +78,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                        SizedBox(height: _size.height/90),
                                         Text(
                                           "Status: In Progress",
                                           style: TextStyle(
@@ -93,18 +86,14 @@ class _DepositInformationState extends State<DepositInformation> {
                                               fontWeight: FontWeight.bold,
                                               color: HexColor("416DDE")),
                                         ),
-                                        const SizedBox(
-                                          height: 12,
-                                        ),
+                                        SizedBox(height: _size.height/95),
                                         Text(
                                           "Total Deposit:",
                                           style: TextStyle(
                                               fontSize: 18,
                                               color: HexColor("999999")),
                                         ),
-                                        const SizedBox(
-                                          height: 7,
-                                        ),
+                                        SizedBox(height: _size.height/98),
                                         const Text(
                                           "Rp 1.500.000",
                                           style: TextStyle(
@@ -119,15 +108,15 @@ class _DepositInformationState extends State<DepositInformation> {
                       )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
+                  padding: EdgeInsets.only(bottom: _size.height/30),
                   child: DecoratedBox(
                       decoration: BoxDecoration(
                           border: Border(
                               bottom: BorderSide(color: HexColor("CCCCCC")))),
                       child: SizedBox(
-                        height: 200,
+                        height: _size.height/4.5,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 35),
+                          padding: EdgeInsets.symmetric(horizontal: _size.width/20),
                           child: TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(
@@ -142,12 +131,10 @@ class _DepositInformationState extends State<DepositInformation> {
                                   children: [
                                     Image.asset(
                                       "images/tennis-racket.png",
-                                      width: 150,
-                                      height: 150,
+                                      width: _size.width/3,
+                                      height: _size.height/5.8,
                                     ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
+                                    SizedBox(width: _size.width/15),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -158,9 +145,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                               fontSize: 18,
                                               color: Colors.black),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                        SizedBox(height: _size.height/90),
                                         const Text(
                                           "Raket Tenis",
                                           style: TextStyle(
@@ -168,9 +153,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                        SizedBox(height: _size.height/90),
                                         Text(
                                           "Status: In Progress",
                                           style: TextStyle(
@@ -178,18 +161,14 @@ class _DepositInformationState extends State<DepositInformation> {
                                               fontWeight: FontWeight.bold,
                                               color: HexColor("416DDE")),
                                         ),
-                                        const SizedBox(
-                                          height: 12,
-                                        ),
+                                        SizedBox(height: _size.height/95),
                                         Text(
                                           "Total Deposit:",
                                           style: TextStyle(
                                               fontSize: 18,
                                               color: HexColor("999999")),
                                         ),
-                                        const SizedBox(
-                                          height: 7,
-                                        ),
+                                        SizedBox(height: _size.height/98),
                                         const Text(
                                           "Rp 1.500.000",
                                           style: TextStyle(
@@ -202,7 +181,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                   ])),
                         ),
                       )),
-                )
+                ),
               ],
             )));
   }

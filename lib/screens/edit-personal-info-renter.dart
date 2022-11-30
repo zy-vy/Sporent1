@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sporent/screens/edit-description-renter.dart';
 import 'package:sporent/screens/edit-location.dart';
-import 'package:sporent/screens/edit-name-renter.dart';
+import 'package:sporent/screens/edit-username-renter.dart';
 import 'package:sporent/screens/edit-phone.dart';
 import 'package:sporent/screens/edit-username.dart';
 import '/firebase_options.dart';
 import 'package:sporent/screens/color.dart';
-import 'package:sporent/screens/edit-name.dart';
+import 'package:sporent/screens/edit-username.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/screens/edit-email.dart';
 import 'package:sporent/screens/edt-gender.dart';
@@ -19,6 +19,8 @@ class EditPersonalInfoRenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -37,8 +39,10 @@ class ProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+      padding: EdgeInsets.symmetric(vertical: _size.height/20, horizontal: _size.width/20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,12 +50,12 @@ class ProfileInfo extends StatelessWidget {
             "Profile Info",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: _size.height/50),
           Row(
             children: [
               const Text("Name",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 106),
+              SizedBox(width: _size.width/5),
               const Expanded(
                   child: Text("Nasrul Ramadhan",
                       style: TextStyle(
@@ -62,7 +66,7 @@ class ProfileInfo extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const EditNameRenter(),
+                      builder: (context) => const EditUsernameRenter(),
                     ),
                   );
                 },
@@ -71,12 +75,12 @@ class ProfileInfo extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: _size.height/75),
           Row(
             children: [
               const Text("Location",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 85),
+              SizedBox(width: _size.width/6.8),
               Expanded(
                   child: Text("Set Location",
                       style: TextStyle(
@@ -96,12 +100,12 @@ class ProfileInfo extends StatelessWidget {
               )
             ],
           ),
-           const SizedBox(height: 10),
+          SizedBox(height: _size.height/75),
           Row(
             children: [
               const Text("Description",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 64),
+              SizedBox(width: _size.width/10.5),
               Expanded(
                   child: Text("Input description",
                       style: TextStyle(

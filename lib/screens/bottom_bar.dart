@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:sporent/screens/profile.dart';
-import 'package:sporent/screens/cart_screen.dart';
+import 'package:sporent/screens/cart.dart';
 import 'package:sporent/screens/home_screen.dart';
-import 'package:sporent/screens/profile_screen.dart';
 import 'package:sporent/screens/transaction_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {

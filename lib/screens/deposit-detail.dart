@@ -16,6 +16,8 @@ class _DepositDetailState extends State<DepositDetail> {
   TextEditingController dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -26,14 +28,14 @@ class _DepositDetailState extends State<DepositDetail> {
           backgroundColor: hexStringToColor("4164DE"),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 30, bottom: 35),
+          padding: EdgeInsets.only(top: _size.height/30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 15),
-                child: Text(
+               Padding(
+                padding: EdgeInsets.only(left: _size.width/20, bottom: _size.height/80),
+                child: const Text(
                   "Status: In Progress",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
@@ -43,7 +45,7 @@ class _DepositDetailState extends State<DepositDetail> {
                 color: HexColor("E0E0E0"),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, bottom: 30),
+                  padding: EdgeInsets.only(top: _size.height/70, left: _size.width/20, bottom: _size.height/60),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -55,15 +57,15 @@ class _DepositDetailState extends State<DepositDetail> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: _size.height/50),
                         Row(
                           children: [
                             Image.asset(
                               "images/tennis-racket.png",
-                              width: 150,
-                              height: 150,
+                              width: _size.width/3,
+                              height: _size.height/5.8,
                             ),
-                            const SizedBox(width: 30),
+                            SizedBox(width: _size.width/15),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -74,24 +76,18 @@ class _DepositDetailState extends State<DepositDetail> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                SizedBox(height: _size.height/80),
                                 const Text(
                                   "Time: 2 hour",
                                   style: TextStyle(fontSize: 15),
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                SizedBox(height: _size.height/60),
                                 Text(
                                   "Total Deposit:",
                                   style: TextStyle(
                                       fontSize: 18, color: HexColor("999999")),
                                 ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
+                                SizedBox(height: _size.height/95),
                                 const Text(
                                   "Rp 1.500.000",
                                   style: TextStyle(
@@ -105,9 +101,9 @@ class _DepositDetailState extends State<DepositDetail> {
                         ),
                       ])),
               Divider(thickness: 2, color: HexColor("E0E0E0")),
-              const Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 15, top: 20),
-                child: Text(
+              Padding(
+                padding: EdgeInsets.only(top: _size.height/50, left: _size.width/20, bottom: _size.height/60),
+                child: const Text(
                   "Bank Information",
                   style: TextStyle(
                       fontSize: 20,
@@ -116,31 +112,31 @@ class _DepositDetailState extends State<DepositDetail> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10),
+                padding: EdgeInsets.only(left: _size.width/20, top: _size.height/90),
                 child: Row(
-                  children: const [
-                      Text(
+                  children: [
+                      const Text(
                       "Bank Name",
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.normal),
                     ),
-                    SizedBox(width: 81),
-                    Text("BCA",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    SizedBox(width: _size.width/5),
+                    const Text("BCA",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     )
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 20),
+                padding: EdgeInsets.only(left: _size.width/20, top: _size.height/50),
                 child: Row(
-                  children: const [
-                      Text(
+                  children: [
+                      const Text(
                       "Account Number",
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.normal),
                     ),
-                    SizedBox(width: 40),
-                    Text("0211276484758",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    SizedBox(width: _size.width/10),
+                    const Text("0211276484758",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     )
                   ],
                 ),

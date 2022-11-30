@@ -5,18 +5,20 @@ import 'package:hexcolor/hexcolor.dart';
 import '/firebase_options.dart';
 import 'package:sporent/screens/color.dart';
 
-class EditNameRenter extends StatefulWidget {
-  const EditNameRenter({super.key});
+class EditUsernameRenter extends StatefulWidget {
+  const EditUsernameRenter({super.key});
 
   @override
-  State<EditNameRenter> createState() => _EditNameRenterState();
+  State<EditUsernameRenter> createState() => _EditUsernameRenterState();
 }
 
-class _EditNameRenterState extends State<EditNameRenter> {
+class _EditUsernameRenterState extends State<EditUsernameRenter> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -31,32 +33,32 @@ class _EditNameRenterState extends State<EditNameRenter> {
           key: _formKey,
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+                EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Edit Your Name",
+                  "Edit Your Username",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 20),
-                Text("Enter a name for your apps",
+                SizedBox(height: _size.height/50),
+                Text("Enter a username for your apps",
                     style: TextStyle(fontSize: 13, color: HexColor("979797"))),
-                const SizedBox(height: 30),
+                SizedBox(height: _size.height/30),
                 TextFormField(
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Enter your name',),
+                      labelText: 'Enter your username',),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Name must not be empty";
+                      return "Username must not be empty";
                     }
                   },
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: _size.height/20),
                 SizedBox(
-                    width: 370,
-                    height: 55,
+                    width: _size.width,
+                    height: _size.height/15,
                     child: ElevatedButton(
                       onPressed: () {
                         final isValidForm = _formKey.currentState!.validate();

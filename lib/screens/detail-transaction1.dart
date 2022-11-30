@@ -14,6 +14,8 @@ class DetailTransaction1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -24,16 +26,13 @@ class DetailTransaction1 extends StatelessWidget {
         backgroundColor: hexStringToColor("4164DE"),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 30, bottom: 35),
+        padding: EdgeInsets.symmetric(vertical: _size.height/40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 35,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: _size.width/18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +41,7 @@ class DetailTransaction1 extends StatelessWidget {
                     "Booking Period",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/40),
                   Row(
                     children: [
                       Column(
@@ -61,9 +60,9 @@ class DetailTransaction1 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(width: 50),
+                      SizedBox(width: _size.width/10),
                       const FaIcon(FontAwesomeIcons.arrowRight),
-                      const SizedBox(width: 50),
+                      SizedBox(width: _size.width/10),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,14 +84,11 @@ class DetailTransaction1 extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: _size.height/70),
             Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-            const SizedBox(height: 10),
+            SizedBox(height: _size.height/40),
             Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 35,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: _size.width/18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,15 +97,15 @@ class DetailTransaction1 extends StatelessWidget {
                     "Detail Product",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/40),
                   Row(
                     children: [
                       Image.asset(
                         "images/tennis-racket.png",
-                        height: 150,
-                        width: 150,
+                        height: _size.height/6,
+                        width: _size.width/3,
                       ),
-                      const SizedBox(width: 20),
+                      SizedBox(width: _size.width/20),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -118,13 +114,13 @@ class DetailTransaction1 extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: _size.height/80),
                           const Text(
                             "Time: 2 Hour",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.normal),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: _size.height/80),
                           Text(
                             "Total Payment",
                             style: TextStyle(
@@ -132,7 +128,7 @@ class DetailTransaction1 extends StatelessWidget {
                                 fontWeight: FontWeight.normal,
                                 color: HexColor("A6A6A6")),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: _size.height/90),
                           const Text(
                             "Rp 300.000",
                             style: TextStyle(
@@ -145,14 +141,11 @@ class DetailTransaction1 extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: _size.height/30),
             Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-            const SizedBox(height: 10),
+            SizedBox(height: _size.height/50),
             Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 30,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: _size.width/18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +154,7 @@ class DetailTransaction1 extends StatelessWidget {
                     "Delivery Information",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/40),
                   Row(
                     children: const [
                       Expanded(
@@ -178,7 +171,7 @@ class DetailTransaction1 extends StatelessWidget {
                       ))
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/40),
                   Row(
                     children: const [
                       Expanded(
@@ -195,7 +188,7 @@ class DetailTransaction1 extends StatelessWidget {
                       ))
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,11 +207,11 @@ class DetailTransaction1 extends StatelessWidget {
                       ))
                     ],
                   ),
-                  const SizedBox(height: 50),
+                  SizedBox(height: _size.height/20),
                   Center(
                     child: SizedBox(
-                      height: 70,
-                      width: 350,
+                      height: _size.height/12,
+                      width: _size.width,
                       child: ElevatedButton(
                           onPressed: () {
                              Navigator.of(context).push(MaterialPageRoute(

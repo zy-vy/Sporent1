@@ -17,18 +17,20 @@ class ManageProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Edit Name"),
+            child: const Text("Manage Product"),
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
         body: Padding(
           padding:
-              const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+              EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TextButton(
@@ -46,14 +48,14 @@ class ManageProduct extends StatelessWidget {
                     child: const FaIcon(FontAwesomeIcons.plus,
                         color: Colors.white),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: _size.width/50),
                   const Text("Add New Product",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black))
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: _size.height/40),
             StreamBuilder(
                 stream: product(),
                 builder: ((context, snapshot) {
