@@ -51,25 +51,28 @@ class _PopularCategoryState extends State<PopularCategory> {
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => TypeScreen(category: category),));
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: ImageIcon(
-                               AssetImage("assets/icons/${category.olahraga}.png"),
+              child: Container(
+                width: _size.width/5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: ImageIcon(
+                                 AssetImage("assets/icons/${category.olahraga}.png"),
 
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(child:  Text("${category.olahraga}")),
-                          )
-                        ],
-                      ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Center(child:  Text("${category.olahraga}")),
+                            )
+                          ],
+                        ),
+              ),
             );
           },
           );
