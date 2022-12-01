@@ -18,6 +18,8 @@ class _HelpCenterState extends State<HelpCenter> {
   TextEditingController dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -29,13 +31,13 @@ class _HelpCenterState extends State<HelpCenter> {
       ),
       body: Padding(
         padding:
-            const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+            EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
           const Text("What can we help you?", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
+          SizedBox(height: _size.height/60),
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
@@ -60,7 +62,7 @@ class _HelpCenterState extends State<HelpCenter> {
               ) 
             ),
           ),
-           const SizedBox(height: 15),
+          SizedBox(height: _size.height/60),
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
@@ -85,7 +87,7 @@ class _HelpCenterState extends State<HelpCenter> {
               ) 
             ),
           ),
-           const SizedBox(height: 15),
+          SizedBox(height: _size.height/60),
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(

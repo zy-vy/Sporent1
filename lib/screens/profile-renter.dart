@@ -21,7 +21,10 @@ class RenterProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             centerTitle: false,
             title: Transform(
@@ -32,9 +35,21 @@ class RenterProfile extends StatelessWidget {
             ),
             backgroundColor: Colors.white),
         backgroundColor: Colors.white,
-        body: Stack(
-          children: const [TopProfile()],
-        ),
+        body: Center(
+          child: Padding(
+              padding: EdgeInsets.only(top: _size.height / 16),
+              child: Column(
+                  children: const [
+                    TopProfile(),
+                    NameUser(),
+                    DetailProfile(),
+                    DetailProduct(),
+                    DetailTransaction(),
+                    DetailHelp()
+                  ],
+                ),
+              ),
+        )
     );
   }
 }
@@ -61,84 +76,46 @@ class _TopProfileState extends State<TopProfile> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
       children: [
+        CircleAvatar(
+          backgroundColor: Colors.grey.shade200,
+          backgroundImage: image != null
+              ? FileImage(image!) as ImageProvider
+              : const AssetImage("images/5864188.jpg"),
+          radius: 100,
+        ),
         Positioned(
-            top: 50,
-            child: CircleAvatar(
-              backgroundColor: Colors.grey.shade200,
-              backgroundImage: image != null
-                  ? FileImage(image!) as ImageProvider
-                  : const AssetImage("images/5864188.jpg"),
-              radius: 100,
-            )),
-        Positioned(
-            top: 190,
-            left: 230,
-            child: Container(
-              height: 70,
-              width: 70,
-              decoration: const BoxDecoration(
-                  color: Colors.blueAccent, shape: BoxShape.circle),
-              child: TextButton(
-                  onPressed: () async {
-                    await openGallery();
-                  },
-                  style: TextButton.styleFrom(foregroundColor: Colors.white),
-                  child: const ImageIcon(AssetImage("images/Camera.png"))),
-            )),
-        const Positioned(
-            top: 280,
-            child: Text("Nasrul Ramadhan",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
-
-        Positioned(
-            top: 355,
-            left: 60,
-            child: Image.asset("images/EditPersonal.png", height: 40)),
-        const Positioned(top: 340, child: DetailProfile()),
-        const Positioned(
-            top: 355,
-            left: 320,
-            child: Icon(Icons.keyboard_arrow_right_outlined,
-                color: Colors.black, size: 40)),
-
-
-        Positioned(
-            top: 440,
-            left: 52,
-            child: Image.asset("images/Manage Product.png", height: 43)),
-        const Positioned(top: 425, child: DetailProduct()),
-        const Positioned(
-            top: 440,
-            left: 320,
-            child: Icon(Icons.keyboard_arrow_right_outlined,
-                color: Colors.black, size: 40)),
-
-
-        Positioned(
-            top: 525,
-            left: 58,
-            child: Image.asset("images/Manage Transaction.png", height: 35)),
-        const Positioned(top: 510, child: DetailTransaction()),
-        const Positioned(
-            top: 522,
-            left: 320,
-            child: Icon(Icons.keyboard_arrow_right_outlined,
-                color: Colors.black, size: 40)),
-
-
-        Positioned(
-            top: 608,
-            left: 60,
-            child: Image.asset("images/HelpCenter.png", height: 42)),
-        const Positioned(top: 595, child: DetailHelp()),
-        const Positioned(
-            top: 608,
-            left: 320,
-            child: Icon(Icons.keyboard_arrow_right_outlined,
-                color: Colors.black, size: 40)),
+          right: 0,
+          bottom: 0,
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: const BoxDecoration(
+                color: Colors.blueAccent, shape: BoxShape.circle),
+            child: TextButton(
+                onPressed: () async {
+                  await openGallery();
+                },
+                style: TextButton.styleFrom(foregroundColor: Colors.white),
+                child: const ImageIcon(AssetImage("images/Camera.png"))),
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class NameUser extends StatelessWidget {
+  const NameUser({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: _size.height / 60),
+      child: const Text("Nasrul Ramadhan",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
     );
   }
 }
@@ -148,34 +125,50 @@ class DetailProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
-      child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const EditPersonalInfoRenter(),
-              ),
-            );
-          },
-          child: Row(
-            children: [
-              const SizedBox(width: 57),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Edit Personal Info",
-                      style: TextStyle(color: Colors.black, fontSize: 20)),
-                  Text("Name, Location, Description",
-                      style: TextStyle(color: Colors.grey, fontSize: 14)),
-                ],
-              ),
-              const SizedBox(width: 40)
-            ],
-          )),
+    Size _size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.only(
+          left: _size.width / 8,
+          right: _size.width / 15,
+          top: _size.height / 60),
+      child: Container(
+        height: 70,
+        decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
+        child: TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const EditPersonalInfoRenter(),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Image.asset("images/EditPersonal.png", height: 35),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: _size.width / 20, right: _size.width / 18),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Edit Personal Info",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20)),
+                        Text("Name, Location, Description",
+                            style: TextStyle(color: Colors.grey, fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_right_outlined,
+                    color: Colors.black, size: 40)
+              ],
+            )),
+      ),
     );
   }
 }
@@ -185,38 +178,51 @@ class DetailProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
-      child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ManageProduct(),
-              ),
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(width: 50),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("Manage Product",
-                        style: TextStyle(color: Colors.black, fontSize: 20)),
-                    Text("Add, Edit, and Delete Product",
-                        style: TextStyle(color: Colors.grey, fontSize: 14)),
-                  ],
+    Size _size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.only(
+          left: _size.width / 8,
+          right: _size.width / 15,
+          top: _size.height / 70),
+      child: Container(
+        height: 70,
+        decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
+        child: TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ManageProduct(),
                 ),
-              ),
-              const SizedBox(width: 40)
-            ],
-          )),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset("images/Manage Product.png", height: 33),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: _size.width / 30, right: _size.width / 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Manage Product",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20)),
+                        Text("Add, Edit, and Delete Product",
+                            style: TextStyle(color: Colors.grey, fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_right_outlined,
+                    color: Colors.black, size: 40)
+              ],
+            )),
+      ),
     );
   }
 }
@@ -226,37 +232,51 @@ class DetailTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
-      child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ManageTransaction(),
-              ),
-            );
-          },
-          child: Row(
-            children: [
-              const SizedBox(width: 73),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("Manage Transaction",
-                        style: TextStyle(color: Colors.black, fontSize: 20)),
-                    Text("Show all transaction",
-                        style: TextStyle(color: Colors.grey, fontSize: 14)),
-                  ],
+    Size _size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.only(
+          left: _size.width / 8,
+          right: _size.width / 15,
+          top: _size.height / 70),
+      child: Container(
+        height: 70,
+        decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
+        child: TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ManageTransaction(),
                 ),
-              ),
-              const SizedBox(width: 40)
-            ],
-          )),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset("images/Manage Transaction.png", height: 30),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: _size.width / 25, right: _size.width / 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Manage Transaction",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20)),
+                        Text("Show all transaction",
+                            style: TextStyle(color: Colors.grey, fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_right_outlined,
+                    color: Colors.black, size: 40)
+              ],
+            )),
+      ),
     );
   }
 }
@@ -266,37 +286,51 @@ class DetailHelp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
-      child: TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const HelpCenter(),
-              ),
-            );
-          },
-          child: Row(
-            children: [
-              const SizedBox(width: 55),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("Help Center",
-                        style: TextStyle(color: Colors.black, fontSize: 20)),
-                    Text("Solution for your problem",
-                        style: TextStyle(color: Colors.grey, fontSize: 14)),
-                  ],
+    Size _size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.only(
+          left: _size.width / 8,
+          right: _size.width / 15,
+          top: _size.height / 70),
+      child: Container(
+        height: 70,
+        decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(width: 0.4, color: Colors.grey))),
+        child: TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const HelpCenter(),
                 ),
-              ),
-              const SizedBox(width: 40)
-            ],
-          )),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset("images/HelpCenter.png", height: 35),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: _size.width / 25, right: _size.width / 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Help Center",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20)),
+                        Text("Solution for your problem",
+                            style: TextStyle(color: Colors.grey, fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_right_outlined,
+                    color: Colors.black, size: 40)
+              ],
+            )),
+      ),
     );
   }
 }

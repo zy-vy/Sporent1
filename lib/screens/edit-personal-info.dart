@@ -5,7 +5,7 @@ import 'package:sporent/screens/edit-phone.dart';
 import 'package:sporent/screens/edit-username.dart';
 import '/firebase_options.dart';
 import 'package:sporent/screens/color.dart';
-import 'package:sporent/screens/edit-name.dart';
+import 'package:sporent/screens/edit-username.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/screens/edit-email.dart';
 import 'package:sporent/screens/edt-gender.dart';
@@ -34,8 +34,10 @@ class ProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+      padding: EdgeInsets.symmetric(vertical: _size.height/20, horizontal: _size.width/20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,43 +45,18 @@ class ProfileInfo extends StatelessWidget {
             "Profile Info",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: _size.height/50),
           Row(
             children: [
-              const Text("Name",
+              const Text("Username",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 106),
+              SizedBox(width: _size.width/5),
               const Expanded(
                   child: Text("Nasrul Ramadhan",
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.black,
                           fontWeight: FontWeight.bold))),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const EditName(),
-                    ),
-                  );
-                },
-                icon: const FaIcon(FontAwesomeIcons.chevronRight),
-                iconSize: 20,
-              )
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              const Text("Username",
-                  style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 73),
-              Expanded(
-                  child: Text("Create unique username",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: HexColor("B0B0B0"),
-                      ))),
               IconButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -93,7 +70,7 @@ class ProfileInfo extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: _size.height/70),
           Divider(color: hexStringToColor("E6E6E6"), thickness: 2)
         ],
       ),
@@ -106,8 +83,10 @@ class PersonalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 240, left: 20, right: 35, bottom: 35),
+      padding: EdgeInsets.symmetric(vertical: _size.height/4.5, horizontal: _size.width/20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -115,12 +94,12 @@ class PersonalInfo extends StatelessWidget {
             "Personal Info",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: _size.height/50),
           Row(
             children: [
               const Text("E-mail",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 104),
+              SizedBox(width: _size.width/3.6),
               const Expanded(
                   child: Text("nasrul24@gmail.com",
                       style: TextStyle(
@@ -140,12 +119,12 @@ class PersonalInfo extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: _size.height/75),
           Row(
             children: [
               const Text("Phone Number",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 35),
+              SizedBox(width: _size.width/9.5),
               Expanded(
                   child: Text("Input phone number",
                       style:
@@ -163,12 +142,12 @@ class PersonalInfo extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: _size.height/75),
           Row(
             children: [
               const Text("Gender",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 96),
+              SizedBox(width: _size.width/3.9),
               Expanded(
                   child: Text("Input gender",
                       style:
@@ -186,12 +165,12 @@ class PersonalInfo extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: _size.height/75),
           Row(
             children: [
               const Text("Birhdate",
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
-              const SizedBox(width: 87),
+              SizedBox(width: _size.width/4.3),
               const Expanded(
                   child: Text("20 January 2001",
                       style: TextStyle(

@@ -14,6 +14,8 @@ class ManageTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -25,23 +27,22 @@ class ManageTransaction extends StatelessWidget {
       ),
       body: Padding(
         padding:
-            const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+            EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
                 decoration: BoxDecoration(color: HexColor("F5F5F5")),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 15, top: 15, bottom: 15, right: 10),
+                  padding: EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/25),
                   child: Row(
                     children: [
                       Image.asset(
                         "images/tennis-racket.png",
-                        width: 100,
-                        height: 100,
+                        width: _size.width/4,
+                        height: _size.height/8,
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: _size.width/30),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -50,17 +51,17 @@ class ManageTransaction extends StatelessWidget {
                                   fontSize: 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal)),
-                          const SizedBox(height: 10),
+                          SizedBox(height: _size.height/90),
                           const Text("Rp 150.000/Day",
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 10),
+                          SizedBox(height: _size.height/90),
                           const Text("Time: 2 Day",
                               style:
                                   TextStyle(fontSize: 14, color: Colors.black)),
-                          const SizedBox(height: 10),
+                          SizedBox(height: _size.height/90),
                           Text("Status: New",
                               style: TextStyle(
                                   fontSize: 14,
@@ -68,10 +69,10 @@ class ManageTransaction extends StatelessWidget {
                                   fontWeight: FontWeight.bold)),
                         ],
                       ),
-                      const SizedBox(width: 20),
+                      SizedBox(width: _size.width/25),
                       SizedBox(
-                        width: 80,
-                        height: 50,
+                        width: _size.width/5,
+                        height: _size.height/15,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(

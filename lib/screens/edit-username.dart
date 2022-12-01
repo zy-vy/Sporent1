@@ -10,49 +10,50 @@ class EditUsername extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Transform(
-          transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-          child: const Text("Edit Username"),
+        appBar: AppBar(
+          centerTitle: false,
+          title: Transform(
+            transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
+            child: const Text("Edit Username"),
+          ),  
+          backgroundColor: hexStringToColor("4164DE"),
         ),
-        backgroundColor: HexColor("4164DE"),
-      ),
-      body: Padding(
-        padding:
-            const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Edit Your Username",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        body: Padding(
+      padding: EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Edit Your Username",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: _size.height/50),
+          Text("Enter a username for your apps", style: TextStyle(fontSize: 13, color: HexColor("979797"))),
+          SizedBox(height: _size.height/30),
+          const TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Enter your username'
             ),
-            const SizedBox(height: 20),
-            Text("Enter a username for your apps",
-                style: TextStyle(fontSize: 13, color: HexColor("979797"))),
-            const SizedBox(height: 30),
-            const TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter your username'),
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-                width: 370,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor("4164DE"),
-                    // padding: const EdgeInsets.only(right: 300, bottom: 40)
-                  ),
-                  child: const Text("Confirm", textAlign: TextAlign.center),
-                ))
-          ],
-        ),
+          ),
+          SizedBox(height: _size.height/20),
+          SizedBox(
+            width: _size.width,
+            height: _size.height/15,
+            child: ElevatedButton(
+            onPressed: (){},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: HexColor("4164DE"),
+              // padding: const EdgeInsets.only(right: 300, bottom: 40)
+            ), 
+            child: const Text("Confirm", textAlign: TextAlign.center),)
+          )
+        ],
       ),
+    ),
     );
   }
 }

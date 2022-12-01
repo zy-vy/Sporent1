@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'dart:ui';
 
@@ -43,6 +44,8 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -55,8 +58,7 @@ class _AddProductState extends State<AddProduct> {
         body: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                  top: 30, left: 20, right: 35, bottom: 35),
+              padding: EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,10 +66,10 @@ class _AddProductState extends State<AddProduct> {
                     "Product Photo",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/50),
                   Container(
-                    width: 80,
-                    height: 85,
+                    width: _size.width/5,
+                    height: _size.height/10,
                     decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -86,22 +88,22 @@ class _AddProductState extends State<AddProduct> {
                             ),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: _size.height/23),
                   const Text("Product Name",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/50),
                   TextField(
                     controller: productNameController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Enter your name'),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: _size.height/23),
                   const Text("Product Price",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/50),
                   TextField(
                     controller: productPriceController,
                     keyboardType: TextInputType.number,
@@ -112,11 +114,11 @@ class _AddProductState extends State<AddProduct> {
                         border: OutlineInputBorder(),
                         labelText: 'Enter your price'),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: _size.height/23),
                   const Text("Product Category",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/50),
                   DropdownButtonFormField(
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -131,11 +133,11 @@ class _AddProductState extends State<AddProduct> {
                       });
                     },
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: _size.height/23),
                   const Text("Product Description",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 20),
+                  SizedBox(height: _size.height/50),
                   TextField(
                     controller: productDescriptionController,
                     keyboardType: TextInputType.multiline,
@@ -145,10 +147,10 @@ class _AddProductState extends State<AddProduct> {
                         border: OutlineInputBorder(),
                         labelText: 'Enter your description'),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: _size.height/23),
                   SizedBox(
-                      width: 370,
-                      height: 55,
+                      width: _size.width,
+                      height: _size.height/15,
                       child: ElevatedButton(
                         onPressed: () {
                           int price = int.parse(productPriceController.text);

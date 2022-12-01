@@ -18,6 +18,8 @@ class _EditPasswordState extends State<EditPassword> {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -29,7 +31,7 @@ class _EditPasswordState extends State<EditPassword> {
       ),
       body: Padding(
         padding:
-            const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+              EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,10 +39,10 @@ class _EditPasswordState extends State<EditPassword> {
               "New Password",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: _size.height/50),
             Text("Create a new strong password for your email",
                 style: TextStyle(fontSize: 13, color: HexColor("979797"))),
-            const SizedBox(height: 15),
+            SizedBox(height: _size.height/40),
             TextField(
               controller: passController,
               obscureText: hidePassword,
@@ -68,7 +70,7 @@ class _EditPasswordState extends State<EditPassword> {
                     borderSide: BorderSide(color: Colors.blueAccent)) 
                   ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: _size.height/40),
             TextField(
               obscureText: hidePasswordConfirm,
               decoration: InputDecoration(
@@ -87,10 +89,10 @@ class _EditPasswordState extends State<EditPassword> {
                               : FontAwesomeIcons.eyeSlash,
                           size: 20))),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: _size.height/20),
             SizedBox(
-                width: 370,
-                height: 55,
+                width: _size.width,
+                height: _size.height/15,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(

@@ -10,6 +10,8 @@ class EditLocationRenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -21,7 +23,7 @@ class EditLocationRenter extends StatelessWidget {
       ),
       body: Padding(
         padding:
-            const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+            EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,10 +31,10 @@ class EditLocationRenter extends StatelessWidget {
               "Edit Your Location",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: _size.height/50),
             Text("Enter a location for your page",
                 style: TextStyle(fontSize: 13, color: HexColor("979797"))),
-            const SizedBox(height: 30),
+            SizedBox(height: _size.height/30),
             const TextField(
               keyboardType: TextInputType.multiline,
               minLines: 1,
@@ -41,10 +43,10 @@ class EditLocationRenter extends StatelessWidget {
                   border: OutlineInputBorder(),
                   labelText: 'Enter your location'),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: _size.height/20),
             SizedBox(
-                width: 370,
-                height: 55,
+                width: _size.width,
+                height: _size.height/15,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
