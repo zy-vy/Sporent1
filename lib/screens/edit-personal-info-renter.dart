@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sporent/screens/edit-description-renter.dart';
+import 'package:sporent/screens/edit-description-renter2.dart';
 import 'package:sporent/screens/edit-location.dart';
 import 'package:sporent/screens/edit-username-renter.dart';
 import 'package:sporent/screens/edit-phone.dart';
