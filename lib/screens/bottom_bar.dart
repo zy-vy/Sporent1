@@ -36,21 +36,21 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         items: const [
           BottomNavigationBarItem(
               label: 'Home',
-              icon: ImageIcon(AssetImage("assets/images/Home Before.png")),
-              activeIcon: ImageIcon(AssetImage("assets/images/Home After.png"))),
+              icon: ImageIcon(AssetImage("assets/icons/Home Before.png")),
+              activeIcon: ImageIcon(AssetImage("assets/icons/Home After.png"))),
           BottomNavigationBarItem(
               label: 'Transaction',
-              icon: ImageIcon(AssetImage("assets/images/Transaction Before.png")),
+              icon: ImageIcon(AssetImage("assets/icons/Transaction Before.png")),
               activeIcon:
-              ImageIcon(AssetImage("assets/images/Transaction After.png"))),
+              ImageIcon(AssetImage("assets/icons/Transaction After.png"))),
           BottomNavigationBarItem(
               label: 'Cart',
-              icon: ImageIcon(AssetImage("assets/images/Cart Before.png")),
-              activeIcon: ImageIcon(AssetImage("assets/images/Cart After.png"))),
+              icon: ImageIcon(AssetImage("assets/icons/Cart Before.png")),
+              activeIcon: ImageIcon(AssetImage("assets/icons/Cart After.png"))),
           BottomNavigationBarItem(
               label: 'Profile',
-              icon: ImageIcon(AssetImage("assets/images/Profile Before.png")),
-              activeIcon: ImageIcon(AssetImage("assets/images/Profile After.png")))
+              icon: ImageIcon(AssetImage("assets/icons/Profile Before.png")),
+              activeIcon: ImageIcon(AssetImage("assets/icons/Profile After.png")))
         ],
         selectedItemColor: Colors.blueAccent,
         unselectedItemColor: Colors.grey,

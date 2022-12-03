@@ -11,18 +11,15 @@ class ProductRenter {
   @required
   int? price;
   @required
-  int? rent_price;
-  @required
   String? category;
   @required
   String? description;
 
-  ProductRenter(this.id, this.image, this.name, this.price, this.rent_price,
+  ProductRenter(this.id, this.image, this.name, this.price, 
       this.category, this.description);
 
   static ProductRenter fromDocument(String id, Map<String, dynamic> json) {
-    return ProductRenter(id, json['image'], json['name'], json['price'],
-        json['rent_price'], json['category'], json['description']);
+    return ProductRenter(id, json['image'], json['name'], json['price'], json['category'], json['description']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -30,7 +27,6 @@ class ProductRenter {
         "image": image,
         "name": name,
         "price": price,
-        "rent_price": rent_price,
         "category": category,
         "description": description
       };

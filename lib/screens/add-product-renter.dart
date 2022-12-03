@@ -29,7 +29,6 @@ class _AddProductState extends State<AddProduct> {
   final productCategoryController = TextEditingController();
   final productDescriptionController = TextEditingController();
   final productPhotoController = TextEditingController();
-  final productRentPriceController = TextEditingController();
   final productLocationController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -38,8 +37,6 @@ class _AddProductState extends State<AddProduct> {
 
   File? image;
   String? productCategory;
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -124,21 +121,6 @@ class _AddProductState extends State<AddProduct> {
                         labelText: 'Enter your price'),
                   ),
                   SizedBox(height: _size.height / 23),
-                  const Text("Rent Price",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  TextField(
-                    controller: productRentPriceController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your rent price'),
-                  ),
-                  SizedBox(height: _size.height / 23),
                   const Text("Product Category",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
@@ -209,14 +191,11 @@ class _AddProductState extends State<AddProduct> {
                       child: ElevatedButton(
                         onPressed: () {
                           int price = int.parse(productPriceController.text);
-                          int rent_price =
-                              int.parse(productRentPriceController.text);
 
                           addProduct(
                               productImage: image,
                               productName: productNameController.text,
                               productPrice: price,
-                              rentPrice: rent_price,
                               productCategory: productCategory,
                               productDescription:
                                   productDescriptionController.text);
@@ -256,7 +235,6 @@ Future addProduct(
     {required File? productImage,
     required String productName,
     required int productPrice,
-    required int rentPrice,
     required String? productCategory,
     required String productDescription}) async {
   final docProduct = FirebaseFirestore.instance.collection("product-renter").doc();
@@ -269,7 +247,7 @@ Future addProduct(
   String? imageUrl;
   imageUrl = await ref.getDownloadURL();
 
-  var productRenter = ProductRenter(docProduct.id, imageUrl, productName, productPrice, rentPrice,
+  var productRenter = ProductRenter(docProduct.id, imageUrl, productName, productPrice,
           productCategory, productDescription)
       .toJson();
 

@@ -74,7 +74,7 @@ class _TopProfileState extends State<TopProfile> {
           backgroundColor: Colors.grey.shade200,
           backgroundImage: image != null
               ? FileImage(image!) as ImageProvider
-              : const AssetImage("images/5864188.jpg"),
+              : const AssetImage("assets/images/5864188.jpg"),
           radius: 100,
         ),
         Positioned(
@@ -90,7 +90,7 @@ class _TopProfileState extends State<TopProfile> {
                   await openGallery();
                 },
                 style: TextButton.styleFrom(foregroundColor: Colors.white),
-                child: const ImageIcon(AssetImage("images/Camera.png"))),
+                child: const ImageIcon(AssetImage("assets/icons/Camera.png"))),
           ),
         ),
       ],
@@ -190,7 +190,7 @@ class DetailProfile extends StatelessWidget {
             },
             child: Row(
               children: [
-                Image.asset("images/EditPersonal.png", height: 40),
+                Image.asset("assets/icons/EditPersonal.png", height: 40),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -244,7 +244,7 @@ class DetailDeposit extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Image.asset("images/Deposit.png", height: 33),
+                Image.asset("assets/icons/Deposit.png", height: 33),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -298,7 +298,7 @@ class DetailPassword extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Image.asset("images/ChangePassword.png", height: 35),
+                Image.asset("assets/icons/ChangePassword.png", height: 35),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -352,7 +352,7 @@ class DetailHelp extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Image.asset("images/HelpCenter.png", height: 35),
+                Image.asset("assets/icons/HelpCenter.png", height: 35),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(

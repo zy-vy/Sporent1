@@ -28,10 +28,14 @@ class _EditProductState extends State<EditProduct> {
   final productCategoryController = TextEditingController();
   final productDescriptionController = TextEditingController();
   final productPhotoController = TextEditingController();
+  final productLocationController = TextEditingController();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Stream<QuerySnapshot> category() =>
+      FirebaseFirestore.instance.collection("category").snapshots();
+
   File? image;
   String? productCategory;
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -49,202 +53,205 @@ class _EditProductState extends State<EditProduct> {
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Add Product"),
+            child: const Text("Edit Product"),
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection("product")
+                .collection("product-renter")
                 .doc(widget.productId)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Text("Something went wrong");
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              var docProduct = snapshot.data;
-              productNameController.text = docProduct!.get('productName');
-              productPriceController.text =
-                  docProduct.get('productPrice').toString();
-              productDescriptionController.text =
-                  docProduct.get('productDescription');
-              return ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 30, left: 20, right: 35, bottom: 35),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                                child: Text(
-                              "Product Photo",
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                var docProduct = snapshot.data;
+                productNameController.text = docProduct!.get('productName');
+                productPriceController.text =
+                    docProduct.get('productPrice').toString();
+                productDescriptionController.text =
+                    docProduct.get('productDescription');
+                return ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 30, left: 20, right: 35, bottom: 35),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Expanded(
+                                  child: Text(
+                                "Product Photo",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w500),
+                              )),
+                              TextButton(
+                                  onPressed: () async {
+                                    await openGallery();
+                                  },
+                                  child: const Text("Add Photo")),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                              width: 80,
+                              height: 85,
+                              decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          width: 2,
+                                          color: HexColor("868686")))),
+                              child: image != null
+                                  ? Image.file(image!)
+                                  : Image.network(
+                                      docProduct.get('productImage'))),
+                          const SizedBox(height: 40),
+                          const Text("Product Name",
                               style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            )),
-                            TextButton(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: productNameController,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter your name'),
+                          ),
+                          const SizedBox(height: 40),
+                          const Text("Product Price",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: productPriceController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter your price'),
+                          ),
+                          const SizedBox(height: 40),
+                          const Text("Product Category",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 20),
+                          DropdownButtonFormField(
+                            value: docProduct.get('productCategory'),
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Select category'),
+                            items: const [
+                              DropdownMenuItem(
+                                  value: "Male", child: Text("Male")),
+                              DropdownMenuItem(
+                                  value: "Female", child: Text("Female"))
+                            ],
+                            onChanged: (value) {
+                              productCategory = value as String?;
+
+                              FirebaseFirestore.instance
+                                  .collection('product')
+                                  .doc(widget.productId)
+                                  .update({'productCategory': productCategory});
+                            },
+                          ),
+                          const SizedBox(height: 40),
+                          const Text("Product Description",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: productDescriptionController,
+                            keyboardType: TextInputType.multiline,
+                            minLines: 1,
+                            maxLines: 5,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter your description'),
+                          ),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                              width: 370,
+                              height: 55,
+                              child: ElevatedButton(
                                 onPressed: () async {
-                                  await openGallery();
-                                },
-                                child: const Text("Add Photo")),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                            width: 80,
-                            height: 85,
-                            decoration: ShapeDecoration(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide(
-                                        width: 2, color: HexColor("868686")))),
-                            child: image != null
-                                ? Image.file(image!)
-                                : Image.network(
-                                    docProduct.get('productImage'))),
-                        const SizedBox(height: 40),
-                        const Text("Product Name",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: productNameController,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Enter your name'),
-                        ),
-                        const SizedBox(height: 40),
-                        const Text("Product Price",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: productPriceController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Enter your price'),
-                        ),
-                        const SizedBox(height: 40),
-                        const Text("Product Category",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 20),
-                        DropdownButtonFormField(
-                          value: docProduct.get('productCategory'),
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Select category'),
-                          items: const [
-                            DropdownMenuItem(
-                                value: "Male", child: Text("Male")),
-                            DropdownMenuItem(
-                                value: "Female", child: Text("Female"))
-                          ],
-                          onChanged: (value) {
-                            productCategory = value as String?;
+                                  final String newName =
+                                      productNameController.text;
+                                  final int newPrice =
+                                      int.parse(productPriceController.text);
+                                  final String newDescription =
+                                      productDescriptionController.text;
 
-                            FirebaseFirestore.instance
-                                .collection('product')
-                                .doc(widget.productId)
-                                .update({'productCategory': productCategory});
-                          },
-                        ),
-                        const SizedBox(height: 40),
-                        const Text("Product Description",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500)),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: productDescriptionController,
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          maxLines: 5,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Enter your description'),
-                        ),
-                        const SizedBox(height: 30),
-                        SizedBox(
-                            width: 370,
-                            height: 55,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final String newName =
-                                    productNameController.text;
-                                final int newPrice =
-                                    int.parse(productPriceController.text);
-                                final String newDescription =
-                                    productDescriptionController.text;
+                                  if (image != null) {
+                                    FirebaseStorage.instance
+                                        .refFromURL(
+                                            docProduct.get('productImage'))
+                                        .delete();
 
-                                if (image != null) {
-                                  FirebaseStorage.instance
-                                      .refFromURL(
-                                          docProduct.get('productImage'))
-                                      .delete();
+                                    final ref = FirebaseStorage.instance
+                                        .ref()
+                                        .child('product-images/')
+                                        .child(widget.productId);
+                                    await ref.putFile(image!);
+                                    String? imageUrl;
+                                    imageUrl = await ref.getDownloadURL();
 
-                                  final ref = FirebaseStorage.instance
-                                      .ref()
-                                      .child('product-images/')
-                                      .child(widget.productId);
-                                  await ref.putFile(image!);
-                                  String? imageUrl;
-                                  imageUrl = await ref.getDownloadURL();
+                                    FirebaseFirestore.instance
+                                        .collection("product")
+                                        .doc(widget.productId)
+                                        .update({
+                                      "productName": newName,
+                                      "productPrice": newPrice,
+                                      "productDescription": newDescription,
+                                      "productImage": imageUrl
+                                    });
+                                  } else {
+                                    FirebaseFirestore.instance
+                                        .collection("product")
+                                        .doc(widget.productId)
+                                        .update({
+                                      "productName": newName,
+                                      "productPrice": newPrice,
+                                      "productDescription": newDescription,
+                                    });
+                                  }
 
-                                  FirebaseFirestore.instance
-                                      .collection("product")
-                                      .doc(widget.productId)
-                                      .update({
-                                    "productName": newName,
-                                    "productPrice": newPrice,
-                                    "productDescription": newDescription,
-                                    "productImage": imageUrl
-                                  });
-                                } else {
-                                  FirebaseFirestore.instance
-                                      .collection("product")
-                                      .doc(widget.productId)
-                                      .update({
-                                    "productName": newName,
-                                    "productPrice": newPrice,
-                                    "productDescription": newDescription,
-                                  });
-                                }
-
-                                const snackBar = SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  margin: EdgeInsets.all(8),
-                                  content: SizedBox(
-                                    height: 50,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(top: 10),
-                                      child: Text('Sucess Update Product!', style: TextStyle(fontSize: 20)),
-                                    )),
-                                  duration: Duration(seconds: 5),
+                                  const snackBar = SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    margin: EdgeInsets.all(8),
+                                    content: SizedBox(
+                                        height: 50,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                          child: Text('Sucess Update Product!',
+                                              style: TextStyle(fontSize: 20)),
+                                        )),
+                                    duration: Duration(seconds: 5),
                                   );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
 
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: HexColor("4164DE"),
-                              ),
-                              child: const Text("Confirm",
-                                  textAlign: TextAlign.center),
-                            )),
-                      ],
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: HexColor("4164DE"),
+                                ),
+                                child: const Text("Confirm",
+                                    textAlign: TextAlign.center),
+                              )),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
+                  ],
+                );
+              }
             }));
   }
 }

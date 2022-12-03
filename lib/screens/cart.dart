@@ -49,7 +49,7 @@ class _CartPage extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Image.asset(
-                          'images/tennis-racket.png',
+                          'assets/images/tennis-racket.png',
                           height: 130,
                           width: 130,
                         ),

@@ -38,7 +38,7 @@ class ManageTransaction extends StatelessWidget {
                   child: Row(
                     children: [
                       Image.asset(
-                        "images/tennis-racket.png",
+                        "asset/images/tennis-racket.png",
                         width: _size.width/4,
                         height: _size.height/8,
                       ),

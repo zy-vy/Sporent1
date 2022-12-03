@@ -55,7 +55,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Image.asset(
-                                      "images/tennis-racket.png",
+                                      "asset/images/tennis-racket.png",
                                       width: _size.width/3,
                                       height: _size.height/5.8,
                                     ),
@@ -130,7 +130,7 @@ class _DepositInformationState extends State<DepositInformation> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Image.asset(
-                                      "images/tennis-racket.png",
+                                      "asset/images/tennis-racket.png",
                                       width: _size.width/3,
                                       height: _size.height/5.8,
                                     ),

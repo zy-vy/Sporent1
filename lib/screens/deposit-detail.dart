@@ -61,7 +61,7 @@ class _DepositDetailState extends State<DepositDetail> {
                         Row(
                           children: [
                             Image.asset(
-                              "images/tennis-racket.png",
+                              "asset/images/tennis-racket.png",
                               width: _size.width/3,
                               height: _size.height/5.8,
                             ),
