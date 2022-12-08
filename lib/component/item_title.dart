@@ -7,6 +7,6 @@ class ItemTitle extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Text(_text,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 26,color: Colors.black87),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,);
+    return Text(_text,style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 26,color: Colors.black87),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,);
   }
 }

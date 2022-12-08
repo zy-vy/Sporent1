@@ -3,22 +3,28 @@ import 'package:intl/intl.dart';
 
 class ItemPrice extends StatelessWidget {
 
-  const ItemPrice({Key? key, int? price, this.fontSize}) : _price = price,  super(key: key);
+  const ItemPrice({Key? key, this.price, this.fontSize}) : super(key: key);
 
   final double? fontSize;
 
-  final int? _price;
+  final int? price;
 
   @override
   Widget build(BuildContext context) {
     NumberFormat currencyFormatter = NumberFormat.currency(
       locale: 'id',
-      symbol: 'Rp ',
+      symbol: 'Rp. ',
       decimalDigits: 0
     );
 
     return Container(
-      child: Text("Rp. ${currencyFormatter.format(_price)}/hour",style: TextStyle(fontSize: fontSize),),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text("${currencyFormatter.format(price)}",style: TextStyle(fontSize: fontSize),),
+          Text("/hari",style: TextStyle(fontSize:( fontSize??14)*0.75))
+        ],
+      ),
     );
   }
 }

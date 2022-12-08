@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sporent/model/user.dart';
 
 class Product {
 
@@ -6,18 +7,22 @@ class Product {
   String? id;
   String? name;
   int? price;
+  int? rentPrice;
   String? location;
   String? img;
+  DocumentReference? ownerRef;
 
-  Product(this.id,this.name,this.price,this.location,this.img);
+  Product({this.id,this.name,this.price,this.location,this.img,this.ownerRef,this.rentPrice});
 
   static Product fromDocument (String id,Map<String, dynamic> json){
     return Product(
-      id,
-      json['name'],
-      json['price'],
-      json['location'],
-      json['img']
+      id :id,
+      name: json['name'],
+      price: json['price'],
+      location: json['location'],
+      img : json['img'],
+      ownerRef : json['owner'],
+      rentPrice: json['rent_price']
     );
   }
 

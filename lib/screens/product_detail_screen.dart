@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
+import 'package:sporent/component/owner_thumbnail.dart';
 import 'package:sporent/model/product.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -20,6 +21,7 @@ class ProductDetailScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     inspect(_product);
     return Scaffold(
+
       body: SingleChildScrollView(
         child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,8 +38,12 @@ crossAxisAlignment: CrossAxisAlignment.start,
               child: ItemTitle(text: _product.name??""),
             ),
             Container(
-              child: ItemPrice(price: _product.price ),
+              padding: EdgeInsets.symmetric(horizontal: size.width/20 ),
+              child: ItemPrice(price: _product.rentPrice , fontSize: 20,),
             ),
+            Container(
+              child: OwnerThumbnail(userRef: _product.ownerRef?.path??""),
+            )
 
           ],
         ),

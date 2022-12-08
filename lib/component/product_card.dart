@@ -52,11 +52,11 @@ class _ProductCardState extends State<ProductCard> {
                 children: [
                   Text(
                     widget._product.name??"",
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   Text(
-                    "Rp. ${widget._product.price??""}/hour",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    "Rp. ${widget._product.rentPrice??""}/hour",
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   Row(children: [
                     const Icon(Icons.location_on),
