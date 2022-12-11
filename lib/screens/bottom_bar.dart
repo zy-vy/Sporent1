@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sporent/screens/profile.dart';
 import 'package:sporent/screens/cart.dart';
 import 'package:sporent/screens/home_screen.dart';
-import 'package:sporent/screens/profile.dart';
 import 'package:sporent/screens/transaction_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
@@ -41,8 +40,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
           BottomNavigationBarItem(
               label: 'Transaction',
               icon: ImageIcon(AssetImage("assets/icons/Transaction Before.png")),
-              activeIcon:
-              ImageIcon(AssetImage("assets/icons/Transaction After.png"))),
+              activeIcon: FaIcon(FontAwesomeIcons.receipt)),
           BottomNavigationBarItem(
               label: 'Cart',
               icon: ImageIcon(AssetImage("assets/icons/Cart Before.png")),
