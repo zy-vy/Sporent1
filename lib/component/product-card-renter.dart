@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:sporent/component/firebase_image.dart';
 
 import '../screens/edit-product.dart';
 
@@ -13,29 +13,30 @@ class ProductCardRenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Reference firebase = FirebaseStorage.instance.ref();
     Size _size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: _size.height/50),
+      padding: EdgeInsets.symmetric(vertical: _size.height / 50),
       child: Container(
           decoration: BoxDecoration(color: HexColor("F5F5F5")),
           child: Padding(
-              padding: EdgeInsets.symmetric(vertical: _size.width/20, horizontal: _size.height/50),
+              padding: EdgeInsets.symmetric(
+                  vertical: _size.width / 20, horizontal: _size.height / 50),
               child: Row(
                 children: [
-                  Image.network(dataProduct['image'],
-                      width: _size.width/5, height: _size.height/8),
-                  SizedBox(width: _size.width/60),
+                  SizedBox(width: _size.width/5, height: _size.height/8,child: FirebaseImage(filePath: "product-images/${dataProduct['id']}"),),
+                  SizedBox(width: _size.width / 60),
                   Expanded(
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(dataProduct['name'],
+                      Text(dataProduct.get('name'),
                           style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.normal)),
-                      SizedBox(height: _size.height/70),
+                      SizedBox(height: _size.height / 70),
                       Text(combineString,
                           style: const TextStyle(
                               fontSize: 14,
@@ -43,19 +44,19 @@ class ProductCardRenter extends StatelessWidget {
                               fontWeight: FontWeight.bold))
                     ],
                   )),
-                  SizedBox(width: _size.width/40),
+                  SizedBox(width: _size.width / 40),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
-                        width: _size.width/5,
-                        height: _size.height/30,
+                        width: _size.width / 5,
+                        height: _size.height / 30,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
-                                    EditProduct(dataProduct['id'])));
+                                    EditProduct(dataProduct.get('id'))));
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("4164DE")),
@@ -66,10 +67,10 @@ class ProductCardRenter extends StatelessWidget {
                                   fontWeight: FontWeight.bold)),
                         ),
                       ),
-                      SizedBox(height: _size.height/40),
+                      SizedBox(height: _size.height / 40),
                       SizedBox(
-                        width: _size.width/5,
-                        height: _size.height/30,
+                        width: _size.width / 5,
+                        height: _size.height / 30,
                         child: ElevatedButton(
                           onPressed: () {
                             showDeleteButton(context, dataProduct);
@@ -96,7 +97,7 @@ showDeleteButton(BuildContext context, DocumentSnapshot deleteObject) {
 
   Widget confirmButton = SizedBox(
     width: _size.width,
-    height: _size.height/20,
+    height: _size.height / 20,
     child: ElevatedButton(
       onPressed: () {
         final product = FirebaseFirestore.instance
@@ -105,14 +106,19 @@ showDeleteButton(BuildContext context, DocumentSnapshot deleteObject) {
 
         product.delete();
 
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('product-images/')
+            .child(deleteObject['id']);
+
+        ref.delete();
+
         Navigator.of(context).pop();
       },
       style: ElevatedButton.styleFrom(backgroundColor: HexColor("4164DE")),
       child: const Text("Confirm",
           style: TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.bold)),
+              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
     ),
   );
 
@@ -129,7 +135,8 @@ showDeleteButton(BuildContext context, DocumentSnapshot deleteObject) {
       ));
 
   AlertDialog alert = AlertDialog(
-    contentPadding:EdgeInsets.symmetric(vertical: _size.height/70, horizontal: _size.width/80),
+    contentPadding: EdgeInsets.symmetric(
+        vertical: _size.height / 70, horizontal: _size.width / 20),
     alignment: Alignment.center,
     title: const Center(
       child: Text(
@@ -140,9 +147,7 @@ showDeleteButton(BuildContext context, DocumentSnapshot deleteObject) {
     content: Text(
       "Are you sure want to delete product?",
       style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: HexColor("979797")),
+          fontSize: 16, fontWeight: FontWeight.w400, color: HexColor("979797")),
     ),
     actions: [
       Column(

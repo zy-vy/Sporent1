@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 import 'package:sporent/screens/color.dart';
 
 class DetailHelpCenter extends StatefulWidget {
@@ -23,7 +19,7 @@ class _DetailHelpCenterState extends State<DetailHelpCenter> {
         centerTitle: false,
         title: Transform(
           transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-          child: const Text("Help Center"),
+          child: const Text("Detail Help Center"),
         ),
         backgroundColor: hexStringToColor("4164DE"),
       ),

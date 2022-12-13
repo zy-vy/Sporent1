@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import '/firebase_options.dart';
-
+import 'package:sporent/component/cart-card.dart';
+import 'package:sporent/screens/checkout.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -25,9 +21,9 @@ class _CartPage extends State<CartPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Padding(
-          padding: EdgeInsets.only(top: 10),
-          child: Text(
+        title: Padding(
+          padding: EdgeInsets.only(top: _size.height / 80),
+          child: const Text(
             "Cart",
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
@@ -38,112 +34,41 @@ class _CartPage extends State<CartPage> {
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
+        padding: EdgeInsets.symmetric(
+            vertical: _size.height / 30, horizontal: _size.width / 13),
         child: Column(
           children: [
             Expanded(
-              child:  ListView(
-              children: [
-                  Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/images/tennis-racket.png',
-                          height: 130,
-                          width: 130,
-                        ),
-                        SizedBox(width: _size.width/70),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("Raket Tenis",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.normal)),
-                            SizedBox(width: _size.width/90),
-                            const Text("Rp 150.000/Day",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                            SizedBox(width: _size.width/90),
-                            Text("How many day",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: HexColor("969696"))),
-                            SizedBox(width: _size.width/90),
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: HexColor("416DDE"),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (counter > 0) {
-                                            counter--;
-                                          }
-                                        });
-                                      },
-                                      icon: const FaIcon(
-                                        FontAwesomeIcons.minus,
-                                        color: Colors.white,
-                                        size: 20,
-                                      )),
-                                ),
-                                const SizedBox(width: 15),
-                                Text(
-                                  "$counter",
-                                  style: const TextStyle(
-                                      fontSize: 20, fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(width: 15),
-                                CircleAvatar(
-                                  backgroundColor: HexColor("416DDE"),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          counter++;
-                                        });
-                                      },
-                                      icon: const FaIcon(
-                                        FontAwesomeIcons.plus,
-                                        color: Colors.white,
-                                        size: 20,
-                                      )),
-                                ),
-                                const SizedBox(width: 10),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.trash,
-                                      color: HexColor("808080"),
-                                    ))
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-              ],
-            ),),
+              child: ListView(
+                children: const [CartCard(true), CartCard(false)],
+              ),
+            ),
             Divider(thickness: 1, color: HexColor("A3A3A3")),
-            const SizedBox(height: 15),
+            SizedBox(height: _size.height / 80),
             Row(
               children: const [
                 Expanded(
-                  child: Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))),
-                Text("Rp 300.000", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
+                    child: Text("Total: ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20))),
+                Text("Rp 300.000",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
               ],
             ),
-            const SizedBox(height: 25),
+            SizedBox(height: _size.height / 30),
             SizedBox(
               width: _size.width,
-              height: 60,
+              height: _size.height / 13,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: HexColor("4164DE")
-                ),
-                onPressed: (){}, 
-                child: const Text("Checkout", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: HexColor("4164DE")),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const CheckoutPage()));
+                  },
+                  child: const Text("Checkout",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18))),
             )
           ],
         ),

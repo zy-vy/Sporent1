@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/screens/edit-personal-info-renter.dart';
+import 'package:sporent/screens/deposit-detail.dart';
 import '../component/edit-page.dart';
 
-class EditDescriptionRenter extends StatelessWidget {
-  const EditDescriptionRenter({super.key});
+class EditAccountNumber extends StatelessWidget {
+  const EditAccountNumber({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class EditDescriptionRenter extends StatelessWidget {
         centerTitle: false,
         title: Transform(
           transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-          child: const Text("Edit Description"),
+          child: const Text("Edit Account Number"),
         ),
         backgroundColor: HexColor("4164DE"),
       ),
-      body: const EditPage("Edit Your Description", "Enter a description for your page", "Enter your Description", "Description", EditPersonalInfoRenter())
+      body: const EditPage("Edit Your Account Number", "Enter account number for deposit", "Enter your account number", "Account Number", DepositDetail())
     );
   }
 }

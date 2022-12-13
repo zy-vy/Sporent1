@@ -1,19 +1,14 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import '../model/category.dart';
 import '../model/product-renter.dart';
-import '/firebase_options.dart';
 import 'package:sporent/screens/color.dart';
 
 class AddProduct extends StatefulWidget {
@@ -24,19 +19,23 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  final productNameController = TextEditingController();
-  final productPriceController = TextEditingController();
-  final productCategoryController = TextEditingController();
-  final productDescriptionController = TextEditingController();
-  final productPhotoController = TextEditingController();
-  final productLocationController = TextEditingController();
+  final nameController = TextEditingController();
+  final priceController = TextEditingController();
+  final categoryController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final photoController = TextEditingController();
+  final locationController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Stream<QuerySnapshot> category() =>
       FirebaseFirestore.instance.collection("category").snapshots();
 
   File? image;
+  File? image_temp;
+  List<File?> listImages = [];
   String? productCategory;
+  int counter = 1;
+  int deleteCount = 1;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -50,6 +49,7 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
+    listImages.add(image_temp);
 
     return Scaffold(
         appBar: AppBar(
@@ -60,6 +60,7 @@ class _AddProductState extends State<AddProduct> {
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
+        resizeToAvoidBottomInset: true,
         body: ListView(
           children: [
             Padding(
@@ -69,58 +70,77 @@ class _AddProductState extends State<AddProduct> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Product Photo",
+                    "Product Photo (Maximum 3 Photo)",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: _size.height / 50),
-                  Container(
-                    width: _size.width / 5,
-                    height: _size.height / 10,
-                    decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                                width: 2, color: HexColor("868686")))),
-                    child: TextButton(
-                      onPressed: () async {
-                        await openGallery();
-                      },
-                      child: image != null
-                          ? Image.file(image!)
-                          : FaIcon(
-                              FontAwesomeIcons.plus,
-                              color: HexColor("4164DE"),
-                              size: 35,
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: _size.height / 23),
-                  const Text("Product Name",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  TextField(
-                    controller: productNameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your name'),
-                  ),
-                  SizedBox(height: _size.height / 23),
-                  const Text("Product Price",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  TextField(
-                    controller: productPriceController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
+                  Row(
+                    children: [
+                      for (int i = 0; i < counter; i++)
+                        Stack(
+                          children: [
+                                Container(
+                                  width: _size.width / 5,
+                                  height: _size.height / 10,
+                                  decoration: ShapeDecoration(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          side: BorderSide(
+                                              width: 2,
+                                              color: HexColor("868686")))),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      await openGallery();
+                                      setState(() {
+                                        if (counter != 3) {
+                                          counter += 1;
+                                          deleteCount += 1;
+                                        }
+                                        listImages.remove(image_temp);
+                                        listImages.add(image);
+                                      });
+                                    },
+                                    child: listImages[i] != null
+                                        ? Image.file(listImages[i]!)
+                                        : FaIcon(
+                                            FontAwesomeIcons.plus,
+                                            color: HexColor("4164DE"),
+                                            size: 35,
+                                          ),
+                                  ),
+                                ),
+                                counter != 1
+                                    ? SizedBox(width: _size.width / 20)
+                                    : const SizedBox(),
+                            counter != 1
+                                ? Positioned(
+                                    right: _size.width / 25,
+                                    child: Container(
+                                        height: 25,
+                                        width: 25,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.blueAccent,
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                          icon: const FaIcon(
+                                              FontAwesomeIcons.xmark,
+                                              size: 10,
+                                              color: Colors.white),
+                                          onPressed: () {},
+                                        )),
+                                  )
+                                : const Positioned(
+                                    right: 0, top: 0, child: SizedBox())
+                          ],
+                        )
                     ],
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your price'),
                   ),
                   SizedBox(height: _size.height / 23),
+                  fieldText("Product Name", "Enter product name", _size,
+                      nameController),
+                  fieldPrice("Product Price", "Enter product price", _size,
+                      priceController),
                   const Text("Product Category",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
@@ -157,62 +177,27 @@ class _AddProductState extends State<AddProduct> {
                     },
                   ),
                   SizedBox(height: _size.height / 23),
-                  const Text("Location",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  TextField(
-                    controller: productLocationController,
-                    keyboardType: TextInputType.multiline,
-                    minLines: 1,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your location'),
-                  ),
-                  SizedBox(height: _size.height / 23),
-                  const Text("Product Description",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  TextField(
-                    controller: productDescriptionController,
-                    keyboardType: TextInputType.multiline,
-                    minLines: 1,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Enter your description'),
-                  ),
-                  SizedBox(height: _size.height / 23),
+                  fieldText("Location", "Enter product location", _size,
+                      locationController),
+                  fieldText("Product Description", "Enter product description",
+                      _size, descriptionController),
                   SizedBox(
                       width: _size.width,
                       height: _size.height / 15,
                       child: ElevatedButton(
                         onPressed: () {
-                          int price = int.parse(productPriceController.text);
+                          int price = int.parse(priceController.text);
 
                           addProduct(
-                              productImage: image,
-                              productName: productNameController.text,
-                              productPrice: price,
-                              productCategory: productCategory,
-                              productDescription:
-                                  productDescriptionController.text);
+                              image: image,
+                              name: nameController.text,
+                              price: price,
+                              location: locationController.text,
+                              category: productCategory,
+                              description: descriptionController.text);
 
-                          var snackBar = SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            margin: EdgeInsets.symmetric(vertical: _size.height/40, horizontal: _size.width/40),
-                            content: SizedBox(
-                                height: _size.height/20,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: _size.height/80),
-                                  child: const Text('Sucess Add Product!',
-                                      style: TextStyle(fontSize: 20)),
-                                )),
-                            duration: const Duration(seconds: 5),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(snackbar(_size));
 
                           Navigator.pop(context);
                         },
@@ -232,24 +217,84 @@ class _AddProductState extends State<AddProduct> {
 }
 
 Future addProduct(
-    {required File? productImage,
-    required String productName,
-    required int productPrice,
-    required String? productCategory,
-    required String productDescription}) async {
-  final docProduct = FirebaseFirestore.instance.collection("product-renter").doc();
+    {required File? image,
+    required String name,
+    required int price,
+    required String? location,
+    required String? category,
+    required String description}) async {
+  final docProduct =
+      FirebaseFirestore.instance.collection("product-renter").doc();
+
+  final categoryReference =
+      FirebaseFirestore.instance.collection("category").doc(category);
 
   final ref = FirebaseStorage.instance
       .ref()
       .child('product-images/')
       .child(docProduct.id);
-  await ref.putFile(productImage!);
-  String? imageUrl;
-  imageUrl = await ref.getDownloadURL();
+  await ref.putFile(image!);
 
-  var productRenter = ProductRenter(docProduct.id, imageUrl, productName, productPrice,
-          productCategory, productDescription)
+  var productRenter = ProductRenter(docProduct.id, docProduct.id, name, price,
+          location, categoryReference, description)
       .toJson();
 
   await docProduct.set(productRenter);
 }
+
+Column fieldText(String title, String desc, Size _size,
+        TextEditingController controller) =>
+    Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+        SizedBox(height: _size.height / 50),
+        TextField(
+          controller: controller,
+          keyboardType: TextInputType.multiline,
+          minLines: 1,
+          maxLines: 5,
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(), labelText: desc),
+        ),
+        SizedBox(height: _size.height / 23),
+      ],
+    );
+
+Column fieldPrice(String title, String desc, Size _size,
+        TextEditingController controller) =>
+    Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+        SizedBox(height: _size.height / 50),
+        TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(), labelText: desc),
+        ),
+        SizedBox(height: _size.height / 23),
+      ],
+    );
+
+SnackBar snackbar(Size _size) => SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.symmetric(
+          vertical: _size.height / 40, horizontal: _size.width / 40),
+      content: SizedBox(
+          height: _size.height / 20,
+          child: Padding(
+            padding: EdgeInsets.only(top: _size.height / 80),
+            child: const Text('Sucess Add Product!',
+                style: TextStyle(fontSize: 20)),
+          )),
+      duration: const Duration(seconds: 5),
+    );

@@ -1,18 +1,18 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/product-card-renter.dart';
 import 'package:sporent/screens/add-product-renter.dart';
-import 'package:sporent/screens/edit-product.dart';
-import '/firebase_options.dart';
-import 'package:sporent/screens/color.dart';
 
-class ManageProduct extends StatelessWidget {
+class ManageProduct extends StatefulWidget {
   const ManageProduct({super.key});
+
+  @override
+  State<ManageProduct> createState() => _ManageProductState();
+}
+
+class _ManageProductState extends State<ManageProduct> {
   Stream<QuerySnapshot> product() =>
       FirebaseFirestore.instance.collection("product-renter").snapshots();
 
@@ -27,8 +27,9 @@ class ManageProduct extends StatelessWidget {
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
             child: const Text("Manage Product"),
           ),
-          backgroundColor: hexStringToColor("4164DE"),
+          backgroundColor: HexColor("4164DE"),
         ),
+        resizeToAvoidBottomInset: false,
         body: Padding(
           padding: EdgeInsets.symmetric(
               vertical: _size.height / 30, horizontal: _size.width / 18),
@@ -64,8 +65,12 @@ class ManageProduct extends StatelessWidget {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  } 
-                  else {
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
                     return Expanded(
                         child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,

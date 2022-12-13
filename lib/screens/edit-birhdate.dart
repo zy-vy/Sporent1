@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:sporent/component/edit-page.dart';
 import 'package:sporent/screens/color.dart';
+import 'package:sporent/screens/edit-personal-info.dart';
 
 class EditBirthdate extends StatefulWidget {
   const EditBirthdate({super.key});
@@ -14,6 +13,7 @@ class EditBirthdate extends StatefulWidget {
 
 class _EditBirthdateState extends State<EditBirthdate> {
   TextEditingController dateController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +28,23 @@ class _EditBirthdateState extends State<EditBirthdate> {
         ),
         backgroundColor: hexStringToColor("4164DE"),
       ),
-      body: Padding(
-        padding:
-            EdgeInsets.symmetric(vertical: _size.height/30, horizontal: _size.width/18),
+      resizeToAvoidBottomInset: false,
+      body: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: _formKey,
+        child: Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: _size.height / 30, horizontal: _size.width / 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Edit Your Birthdate",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: _size.height/50),
-            Text("Select birthdate for your apps",
-                style: TextStyle(fontSize: 13, color: HexColor("979797"))),
-            SizedBox(height: _size.height/30),
-            TextField(
+            topPage(
+                "Edit Your Birhdate", _size, "Select birthdate for your apps"),
+            TextFormField(
               controller: dateController,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Select your birthdate'),
-              readOnly: true,
               onTap: () async {
                 DateTime? selectedDate = await showDatePicker(
                     context: context,
@@ -57,31 +54,23 @@ class _EditBirthdateState extends State<EditBirthdate> {
 
                 if (selectedDate != null) {
                   String formattedDate =
-                      DateFormat('d MMMM ''yyyy').format(selectedDate);
+                      DateFormat('d MMMM ' 'yyyy').format(selectedDate);
 
                   setState(() {
                     dateController.text = formattedDate;
                   });
-                } else {
-                  print("Date is not selected");
+                }
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Date must not be empty";
                 }
               },
             ),
-            SizedBox(height: _size.height/20),
-            SizedBox(
-                width: _size.width,
-               height: _size.height/15,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HexColor("4164DE"),
-                    // padding: const EdgeInsets.only(right: 300, bottom: 40)
-                  ),
-                  child: const Text("Confirm", textAlign: TextAlign.center),
-                ))
+            bottomPage(_size, _formKey, context, const EditPersonalInfo())
           ],
         ),
       ),
-    );
+    ));
   }
 }
