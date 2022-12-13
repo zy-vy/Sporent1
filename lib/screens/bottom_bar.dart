@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:sporent/screens/login_google_screen.dart';
 import 'package:sporent/screens/profile.dart';
 import 'package:sporent/screens/cart_screen.dart';
 import 'package:sporent/screens/home_screen.dart';
@@ -18,8 +19,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   final List pageList = [
     const HomeScreen(),
     const TransactionScreen(),
-    const CartPage(),
-    const ProfilePage()
+    const CartScreen(),
+    const LoginGoogleScreen()
   ];
 
   void selectedPage(int index){

@@ -7,6 +7,7 @@ import 'package:sporent/component/product_card.dart';
 import 'package:sporent/component/product_recommend.dart';
 import 'package:sporent/component/search_bar_product.dart';
 import 'package:sporent/screens/category_screen.dart';
+import 'package:sporent/screens/product_list_screen.dart';
 
 import '../model/product.dart';
 
@@ -78,15 +79,20 @@ class HeadingRecommend extends StatelessWidget {
           horizontal: _size.width / 30, vertical: _size.height / 75),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text("Today's Recommendation",
+        children: [
+          const Text("Today's Recommendation",
               style:
               TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           Align(
             alignment: Alignment.bottomRight,
-            child: Text(
-              "see all",
-              style: TextStyle(color: Colors.grey),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductListScreen(),));
+              },
+              child: const Text(
+                "see all",
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           )
         ],

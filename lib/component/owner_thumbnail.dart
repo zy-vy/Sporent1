@@ -19,7 +19,7 @@ class OwnerThumbnail extends StatefulWidget {
 
 class _OwnerThumbnailState extends State<OwnerThumbnail> {
 
-  User? _user;
+  UserLocal? _user;
 
 
   @override
@@ -39,9 +39,9 @@ class _OwnerThumbnailState extends State<OwnerThumbnail> {
     }
   }
 
-  Future<User?> getUser() async {
+  Future<UserLocal?> getUser() async {
     final userRepository = UserRepository();
-    Future<User?> user =  userRepository.getUserByRef(widget.userRef);
+    Future<UserLocal?> user =  userRepository.getUserByRef(widget.userRef);
     return user;
   }
 
@@ -58,7 +58,7 @@ class _OwnerThumbnailState extends State<OwnerThumbnail> {
             child: CircularProgressIndicator(),
           );
         }
-        User? user = snapshot.data;
+        UserLocal? user = snapshot.data;
 
       return Card(
         elevation: 3,

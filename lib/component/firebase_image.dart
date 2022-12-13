@@ -50,11 +50,15 @@ class _FirebaseImageState extends State<FirebaseImage> {
       try {
         file.create(recursive: true);
         await FirebaseStorage.instance.ref(filePath).writeToFile(file);
+
       } catch (e) {
         // If there is an error delete the created file
         await file.delete(recursive: true);
         return null;
       }
+    }
+    if(await file.length()==0){
+      return null;
     }
     return file;
   }
