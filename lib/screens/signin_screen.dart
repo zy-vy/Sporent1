@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
 import 'package:sporent/screens/homepage.dart';
+import 'package:sporent/screens/otp.dart';
 import 'package:sporent/screens/signup_final.dart';
 import 'package:sporent/screens/signup_screen.dart';
 import 'package:sporent/utils/colors.dart';

@@ -1,12 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sporent/authentication/models/user_model.dart';
+import 'package:sporent/repository/user_repository.dart';
+import 'package:sporent/screens/otp.dart';
+import 'package:email_auth/email_auth.dart';
+import 'package:get/get.dart';
 
 import '../utils/colors.dart';
 import 'homepage.dart';
 
 class SignUpScreenFinal extends StatefulWidget {
   const SignUpScreenFinal({super.key});
+
+  static String verify = "";
+  static String email = "";
 
   @override
   State<SignUpScreenFinal> createState() => _SignUpScreenFinalState();
@@ -19,6 +28,8 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
   TextEditingController _birthDateTextController = TextEditingController();
+  TextEditingController _phoneNumberTextController = TextEditingController();
+  final userRepo = Get.put(UserRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +211,51 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             height: 20,
                           ),
                           TextFormField(
+                            controller: _phoneNumberTextController,
+                            obscureText: false,
+                            enableSuggestions: !false,
+                            autocorrect: !false,
+                            cursorColor: Colors.white,
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.9)),
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(
+                                Icons.person_outline,
+                                color: Colors.white70,
+                              ),
+                              labelText: "Enter Phone Number",
+                              labelStyle: TextStyle(
+                                  color: Colors.white.withOpacity(0.9)),
+                              filled: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              fillColor: Colors.white.withOpacity(0.3),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                      width: 0, style: BorderStyle.none)),
+                            ),
+                            keyboardType: false
+                                ? TextInputType.visiblePassword
+                                : TextInputType.phone,
+                            validator: (value) {
+                              if (value!.isEmpty ||
+                                  !RegExp(r'^(\+62|62|0)8[1-9][0-9]{6,9}$')
+                                      .hasMatch(value!)) {
+                                return "Enter Correct Phone Number";
+                              }
+                              // ignore: unrelated_type_equality_checks
+                              if (checkIfEmailInUse(value) == true) {
+                                return 'Email is Already Taken';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
                             controller: _passwordTextController,
                             obscureText: true,
                             enableSuggestions: !true,
@@ -249,6 +305,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                 borderRadius: BorderRadius.circular(90)),
                             child: ElevatedButton(
                               onPressed: () {
+                                // phoneAuthentication(
+                                //     _phoneNumberTextController.value.text);
+                                String checking = " ";
                                 if (formKey.currentState!.validate()) {
                                   FirebaseAuth.instance
                                       .createUserWithEmailAndPassword(
@@ -256,20 +315,34 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                           password:
                                               _passwordTextController.text)
                                       .then((value) {
-                                    print("Created New Account");
+                                    final user = userModel(
+                                        name: _userNameTextController.text,
+                                        birthdate:
+                                            _birthDateTextController.text,
+                                        email: _emailTextController.text,
+                                        phonenumber:
+                                            _phoneNumberTextController.text);
+                                    createUser(user);
+                                    phoneAuthentication(
+                                        _phoneNumberTextController.value.text);
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                HomeScreen()));
+                                            builder: (context) => OTP(
+                                                _phoneNumberTextController
+                                                    .value.text)));
                                   }).onError((error, stackTrace) {
                                     if (error.toString().contains("email")) {
                                       _showAlertDialog("Email Already In Use");
+                                      checking = "error";
                                     }
                                     if (error.toString().contains("Password")) {
                                       _showAlertDialog(
                                           "Password minimum 6 Character");
+                                      checking = "error";
                                     }
+                                    print(checking);
                                     print("Error ${error.toString()}");
                                   });
                                 }
@@ -339,6 +412,32 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
           ],
         );
       },
+    );
+  }
+
+  Future<void> createUser(userModel user) async {
+    await userRepo.createUser(user);
+  }
+
+// '0.0001'.replaceFirst(RegExp(r'0'), ''); // '.0001'
+  void phoneAuthentication(String phoneNumber1) async {
+    if (phoneNumber1[0] == "0") {
+      phoneNumber1 = phoneNumber1.replaceFirst(RegExp(r'0'), '+62');
+    }
+    if (phoneNumber1[0] == "6" && phoneNumber1[1] == "2") {
+      phoneNumber1 = phoneNumber1.replaceFirst(RegExp(r'62'), '+62');
+    } else {
+      phoneNumber1 = phoneNumber1;
+    }
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber1,
+      verificationCompleted: (PhoneAuthCredential credential) async {},
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        SignUpScreenFinal.verify = verificationId;
+        Navigator.pushNamed(context, "otp");
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 }
