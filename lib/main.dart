@@ -7,8 +7,8 @@ import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/screens/home_screen.dart';
 
-import 'screens/cart_screen.dart';
-import 'screens/profile_screen.dart';
+import 'screens/cart.dart';
+import 'screens/profile.dart';
 
 // void main() {
 //   runApp(const MyApp());

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
+import 'package:sporent/component/component-edit.dart';
+import 'package:sporent/component/detail-product-card.dart';
 import 'package:sporent/screens/color.dart';
+import 'package:sporent/screens/edit-account-number.dart';
+import 'package:sporent/screens/edit-bank-name.dart';
 
 class DepositDetail extends StatefulWidget {
   const DepositDetail({super.key});
@@ -16,6 +17,8 @@ class _DepositDetailState extends State<DepositDetail> {
   TextEditingController dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -25,15 +28,17 @@ class _DepositDetailState extends State<DepositDetail> {
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
+        resizeToAvoidBottomInset: false,
         body: Padding(
-          padding: const EdgeInsets.only(top: 30, bottom: 35),
+          padding: EdgeInsets.only(top: _size.height / 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 15),
-                child: Text(
+              Padding(
+                padding: EdgeInsets.only(
+                    left: _size.width / 20, bottom: _size.height / 80),
+                child: const Text(
                   "Status: In Progress",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
@@ -42,111 +47,32 @@ class _DepositDetailState extends State<DepositDetail> {
                 thickness: 2,
                 color: HexColor("E0E0E0"),
               ),
-              Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, bottom: 30),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Detail Product",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Image.asset(
-                              "images/tennis-racket.png",
-                              width: 150,
-                              height: 150,
-                            ),
-                            const SizedBox(width: 30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Raket Tenis",
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  "Time: 2 hour",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "Total Deposit:",
-                                  style: TextStyle(
-                                      fontSize: 18, color: HexColor("999999")),
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                const Text(
-                                  "Rp 1.500.000",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ])),
-              Divider(thickness: 2, color: HexColor("E0E0E0")),
-              const Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 15, top: 20),
-                child: Text(
-                  "Bank Information",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10),
-                child: Row(
-                  children: const [
-                      Text(
-                      "Bank Name",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(width: 81),
-                    Text("BCA",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 20),
-                child: Row(
-                  children: const [
-                      Text(
-                      "Account Number",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(width: 40),
-                    Text("0211276484758",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-              )
+              const DetailProductCard(20, 19, 15, 18, "Total Deposit"),
+              bankInformation(_size)
             ],
           ),
         ));
   }
 }
+
+Padding bankInformation(Size _size) => Padding(
+    padding: EdgeInsets.only(
+        top: _size.height / 50,
+        left: _size.width / 20,
+        bottom: _size.height / 60,
+        right: _size.width / 20),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Bank Information",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        SizedBox(height: _size.height / 50),
+        const FieldForm("Bank Name", "BCA", EditBankName(), 15, 15, 5, true),
+        const FieldForm("Account Number", "0211276484758", EditAccountNumber(),
+            15, 15, 10, true),
+      ],
+    ));

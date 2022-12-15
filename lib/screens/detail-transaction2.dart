@@ -1,13 +1,11 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
-import '/firebase_options.dart';
 import 'package:sporent/screens/color.dart';
+import 'package:sporent/screens/manage-transaction.dart';
 
 class DetailTransaction2 extends StatefulWidget {
   const DetailTransaction2({super.key});
@@ -30,6 +28,8 @@ class _DetailTransaction2State extends State<DetailTransaction2> {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -40,8 +40,8 @@ class _DetailTransaction2State extends State<DetailTransaction2> {
         backgroundColor: hexStringToColor("4164DE"),
       ),
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 30, left: 20, right: 35, bottom: 35),
+        padding: EdgeInsets.symmetric(
+            vertical: _size.height / 30, horizontal: _size.width / 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,10 +49,10 @@ class _DetailTransaction2State extends State<DetailTransaction2> {
               "Product Photo",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: _size.height / 50),
             Container(
-              width: 80,
-              height: 85,
+              width: _size.width / 5,
+              height: _size.height / 10,
               decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -67,20 +67,24 @@ class _DetailTransaction2State extends State<DetailTransaction2> {
                     size: 35,
                   )),
             ),
-            const SizedBox(height: 40),
-            const Text("Live Tracking Gojek",style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+            SizedBox(height: _size.height / 23),
+            const Text("Live Tracking Gojek",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
             const TextField(
               decoration: InputDecoration(
                 border: UnderlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 70),
+            SizedBox(height: _size.height / 15),
             Center(
               child: SizedBox(
-                height: 70,
-                width: 350,
+                height: _size.height / 12,
+                width: _size.width,
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ManageTransaction()));
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: HexColor("4164DE"),
                     ),

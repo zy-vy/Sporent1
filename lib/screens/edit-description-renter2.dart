@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/edit-page.dart';
 import 'package:sporent/screens/edit-personal-info-renter.dart';
+import '../component/edit-page.dart';
 
-class EditLocationRenter extends StatelessWidget {
-  const EditLocationRenter({super.key});
+class EditDescriptionRenter extends StatelessWidget {
+  const EditDescriptionRenter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class EditLocationRenter extends StatelessWidget {
         centerTitle: false,
         title: Transform(
           transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-          child: const Text("Edit Location"),
+          child: const Text("Edit Description"),
         ),
         backgroundColor: HexColor("4164DE"),
       ),
-      body: const EditPage("Edit Your Location", "Enter a location for your page", "Enter your location", "Location", EditPersonalInfoRenter())
+      body: const EditPage("Edit Your Description", "Enter a description for your page", "Enter your Description", "Description", EditPersonalInfoRenter())
     );
   }
 }
