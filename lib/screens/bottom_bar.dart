@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:sporent/screens/login_google_screen.dart';
 import 'package:sporent/screens/profile.dart';
+import 'package:sporent/screens/cart_screen.dart';
 import 'package:sporent/screens/cart.dart';
 import 'package:sporent/screens/home_screen.dart';
 import 'package:sporent/screens/transaction_screen.dart';
@@ -17,7 +20,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   final List pageList = [
     const HomeScreen(),
     const TransactionScreen(),
-    const CartPage(),
+    const CartScreen(),
     const ProfilePage()
   ];
 
