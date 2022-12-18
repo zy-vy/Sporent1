@@ -4,34 +4,29 @@ import 'dart:developer';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/component/firebase_image.dart';
+import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/product_detail_screen.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends StatelessWidget {
   const ProductCard({Key? key, required Product product})
       : _product = product,
         super(key: key);
 
   final Product _product;
 
-  @override
-  State<ProductCard> createState() => _ProductCardState();
-}
-
-class _ProductCardState extends State<ProductCard> {
-  final productPath = "product-images/";
 
   @override
   Widget build(BuildContext context) {
     final Reference storage = FirebaseStorage.instance.ref();
-    final pathRef = storage.child(productPath + widget._product.id!);
-    log("+++ product${widget._product.name}");
+    final pathRef = storage.child("${Product.imagePath!}/${_product.id!}");
+    log("+++ product${_product.name}");
 
     // Size _size = MediaQuery.of(context).size;
 
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: widget._product),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: _product),));
       },
       child: Card(
         child: Column(
@@ -41,7 +36,7 @@ class _ProductCardState extends State<ProductCard> {
               aspectRatio: 1,
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
-                  child: FirebaseImage(filePath : "$productPath${widget._product.id}.jpg")),
+                  child: FirebaseImage(filePath : "${Product.imagePath}/${_product.id}.jpg")),
                   // child: Icon(Icons.access_time)),
             ),
             Expanded(
@@ -51,16 +46,19 @@ class _ProductCardState extends State<ProductCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    widget._product.name??"",
+                    _product.name??"",
                     style: const TextStyle(fontSize: 16),
                   ),
-                  Text(
-                    "Rp. ${widget._product.rentPrice??""}/hour",
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ItemPrice(price: _product.rentPrice!,trail: true,fontSize: 20,),
+                    ],
                   ),
                   Row(children: [
                     const Icon(Icons.location_on),
-                    Text(widget._product.location??"")
+                    Text(_product.location??"")
                   ],)
                 ],
               ),

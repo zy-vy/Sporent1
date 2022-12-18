@@ -36,7 +36,8 @@ class CartController {
     batch.set(cartDetailRef, cartDetail.toFirestore(), SetOptions(merge: true));
 
     batch.commit().onError(
-        (error, stackTrace) => log("=== error add cart $error, $stackTrace"));
+            (error, stackTrace) =>
+            log("=== error add cart $error, $stackTrace"));
   }
 
   // Stream<List<Cart?>> getCartList ()async* {
@@ -75,7 +76,21 @@ class CartController {
         .collection(Cart.path)
         .where("user", isEqualTo: userRef)
         .snapshots()
-        .map((value) => Cart.fromSnapshot(value.docs));
+        .map((value) {
+      var listCart = Cart.fromSnapshot(value.docs);
+      // listCart.forEach((cart) {
+      //   getCartDetailList(cart).map((listCartDetail) {
+      //     listCartDetail.forEach((cartDetail) { cartDetail?.productRef?.get().then((value) {
+      //       var product = Product.fromDocument(value.id, value.data() as Map<String,dynamic>);
+      //       cartDetail.product = product;
+      //     },); });
+      //     cart.listCartDetail = listCartDetail.cast<CartDetail>();
+      //     log("=== listcartdetail : ${listCartDetail.first?.id}");
+      //   },);
+      //
+      // });
+      return listCart;
+    });
 
     yield* listCart;
   }
@@ -96,7 +111,9 @@ class CartController {
   }
 
   Future<void> deleteCart(CartDetail cartDetail) async {
-    var cartDetailRef = firestore.doc(cartDetail.toReference().path);
+    var cartDetailRef = firestore.doc(cartDetail
+        .toReference()
+        .path);
     var cartRef = cartDetail.cartRef;
     var cartDetailList = await firestore
         .collection(CartDetail.path)
@@ -108,5 +125,76 @@ class CartController {
     }
     batch.delete(cartDetailRef);
     batch.commit();
+  }
+
+  Stream<int> getCartItemPrice() async* {
+    int total = 10;
+
+    // await for (final listCart in getCartList()){
+    //   listCart?.forEach((cart) async {
+    //     await for (final listCartDetail in getCartDetailList(cart)){
+    //       listCartDetail.forEach((cartDetail) async{
+    //         await for (final doc in cartDetail!.productRef!.snapshots()){
+    //           var product = Product.fromDocument(doc.id, doc.data() as Map<String, dynamic>);
+    //           int price = (product.rentPrice!* cartDetail.quantity!)+ product.deposit!;
+    //           total+=price;
+    //         }
+    //       });
+    //     }
+    //   }) ;
+    // }
+
+    // yield* getCartList().map((listCart) {
+    //   if (listCart == null) return 0;
+    //
+    //   listCart.forEach((cart) {
+    //     getCartDetailList(cart).map((listCartDetail) {
+    //       for (var cartDetail in listCartDetail) {
+    //         cartDetail?.productRef?.snapshots().map((doc) {
+    //           var product = Product.fromDocument(
+    //               doc.id, doc.data() as Map<String, dynamic>);
+    //           var price = (product.rentPrice! * cartDetail.quantity!) +
+    //               product.deposit!;
+    //           total += price;
+    //         });
+    //       }
+    //     });
+    //   });
+    //   return 0;
+    // });
+
+    log("=== total: $total");
+    yield total;
+  }
+
+
+  Stream<int> getCartTotal() {
+    // List<Cart>? listCart;
+
+    // getCartList().listen((event) { listCart = event;});
+
+    return getCartList().map((listCart) {
+      var total = 0;
+
+      for (var cart in listCart!) {
+        getCartDetailList(cart).map(
+              (listCartDetail) {
+            listCartDetail.forEach((cartDetail) {
+              cartDetail?.productRef?.get().then((value) {
+                var product = Product.fromDocument(
+                    value.id, value.data() as Map<String, dynamic>);
+                var price =
+                    (product.price! * cartDetail.quantity!) + product.deposit!;
+                total += price;
+              });
+            });
+          },
+        );
+      }
+
+
+      // );
+      return total;
+    });
   }
 }

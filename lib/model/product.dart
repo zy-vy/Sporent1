@@ -9,10 +9,11 @@ class Product {
   int? price;
   int? rentPrice;
   String? location;
+  int? deposit;
   String? img;
   DocumentReference? ownerRef;
 
-  Product({this.id,this.name,this.price,this.location,this.img,this.ownerRef,this.rentPrice});
+  Product({this.id,this.name,this.price,this.location,this.img,this.ownerRef,this.rentPrice,this.deposit});
 
   static Product fromDocument (String id,Map<String, dynamic> json){
     return Product(
@@ -22,7 +23,8 @@ class Product {
       location: json['location'],
       img : json['img'],
       ownerRef : json['owner'],
-      rentPrice: json['rent_price']
+      rentPrice: json['rent_price'],
+      deposit: json['deposit_price']
     );
   }
 

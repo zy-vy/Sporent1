@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sporent/model/product.dart';
 
 class CartDetail{
   static String path="cart_detail";
@@ -9,6 +10,7 @@ class CartDetail{
   int? quantity;
   DateTime? startDate;
   DateTime? endDate;
+  Product? product;
 
   CartDetail({this.id,this.cartRef,this.productRef,this.startDate,this.endDate,this.quantity});
 
