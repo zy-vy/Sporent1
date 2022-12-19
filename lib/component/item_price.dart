@@ -23,8 +23,8 @@ class ItemPrice extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text("${currencyFormatter.format(price)}",style: TextStyle(fontSize: fontSize),),
-          Text(trail!=null? trail!?"/day":"":"",style: TextStyle(fontSize:( fontSize??14)*0.75)),
+          Text(currencyFormatter.format(price),style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
+          Text(trail!=null? trail!?"/Day":"":"",style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
         ],
       ),
     );

@@ -10,18 +10,15 @@ class Product {
   @required
   String? id;
   @required
-  String image;
+  String? img;
   @required
   String? name;
   @required
-  int? price;
   int? rentPrice;
   @required
   int? deposit;
   @required
   String? location;
-  int? deposit;
-  String? img;
   DocumentReference? ownerRef;
   @required
   DocumentReference<Map<String, dynamic>> category;
@@ -30,29 +27,21 @@ class Product {
   @required
   String? description;
 
-  Product({this.id,this.name,this.price,this.location,this.img,this.ownerRef,this.rentPrice,this.deposit});
-  Product(this.id, this.image, this.name, this.price, this.deposit,
+
+  Product(this.id, this.img, this.name, this.rentPrice, this.deposit,
       this.location, this.category, this.subcategory, this.description);
 
   static Product fromDocument(String id, Map<String, dynamic> json) {
     return Product(
-        id,
-        json['image'],
-        json['name'],
-        json['price'],
-        json['deposit'],
-        json['location'],
-        json['category'],
-        json['subcategory'],
-        json['description']);
-      id :id,
-      name: json['name'],
-      price: json['price'],
-      location: json['location'],
-      img : json['img'],
-      ownerRef : json['owner'],
-      rentPrice: json['rent_price'],
-      deposit: json['deposit_price']
+      id,
+      json['img'],
+      json['name'],
+      json['rent_price'],
+      json['deposit_price'],
+      json['location'],
+      json['category'],
+      json['subcategory'],
+      json['description']
     );
   }
 
@@ -63,15 +52,16 @@ class Product {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "image" : image,
+        "image" : img,
         "name": name,
-        "price": price,
+        "price": rentPrice,
         "deposit": deposit,
         "location": location,
         "category": category,
         "subcategory" : subcategory,
         "description": description
       };
+
   DocumentReference toReference (){
     var path = "product/$id";
     return FirebaseFirestore.instance.doc(path);

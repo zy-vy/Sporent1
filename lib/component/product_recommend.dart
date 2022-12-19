@@ -57,8 +57,8 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      List<QueryDocumentSnapshot<Map<String, dynamic>>>? listDocs =
-                          snapshot.data?.docs;
+                      List<QueryDocumentSnapshot<Map<String, dynamic>>>?
+                          listDocs = snapshot.data?.docs;
                       inspect(listDocs);
                       int? productCount = listDocs?.length;
                       return ProductGridview(productCount: productCount, listDocs: listDocs);
@@ -109,5 +109,3 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
     inspect(result);
   }
 }
-
-

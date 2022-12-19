@@ -184,7 +184,7 @@ class CartController {
                 var product = Product.fromDocument(
                     value.id, value.data() as Map<String, dynamic>);
                 var price =
-                    (product.price! * cartDetail.quantity!) + product.deposit!;
+                    (product.rentPrice! * cartDetail.quantity!) + product.deposit!;
                 total += price;
               });
             });

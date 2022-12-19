@@ -22,17 +22,16 @@ class ProductGridview extends StatelessWidget {
         controller: ScrollController(),
         shrinkWrap: true,
         itemCount: productCount,
-        gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-            childAspectRatio: 0.6
-        ),
+            childAspectRatio: 0.6),
         itemBuilder: (context, index) {
           // Product p = Product.fromJson(listDocs![index].data());
 
-          Product product = Product.fromDocument(listDocs![index].id, listDocs![index].data());
+          Product product =
+              Product.fromDocument(listDocs![index].id, listDocs![index].data());
           return Center(
             child:
             ProductCard(product: product),
