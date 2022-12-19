@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +8,12 @@ import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/owner_thumbnail.dart';
-import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
+
+import '../controller/test_user.dart';
+import '../model/cart.dart';
+import '../model/cart_detail.dart';
+import '../model/user.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({Key? key, required Product product})
@@ -36,7 +41,6 @@ class ProductDetailScreen extends StatelessWidget {
               horizontal: size.width / 15, vertical: size.width / 25),
           child: FloatingActionButton(
             onPressed: () {
-              CartController controller = CartController();
               showModalBottomSheet(
                   context: context,
                   builder: (context) =>
@@ -154,7 +158,7 @@ class ProductDetailScreen extends StatelessWidget {
                                             daysBetween(startDate!, endDate!) +
                                                 1;
                                         log("--- diff $difference");
-                                        await controller.addToCart(_product,
+                                        await addToCart(_product,
                                             startDate!, endDate!, difference);
                                       }
                                     },
@@ -216,5 +220,46 @@ class ProductDetailScreen extends StatelessWidget {
     from = DateTime(from.year, from.month, from.day);
     to = DateTime(to.year, to.month, to.day);
     return (to.difference(from).inHours / 24).round();
+  }
+  Future<void> addToCart(Product product, DateTime startDate, DateTime endDate,
+      int quantity) async {
+    var firestore = FirebaseFirestore.instance;
+    UserLocal? user = await TestUser().getUser();
+    log("=== user ${user?.name}", level: 3);
+    var ownerRef = product.ownerRef;
+    var userRef = user!.toReference();
+    Cart? cart =await firestore
+        .collection(Cart.path)
+        .where('user', isEqualTo: userRef)
+        .where('owner', isEqualTo: ownerRef)
+        .get()
+        .then((value) {
+      if (value.size == 0) {
+        return null;
+      }
+      return Cart.fromDocument(value.docs[0].id, value.docs[0].data());
+    });
+
+    DocumentReference? cartDoc = cart?.toReference();
+    final batch = firestore.batch();
+
+    if (cart == null) {
+      cartDoc = firestore.collection('cart').doc();
+      cart = Cart(ownerRef: ownerRef, userRef: user?.toReference());
+      batch.set(cartDoc, cart.toFirestore());
+    }
+
+    CartDetail cartDetail = CartDetail(
+        cartRef: cartDoc,
+        productRef: product.toReference(),
+        quantity: quantity,
+        startDate: startDate,
+        endDate: endDate);
+    var cartDetailRef = firestore.collection(CartDetail.path).doc();
+    batch.set(cartDetailRef, cartDetail.toFirestore(), SetOptions(merge: true));
+
+    batch.commit().onError(
+            (error, stackTrace) =>
+            log("=== error add cart $error, $stackTrace"));
   }
 }

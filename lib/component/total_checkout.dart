@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-import 'package:sporent/controller/cart_controller.dart';
-import 'package:sporent/model/cart.dart';
 import 'package:sporent/util/provider/total_price.dart';
 
 import '../screens/checkout.dart';

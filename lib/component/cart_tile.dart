@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/component/cart_detail_tile.dart';
 import 'package:sporent/component/owner_thumbnail.dart';
-import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/cart.dart';
-import 'package:sporent/model/user.dart';
+import 'package:sporent/model/cart_detail.dart';
 
 class CartTile extends StatelessWidget {
   final Cart cart;
@@ -15,7 +14,7 @@ class CartTile extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return StreamBuilder(
-      stream: CartController().getCartDetailList(cart),
+      stream: getCartDetailList(cart),
       builder: (context, snapshot) {
         if (!snapshot.hasData){
           // return const Center(child: CircularProgressIndicator());
@@ -40,4 +39,21 @@ class CartTile extends StatelessWidget {
       },
     );
   }
+  Stream<List<CartDetail?>> getCartDetailList(Cart cart) async* {
+    // Stream<List<Cart?>> stream= const Stream.empty();
+    var firestore = FirebaseFirestore.instance;
+
+    Stream<List<CartDetail?>> listCart = firestore
+        .collection(CartDetail.path)
+        .where("cart", isEqualTo: cart.toReference())
+        .snapshots()
+        .map((snapshot) {
+      return CartDetail.fromSnapshot(snapshot.docs);
+    });
+
+    yield* listCart;
+    // return stream;
+  }
+
+
 }
