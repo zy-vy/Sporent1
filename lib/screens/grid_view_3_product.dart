@@ -7,11 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sporent/model/subcategory.dart';
 import '../model/category.dart';
 import 'package:sporent/screens/color.dart';
-
-import '../model/product.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -34,13 +31,10 @@ class _AddProductState extends State<AddProduct> {
       FirebaseFirestore.instance.collection("category").snapshots();
 
   File? image;
+  File? image_temp;
+  List<File?> listImages = [];
   String? productCategory;
-  String? productSubcategory;
-  bool enabled = false;
-  bool haveData = false;
-  DocumentReference<Map<String, dynamic>>? referenceCategory;
-  Stream<QuerySnapshot<Map<String, dynamic>>>? temp_snapshot_subcategory =
-      FirebaseFirestore.instance.collection('subcategory').snapshots();
+  int counter = 1;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -54,6 +48,7 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
+    listImages.add(image_temp);
 
     return Scaffold(
         appBar: AppBar(
@@ -78,34 +73,88 @@ class _AddProductState extends State<AddProduct> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: _size.height / 50),
-                  Container(
-                    width: _size.width / 5,
-                    height: _size.height / 10,
-                    decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                                width: 2, color: HexColor("868686")))),
-                    child: TextButton(
-                      onPressed: () async {
-                        await openGallery();
-                      },
-                      child: image != null
-                          ? Image.file(image!)
-                          : FaIcon(
-                              FontAwesomeIcons.plus,
-                              color: HexColor("4164DE"),
-                              size: 35,
+                  Row(
+                    children: [
+                      for (int i = 0; i < counter; i++)
+                        Row(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                  width: _size.width / 5,
+                                  height: _size.height / 10,
+                                  decoration: ShapeDecoration(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          side: BorderSide(
+                                              width: 2,
+                                              color: HexColor("868686")))),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      await openGallery();
+                                      setState(() {
+                                        if (counter != 3) {
+                                          counter += 1;
+                                        }
+                                        listImages.remove(image_temp);
+                                        listImages.add(image);
+                                        print("ini counter ${counter}");
+                                      });
+                                    },
+                                    child: listImages[i] != null
+                                        ? Image.file(listImages[i]!)
+                                        : FaIcon(
+                                            FontAwesomeIcons.plus,
+                                            color: HexColor("4164DE"),
+                                            size: 35,
+                                          ),
+                                  ),
+                                ),
+                                listImages[i] != null
+                                    ? Positioned(
+                                        right: 0,
+                                        child: Container(
+                                            height: 25,
+                                            width: 25,
+                                            decoration: const BoxDecoration(
+                                                color: Colors.blueAccent,
+                                                shape: BoxShape.circle),
+                                            child: IconButton(
+                                              icon: const FaIcon(
+                                                  FontAwesomeIcons.xmark,
+                                                  size: 10,
+                                                  color: Colors.white),
+                                              onPressed: () {
+                                                setState(() {
+                                                  listImages
+                                                      .remove(listImages[i]);
+                                                  listImages.remove(image_temp);
+                                                  if (counter != 1) {
+                                                    counter -= 1;
+                                                  }
+                                                  print("ini counter ${counter}");
+                                                });
+                                              },
+                                            )),
+                                      )
+                                    : const Positioned(
+                                        right: 0, top: 0, child: SizedBox())
+                              ],
                             ),
-                    ),
+                            counter != 1
+                                ? SizedBox(width: _size.width / 20)
+                                : const SizedBox(),
+                          ],
+                        ),
+                    ],
                   ),
                   SizedBox(height: _size.height / 23),
                   fieldText("Product Name", "Enter product name", _size,
                       nameController),
                   fieldPrice("Product Price", "Enter product price", _size,
                       priceController),
-                  fieldPrice("Deposit Price", "Enter deposit price", _size,
-                      depositController),
+                  fieldPrice("Deposit Price", "Enter deposit price", _size, depositController),
                   const Text("Product Category",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
@@ -135,60 +184,9 @@ class _AddProductState extends State<AddProduct> {
                           onChanged: (value) {
                             setState(() {
                               productCategory = value!;
-                              referenceCategory = firestore
-                                  .collection("category")
-                                  .doc(productCategory);
-                              enabled = true;
-                              haveData = false;
                             });
                           },
                         );
-                      }
-                    },
-                  ),
-                  SizedBox(height: _size.height / 23),
-                  const Text("Product Subcategory",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  StreamBuilder(
-                    stream: firestore
-                        .collection('subcategory')
-                        .where('category', isEqualTo: referenceCategory)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        List<DropdownMenuItem> subcategoryItem = [];
-                        for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                          Subcategory subcategory = Subcategory.fromDocument(
-                              snapshot.data!.docs[i].data());
-                          subcategoryItem.add(DropdownMenuItem(
-                              value: snapshot.data!.docs[i].id,
-                              child: Text(subcategory.type)));
-                        }
-                        return enabled == true
-                            ? DropdownButtonFormField(
-                                value: haveData == false
-                                    ? null
-                                    : productSubcategory,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Select subcategory'),
-                                items: subcategoryItem,
-                                onChanged: (value) => setState(() {
-                                      productSubcategory = value!;
-                                      haveData = true;
-                                    }))
-                            : DropdownButtonFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Select subcategory'),
-                                items: subcategoryItem,
-                                onChanged: null);
                       }
                     },
                   ),
@@ -205,15 +203,14 @@ class _AddProductState extends State<AddProduct> {
                           int price = int.parse(priceController.text);
                           int deposit = int.parse(depositController.text);
 
-                          addProduct(
-                              image: image,
-                              name: nameController.text,
-                              price: price,
-                              deposit: deposit,
-                              location: locationController.text,
-                              category: productCategory,
-                              subcategory: productSubcategory,
-                              description: descriptionController.text);
+                          // addProduct(
+                          //     image: image,
+                          //     name: nameController.text,
+                          //     price: price,
+                          //     deposit: deposit,
+                          //     location: locationController.text,
+                          //     category: productCategory,
+                          //     description: descriptionController.text);
 
                           ScaffoldMessenger.of(context)
                               .showSnackBar(snackbar(_size));
@@ -235,44 +232,32 @@ class _AddProductState extends State<AddProduct> {
   }
 }
 
-Future addProduct(
-    {required File? image,
-    required String name,
-    required int price,
-    required int deposit,
-    required String? location,
-    required String? category,
-    required String? subcategory,
-    required String description}) async {
-  final docProduct =
-      FirebaseFirestore.instance.collection("product-renter").doc();
+// Future addProduct(
+//     {required File? image,
+//     required String name,
+//     required int price,
+//     required int deposit,
+//     required String? location,
+//     required String? category,
+//     required String description}) async {
+//   final docProduct =
+//       FirebaseFirestore.instance.collection("product-renter").doc();
 
-  final categoryReference =
-      FirebaseFirestore.instance.collection("category").doc(category);
+//   final categoryReference =
+//       FirebaseFirestore.instance.collection("category").doc(category);
 
-  final subcategoryReference =
-      FirebaseFirestore.instance.collection("subcategory").doc(subcategory);
+//   final ref = FirebaseStorage.instance
+//       .ref()
+//       .child('product-images/')
+//       .child(docProduct.id);
+//   await ref.putFile(image!);
 
-  final ref = FirebaseStorage.instance
-      .ref()
-      .child('product-images/')
-      .child(docProduct.id);
-  await ref.putFile(image!);
+//   var productRenter = ProductRenter(docProduct.id, docProduct.id, name, price,
+//           location, categoryReference, description)
+//       .toJson();
 
-  var productRenter = Product(
-          docProduct.id,
-          docProduct.id,
-          name,
-          price,
-          deposit,
-          location,
-          categoryReference,
-          subcategoryReference,
-          description)
-      .toJson();
-
-  await docProduct.set(productRenter);
-}
+//   await docProduct.set(productRenter);
+// }
 
 Column fieldText(String title, String desc, Size _size,
         TextEditingController controller) =>

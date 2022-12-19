@@ -42,11 +42,11 @@ class _TestScreenState extends State<TestScreen> {
                     List<Product> listProduct = [];
                     for (int i = 0; i < listDocs!.length; i++) {
                       Map<String, dynamic> data = listDocs[i].data();
-                      Product p = Product(
-                        listDocs[i].id,
-                          data['name'], data['price'], data['location'],
-                          data['img']);
-                      listProduct.add(p);
+                      // Product p = Product(
+                      //   listDocs[i].id,
+                      //     data['name'], data['price'], data['location'],
+                      //     data['img']);
+                      // listProduct.add(p);
                     }
 
                     return

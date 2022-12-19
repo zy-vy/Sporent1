@@ -63,7 +63,7 @@ class _ManageProductState extends State<ManageProduct> {
                 builder: ((context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: Text("There is no data"),
                     );
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
