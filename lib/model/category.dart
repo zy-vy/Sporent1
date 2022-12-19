@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Category {
+  static String path = "category";
   String? id;
   String? olahraga;
 
