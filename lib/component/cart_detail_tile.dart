@@ -9,6 +9,7 @@ import 'package:sporent/controller/product_controller.dart';
 import 'package:sporent/model/cart_detail.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/product_detail_screen.dart';
+import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
 
@@ -19,6 +20,10 @@ class CartDetailTile extends StatelessWidget {
 
   const CartDetailTile({Key? key, required this.cartDetail}) : super(key: key);
 
+  _rebuild(BuildContext context)async{
+    Provider.of<CartNotifier>(context,listen: false).setValue();
+
+  }
   @override
   Widget build(BuildContext context) {
     var imagePath = "${Product.imagePath}/";
@@ -36,15 +41,15 @@ class CartDetailTile extends StatelessWidget {
           product = snapshot.data!;
           var price = (product.rentPrice!*cartDetail.quantity!)+product.deposit!;
 
-          Future.delayed(const Duration(seconds: 1), () async {
-          });
-          Provider.of<TotalPriceProvider>(context,listen: true).addToCart(price);
+          // Future.delayed(const Duration(seconds: 1), () async {
+          // });
+          // Provider.of<TotalPriceProvider>(context,listen: true).addToCart(price);
 
           // Provider.of<ItemCountProvider>(context,listen: true).addToCart();
           return Card(
             child: ListTile(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product),)).then((value) => _rebuild(context));
               },
               leading: AspectRatio(
                 aspectRatio: 1,
@@ -94,7 +99,9 @@ class CartDetailTile extends StatelessWidget {
                 ],
               ),
               trailing: IconButton(onPressed: () {
-                  CartController().deleteCart(cartDetail);
+                Provider.of<CartNotifier>(context,listen: false).setValue();
+
+                CartController().deleteCart(cartDetail);
               }, icon: const Icon(Icons.delete_outline_rounded))
             ),
           );

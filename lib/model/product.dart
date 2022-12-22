@@ -6,20 +6,18 @@ class Product {
   static String? imagePath = "product-images";
   String? id;
   String? name;
-  int? price;
   int? rentPrice;
   String? location;
   int? deposit;
   String? img;
   DocumentReference? ownerRef;
 
-  Product({this.id,this.name,this.price,this.location,this.img,this.ownerRef,this.rentPrice,this.deposit});
+  Product({this.id,this.name,this.location,this.img,this.ownerRef,this.rentPrice,this.deposit});
 
   static Product fromDocument (String id,Map<String, dynamic> json){
     return Product(
       id :id,
       name: json['name'],
-      price: json['price'],
       location: json['location'],
       img : json['img'],
       ownerRef : json['owner'],

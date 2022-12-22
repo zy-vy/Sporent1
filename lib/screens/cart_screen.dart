@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/total_checkout.dart';
 import 'package:sporent/screens/cart_list.dart';
+import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
 
@@ -58,49 +59,17 @@ class _CartScreenState extends State<CartScreen> {
                   MultiProvider(
                 providers: [
                   ChangeNotifierProvider(
-                      create: (context) => TotalPriceProvider()),
-                  ChangeNotifierProvider(
-                      create: (context) => ItemCountProvider())
+                      create: (context) => CartNotifier()),
+
                 ],
                 child: Column(
+                  // mainAxisSize: MainAxisSize.max,
                   children: [
-                    const Expanded(child: CartList()),
+                    Expanded(child: CartList()),
                     Divider(thickness: 1, color: HexColor("A3A3A3")),
                     SizedBox(height: size.height / 30),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                                child: Text("Total: ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20))),
-                            const Text("Rp. 20"),
-                          ],
-                        ),
-                        SizedBox(height: size.height / 30),
-                        SizedBox(
-                          width: size.width,
-                          height: size.height / 13,
-                          child:
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: HexColor("4164DE"),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)))),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const CheckoutPage()));
-                              },
-                              child: const Text("Checkout",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 18))),
-                        )
-                      ],
-                    ),
-                  ],
+                    const TotalCheckout()
+                  ]
                 ),
               ))
           // )

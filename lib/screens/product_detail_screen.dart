@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/owner_thumbnail.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
+
+import '../util/provider/cart_notifier.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({Key? key, required Product product})
@@ -156,6 +159,7 @@ class ProductDetailScreen extends StatelessWidget {
                                         log("--- diff $difference");
                                         await controller.addToCart(_product,
                                             startDate!, endDate!, difference);
+
                                       }
                                     },
                                     child: const Text("Add to Cart")),

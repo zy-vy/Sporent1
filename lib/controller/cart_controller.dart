@@ -76,19 +76,24 @@ class CartController {
         .collection(Cart.path)
         .where("user", isEqualTo: userRef)
         .snapshots()
-        .map((value) {
+        .asyncMap((value) {
       var listCart = Cart.fromSnapshot(value.docs);
-      // listCart.forEach((cart) {
-      //   getCartDetailList(cart).map((listCartDetail) {
-      //     listCartDetail.forEach((cartDetail) { cartDetail?.productRef?.get().then((value) {
-      //       var product = Product.fromDocument(value.id, value.data() as Map<String,dynamic>);
-      //       cartDetail.product = product;
-      //     },); });
-      //     cart.listCartDetail = listCartDetail.cast<CartDetail>();
-      //     log("=== listcartdetail : ${listCartDetail.first?.id}");
-      //   },);
-      //
-      // });
+      for (var cart in listCart) {
+        getCartDetailList(cart).asyncMap((listCartDetail)  {
+          var total =0;
+          listCartDetail.forEach((cartDetail) async  {
+            var product = await cartDetail?.productRef?.get().then((value) => Product.fromDocument(value.id, value.data() as Map<String,dynamic>));
+            cartDetail?.product = product;
+            var price =
+                (product!.rentPrice! * cartDetail!.quantity!) + product!.deposit!;
+            total+= price;
+          });
+          cart.totalPrice = total;
+          cart.listCartDetail = listCartDetail.cast<CartDetail>();
+          log("=== listcartdetail : ${listCartDetail.first?.id}");
+        },);
+
+      }
       return listCart;
     });
 
@@ -168,33 +173,114 @@ class CartController {
   }
 
 
-  Stream<int> getCartTotal() {
+  Future<int> getCartTotal() async{
     // List<Cart>? listCart;
 
     // getCartList().listen((event) { listCart = event;});
 
-    return getCartList().map((listCart) {
-      var total = 0;
+    // List<Cart>? listCart;
+    //
+    // await for (final value in getCartList()){
+    //   listCart=value;
+    // }
+    //
+    //
+    // var total =1;
+    // for (var cart in listCart!){
+    //   List<CartDetail?>? list;
+    //   await for ( final value in getCartDetailList(cart)){
+    //     list = value;
+    //   }
+    //
+    //   for (var cartDetail in list! ){
+    //     var product = await  cartDetail?.productRef?.get().then((value) => Product.fromDocument(value.id, value.data() as Map<String,dynamic>));
+    //     cartDetail?.product = product;
+    //     var price =
+    //                     (product!.price! * cartDetail!.quantity!) + product!.deposit!;
+    //                 total += price;
+    //   }
+    //
+    // }
+    // yield total;
 
-      for (var cart in listCart!) {
-        getCartDetailList(cart).map(
-              (listCartDetail) {
-            listCartDetail.forEach((cartDetail) {
-              cartDetail?.productRef?.get().then((value) {
-                var product = Product.fromDocument(
-                    value.id, value.data() as Map<String, dynamic>);
-                var price =
-                    (product.price! * cartDetail.quantity!) + product.deposit!;
-                total += price;
-              });
-            });
-          },
-        );
-      }
+    // for( final cart in listCart){
+    //
+    // }
 
 
-      // );
-      return total;
+
+    // return getCartList().map((listCart) {
+    //
+    //   var total = 0;
+    //
+    //   // for (var cart in listCart!) {
+    //   //   getCartDetailList(cart).map(
+    //   //         (listCartDetail) {
+    //   //       listCartDetail.forEach((cartDetail) {
+    //   //         cartDetail?.productRef?.get().then((value) {
+    //   //           var product = Product.fromDocument(
+    //   //               value.id, value.data() as Map<String, dynamic>);
+    //   //           var price =
+    //   //               (product.price! * cartDetail.quantity!) + product.deposit!;
+    //   //           total += price;
+    //   //         });
+    //   //       });
+    //   //     },
+    //   //   );
+    //   // }
+    //
+    //
+    //   // );
+    //   return total;
+    // });
+
+    var userRef = await AuthController()
+        .getCurrentUser()
+        .then((value) => value?.toReference());
+    int total =0;
+
+    List<Cart> listCart ;
+    listCart =await  firestore
+        .collection(Cart.path)
+        .where("user", isEqualTo: userRef)
+        .get()
+        .then((value) {
+      var listCart = Cart.fromSnapshot(value.docs);
+
+
+      return listCart;
     });
+
+    for (var cart in listCart) {
+      List<CartDetail> listCartDetail = await
+      firestore
+          .collection(CartDetail.path)
+          .where("cart", isEqualTo: cart.toReference())
+          .get()
+          .then((snapshot)  {
+        var listCartDetail = CartDetail.fromSnapshot(snapshot.docs);
+
+        cart.totalPrice = total;
+        cart.listCartDetail = listCartDetail.cast<CartDetail>();
+        return listCartDetail;
+      },);
+      for (var cartDetail in listCartDetail) {
+        var product = await cartDetail.productRef?.get().then((value) => Product.fromDocument(value.id, value.data() as Map<String,dynamic>));
+        cartDetail.product = product;
+        // log("=== ${product?.rentPrice}");
+        // log("=== ${product?.deposit}");
+        // log("=== ${cartDetail.quantity}");
+
+        var price =
+            (product!.rentPrice! * cartDetail.quantity!) + product.deposit!;
+        total+= price;
+
+      }
+      // log("=== listcartdetail : ${listCartDetail.first?.product}");
+
+    }
+
+    return total;
   }
+
 }
