@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import 'package:sporent/component/cart_list_test.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/total_checkout.dart';
 import 'package:sporent/screens/cart_list.dart';
 import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
+import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
 import 'checkout.dart';
 
@@ -60,12 +62,12 @@ class _CartScreenState extends State<CartScreen> {
                 providers: [
                   ChangeNotifierProvider(
                       create: (context) => CartNotifier()),
-
+                  ChangeNotifierProvider(create: (context) => CartViewModel(),)
                 ],
                 child: Column(
                   // mainAxisSize: MainAxisSize.max,
                   children: [
-                    Expanded(child: CartList()),
+                    Expanded(child: CartListTest()),
                     Divider(thickness: 1, color: HexColor("A3A3A3")),
                     SizedBox(height: size.height / 30),
                     const TotalCheckout()

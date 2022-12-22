@@ -12,6 +12,7 @@ import 'package:sporent/screens/product_detail_screen.dart';
 import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
+import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
 import '../controller/cart_controller.dart';
 
@@ -24,6 +25,7 @@ class CartDetailTile extends StatelessWidget {
     Provider.of<CartNotifier>(context,listen: false).setValue();
 
   }
+
   @override
   Widget build(BuildContext context) {
     var imagePath = "${Product.imagePath}/";
@@ -99,9 +101,9 @@ class CartDetailTile extends StatelessWidget {
                 ],
               ),
               trailing: IconButton(onPressed: () {
-                Provider.of<CartNotifier>(context,listen: false).setValue();
-
-                CartController().deleteCart(cartDetail);
+                // Provider.of<CartNotifier>(context,listen: false).setValue();
+                Provider.of<CartViewModel>(context, listen: false).removeCart(cartDetail);
+                // CartController().deleteCart(cartDetail);
               }, icon: const Icon(Icons.delete_outline_rounded))
             ),
           );

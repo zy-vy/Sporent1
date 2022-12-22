@@ -7,6 +7,7 @@ import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/cart.dart';
 import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/total_price.dart';
+import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
 import '../screens/checkout.dart';
 import 'item_price.dart';
@@ -21,15 +22,12 @@ class TotalCheckout extends StatefulWidget {
 class _TotalCheckoutState extends State<TotalCheckout> {
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<CartNotifier>(context,listen: true);
+    // final notifier = Provider.of<CartNotifier>(context,listen: true);
 
     Size size = MediaQuery.of(context).size;
 
-    return Consumer<CartNotifier>(
-      builder: (context, value, child) =>  FutureBuilder<int>(
-          future: CartController().getCartTotal(),
-          builder: (context, snapshot) {
-            return Column(
+    return Consumer<CartViewModel>(
+      builder: (context, cartViewModel, child) =>  Column(
               children: [
                 Row(
                   children: [
@@ -37,14 +35,14 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                         child: Text("Total: ",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20))),
-                    ItemPrice(price: snapshot.hasData ? snapshot.data : 0)
+                    ItemPrice(price: cartViewModel.totalAmount)
                   ],
                 ),
                 SizedBox(height: size.height / 30),
                 SizedBox(
                   width: size.width,
                   height: size.height / 13,
-                  child: !snapshot.hasData
+                  child: cartViewModel.isLoading
                       ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("4164DE"),
@@ -73,8 +71,7 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                 )
               ],
               // ),
-            );
-          }),
+            )
     );
   }
 }
