@@ -37,6 +37,14 @@
             {
               "client_id": "741669962898-4v85vkvpdhsoe8nmvpalrmejcih46fh8.apps.googleusercontent.com",
               "client_type": 3
+
+            },
+            {
+              "client_id": "741669962898-9tbp0k2e7tpui6n04lnfq456tda9mtpi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sporent.ios"
+              }
             }
           ]
         }
