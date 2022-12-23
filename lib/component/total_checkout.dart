@@ -63,7 +63,7 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                                       BorderRadius.all(Radius.circular(20)))),
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const CheckoutPage()));
+                                builder: (context) => CheckoutPage(totalAmount: cartViewModel.totalAmount,)));
                           },
                           child: const Text("Checkout",
                               style: TextStyle(

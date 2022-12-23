@@ -3,9 +3,11 @@ import 'package:intl/intl.dart';
 
 class ItemPrice extends StatelessWidget {
 
-  const ItemPrice({Key? key, this.price, this.fontSize, this.trail}) : super(key: key);
+  const ItemPrice({Key? key, this.price, this.textStyle, this.trail}) : super(key: key);
 
-  final double? fontSize;
+  final TextStyle? textStyle;
+
+  // final double? fontSize;
 
   final int? price;
 
@@ -13,6 +15,7 @@ class ItemPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var fontSize = textStyle?.fontSize;
     NumberFormat currencyFormatter = NumberFormat.currency(
       locale: 'id',
       symbol: 'Rp. ',
@@ -23,7 +26,7 @@ class ItemPrice extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text("${currencyFormatter.format(price)}",style: TextStyle(fontSize: fontSize),),
+          Text("${currencyFormatter.format(price)}",style: textStyle,),
           Text(trail!=null? trail!?"/day":"":"",style: TextStyle(fontSize:( fontSize??14)*0.75)),
         ],
       ),

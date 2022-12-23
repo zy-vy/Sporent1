@@ -191,7 +191,7 @@ class ProductDetailScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: size.width / 20),
               child: ItemPrice(
                 price: _product.rentPrice,
-                fontSize: 26,
+                textStyle: const TextStyle(fontSize: 26),
                 trail: true,
               ),
             ),
@@ -199,8 +199,8 @@ class ProductDetailScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: size.width / 20),
               child: ItemPrice(
                 price: _product.deposit,
-                fontSize: 20,
-                trail: true,
+                textStyle: const TextStyle(fontSize: 20),
+                trail: false,
               ),
             ),
             Container(

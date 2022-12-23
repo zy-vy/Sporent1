@@ -22,7 +22,9 @@ class CartDetailTile extends StatelessWidget {
   const CartDetailTile({Key? key, required this.cartDetail}) : super(key: key);
 
   _rebuild(BuildContext context)async{
-    Provider.of<CartNotifier>(context,listen: false).setValue();
+    // Provider.of<CartNotifier>(context,listen: false).setValue();
+    // Provider.of<CartViewModel>(context,listen: false).isLoading = true;
+    Provider.of<CartViewModel>(context,listen: false).fetchData();
 
   }
 

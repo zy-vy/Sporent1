@@ -53,7 +53,7 @@ class ProductCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ItemPrice(price: _product.rentPrice!,trail: true,fontSize: 20,),
+                      ItemPrice(price: _product.rentPrice!,trail: true,textStyle: const TextStyle(fontSize: 20),),
                     ],
                   ),
                   Row(children: [

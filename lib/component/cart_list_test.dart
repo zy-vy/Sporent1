@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
+import '../model/cart.dart';
 import 'cart_detail_tile.dart';
 import 'owner_thumbnail.dart';
 
@@ -33,9 +34,9 @@ class _CartListTestState extends State<CartListTest> {
         return const Center(child: CircularProgressIndicator(),);
       }
       var listCart = cartViewModel.listCart;
-      final streamCart = StreamController<dynamic>();
+      final streamCart = StreamController<List<Cart>?>();
       streamCart.add(listCart);
-      return StreamBuilder<dynamic>(
+      return StreamBuilder<List<Cart>?>(
         stream: streamCart.stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData){
@@ -47,7 +48,7 @@ class _CartListTestState extends State<CartListTest> {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              var cart = snapshot.data[index];
+              var cart = snapshot.data![index];
               var listCartDetail = cart.listCartDetail;
             return Card(
               elevation: 1,
@@ -64,7 +65,7 @@ class _CartListTestState extends State<CartListTest> {
                     },)
                 ],
               ),
-            );;
+            );
           },);
         }
       );

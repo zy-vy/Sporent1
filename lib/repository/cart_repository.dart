@@ -35,7 +35,7 @@ class CartRepository {
               total += price;
             }
             cart.totalPrice = total;
-            log("=== listcartdetail : ${listCartDetail.first?.id}");
+            // log("=== listcartdetail : ${listCartDetail.first?.id}");
             return listCartDetail;
           },
 

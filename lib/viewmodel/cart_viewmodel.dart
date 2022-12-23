@@ -8,7 +8,7 @@ import '../model/cart.dart';
 
 class CartViewModel with ChangeNotifier {
 
-  bool isLoading = true;
+  bool _isLoading = true;
 
   List<Cart>? _listCart ;
 
@@ -22,6 +22,20 @@ class CartViewModel with ChangeNotifier {
 
   set listCart ( List<Cart>? list){
     _listCart = list;
+    notifyListeners();
+  }
+
+  CartViewModel(){
+    fetchData();
+  }
+
+  bool get isLoading{
+    // notifyListeners();
+    return _isLoading;
+  }
+
+  void set isLoading(bool value){
+    _isLoading = value;
     notifyListeners();
   }
 
@@ -43,6 +57,7 @@ class CartViewModel with ChangeNotifier {
   }
 
   Future<void> removeCart (CartDetail cartDetail) async {
+    isLoading = true;
     _repository.deleteCart(cartDetail);
     log("notify");
     fetchData();
