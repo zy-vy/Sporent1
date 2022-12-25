@@ -259,19 +259,19 @@ Future addProduct(
       .child(docProduct.id);
   await ref.putFile(image!);
 
-  var productRenter = Product(
-          docProduct.id,
-          docProduct.id,
-          name,
-          price,
-          deposit,
-          location,
-          categoryReference,
-          subcategoryReference,
-          description)
-      .toJson();
+  // var productRenter = Product(
+  //         docProduct.id,
+  //         docProduct.id,
+  //         name,
+  //         price,
+  //         deposit,
+  //         location,
+  //         categoryReference,
+  //         subcategoryReference,
+  //         description)
+  //     .toJson();
 
-  await docProduct.set(productRenter);
+  // await docProduct.set(productRenter);
 }
 
 Column fieldText(String title, String desc, Size _size,
