@@ -31,7 +31,7 @@ class _AddProductState extends State<AddProduct> {
       FirebaseFirestore.instance.collection("category").snapshots();
 
   File? image;
-  File? image_temp;
+  File? imageTemp;
   List<File?> listImages = [];
   String? productCategory;
   int counter = 1;
@@ -44,11 +44,11 @@ class _AddProductState extends State<AddProduct> {
       image = File(imagePicked!.path);
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    listImages.add(image_temp);
 
     return Scaffold(
         appBar: AppBar(
@@ -91,55 +91,65 @@ class _AddProductState extends State<AddProduct> {
                                               width: 2,
                                               color: HexColor("868686")))),
                                   child: TextButton(
-                                    onPressed: () async {
-                                      await openGallery();
-                                      setState(() {
-                                        if (counter != 3) {
-                                          counter += 1;
-                                        }
-                                        listImages.remove(image_temp);
-                                        listImages.add(image);
-                                        print("ini counter ${counter}");
-                                      });
-                                    },
-                                    child: listImages[i] != null
-                                        ? Image.file(listImages[i]!)
-                                        : FaIcon(
-                                            FontAwesomeIcons.plus,
-                                            color: HexColor("4164DE"),
-                                            size: 35,
-                                          ),
-                                  ),
+                                      onPressed: () async {
+                                        await openGallery();
+                                        setState(() {
+                                          if (counter >= 2) {
+                                            listImages.remove(imageTemp);
+                                          }
+
+                                          listImages.add(image);
+
+                                          if (counter != 3) {
+                                            listImages.add(imageTemp);
+                                            counter += 1;
+                                          }
+                                        });
+                                      },
+                                      child: listImages.isEmpty == true
+                                          ? FaIcon(
+                                              FontAwesomeIcons.plus,
+                                              color: HexColor("4164DE"),
+                                              size: 35,
+                                            )
+                                          : listImages[i] != null
+                                              ? Image.file(listImages[i]!)
+                                              : FaIcon(
+                                                  FontAwesomeIcons.plus,
+                                                  color: HexColor("4164DE"),
+                                                  size: 35,
+                                                )),
                                 ),
-                                listImages[i] != null
-                                    ? Positioned(
-                                        right: 0,
-                                        child: Container(
-                                            height: 25,
-                                            width: 25,
-                                            decoration: const BoxDecoration(
-                                                color: Colors.blueAccent,
-                                                shape: BoxShape.circle),
-                                            child: IconButton(
-                                              icon: const FaIcon(
-                                                  FontAwesomeIcons.xmark,
-                                                  size: 10,
-                                                  color: Colors.white),
-                                              onPressed: () {
-                                                setState(() {
-                                                  listImages
-                                                      .remove(listImages[i]);
-                                                  listImages.remove(image_temp);
-                                                  if (counter != 1) {
-                                                    counter -= 1;
-                                                  }
-                                                  print("ini counter ${counter}");
-                                                });
-                                              },
-                                            )),
-                                      )
-                                    : const Positioned(
+                                listImages.isEmpty == true
+                                    ? const Positioned(
                                         right: 0, top: 0, child: SizedBox())
+                                    : listImages[i] != null
+                                        ? Positioned(
+                                            right: 0,
+                                            child: Container(
+                                                height: 25,
+                                                width: 25,
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.blueAccent,
+                                                    shape: BoxShape.circle),
+                                                child: IconButton(
+                                                  icon: const FaIcon(
+                                                      FontAwesomeIcons.xmark,
+                                                      size: 10,
+                                                      color: Colors.white),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      listImages.remove(
+                                                          listImages[i]);
+                                                      if (counter != 1) {
+                                                        counter -= 1;
+                                                      }
+                                                    });
+                                                  },
+                                                )),
+                                          )
+                                        : const Positioned(
+                                            right: 0, top: 0, child: SizedBox())
                               ],
                             ),
                             counter != 1
