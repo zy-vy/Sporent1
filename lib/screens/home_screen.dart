@@ -6,6 +6,7 @@ import 'package:sporent/component/popular_category.dart';
 import 'package:sporent/component/product_card.dart';
 import 'package:sporent/component/product_recommend.dart';
 import 'package:sporent/component/search_bar_product.dart';
+import 'package:sporent/screens/all_category.dart';
 import 'package:sporent/screens/category_screen.dart';
 import 'package:sporent/screens/product_list_screen.dart';
 
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const PopularCategory(),
                 HeadingRecommend(size: _size),
                 const ProductRecommendation(),
+                
 
 
               ],
@@ -76,7 +78,7 @@ class HeadingRecommend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-          horizontal: _size.width / 30, vertical: _size.height / 75),
+          horizontal: _size.width / 50, vertical: _size.height / 75),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -90,7 +92,7 @@ class HeadingRecommend extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductListScreen(),));
               },
               child: const Text(
-                "see all",
+                "See all",
                 style: TextStyle(color: Colors.grey),
               ),
             ),
@@ -104,7 +106,7 @@ class HeadingRecommend extends StatelessWidget {
 
 class HeadingCategory extends StatelessWidget {
   const HeadingCategory({
-    Key? key,
+    Key? key, 
     required Size size,
   }) : _size = size, super(key: key);
 
@@ -115,7 +117,7 @@ class HeadingCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-          horizontal: _size.width / 30, vertical: _size.height / 75),
+          horizontal: _size.width / 50, vertical: _size.height / 75),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children:  [
@@ -124,12 +126,12 @@ class HeadingCategory extends StatelessWidget {
                   fontWeight: FontWeight.bold, fontSize: 20)),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder:(context) => const CategoryScreen(), ));
+              Navigator.push(context, MaterialPageRoute(builder:(context) => const AllCategory()));
             },
 
             child: const Text(
-              "see all",
-              style: TextStyle(color: Colors.grey),
+              "See all",
+              style: TextStyle(color: Colors.grey, ),
             ),
           )
         ],

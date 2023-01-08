@@ -9,6 +9,9 @@ class EditUsername extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
+    final TextEditingController controllerUsername =
+        TextEditingController();
+
 
     return Scaffold(
         appBar: AppBar(
@@ -19,7 +22,7 @@ class EditUsername extends StatelessWidget {
           ),  
           backgroundColor: hexStringToColor("4164DE"),
         ),
-        body: const EditPage("Edit Your Username", "Enter a username for your apps", "Enter your Username", "Username", EditPersonalInfo())
+        body: EditPage("Edit Your Username", "Enter a username for your apps", "Enter your Username", "Username", controllerUsername, EditPersonalInfo())
     );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sporent/component/component-edit.dart';
 import 'package:sporent/screens/edit-description-renter2.dart';
-import 'package:sporent/screens/edit-location.dart';
+import 'package:sporent/screens/edit_address_renter.dart';
+import 'package:sporent/screens/edit_municipility.dart';
 import 'package:sporent/screens/edit-username-renter.dart';
 import 'package:sporent/screens/color.dart';
 
@@ -34,7 +35,8 @@ class EditPersonalInfoRenter extends StatelessWidget {
               ),
               SizedBox(height: _size.height / 50),
               const FieldForm("Name", "Nasrul Ramadhan", EditUsernameRenter(), 16, 12, 5, true),
-              const FieldForm("Location","Set location", EditLocationRenter(), 16, 12, 6.8, false),
+              const FieldForm("Municipality","Set municipality", EditMunicipality(), 16, 12, 12, false),
+              const FieldForm("Address","Set Address", EditAddress(), 16, 12, 6.5, false),
               const FieldForm("Description","Input description", EditDescriptionRenter(), 16, 12, 10.5, false),
 
             ],

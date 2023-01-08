@@ -7,7 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/bar-profile.dart';
 import 'package:sporent/screens/change-password.dart';
 import 'package:sporent/screens/deposit-information.dart';
-import 'package:sporent/screens/input-renter-name.dart';
+import 'package:sporent/screens/become_owner.dart';
 import 'package:sporent/screens/edit-personal-info.dart';
 import 'package:sporent/screens/help-center.dart';
 import 'package:image_picker/image_picker.dart';
@@ -119,7 +119,7 @@ class RenterButton extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const InputRenterName(),
+                builder: (context) => const BecomOwner(),
               ),
             );
           },

@@ -8,6 +8,8 @@ class EditBankName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController controllerBankName =
+        TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -18,7 +20,7 @@ class EditBankName extends StatelessWidget {
         ),
         backgroundColor: HexColor("4164DE"),
       ),
-      body: const EditPage("Edit Your Bank Name", "Enter a bank name for deposit", "Enter your bank name", "Bank Name", DepositDetail())
+      body: EditPage("Edit Your Bank Name", "Enter a bank name for deposit", "Enter your bank name", "Bank Name", controllerBankName, DepositDetail())
     );
   }
 }

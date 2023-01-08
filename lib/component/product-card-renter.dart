@@ -3,7 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/firebase_image.dart';
-import 'package:sporent/screens/product.dart';
 
 import '../screens/edit-product.dart';
 
@@ -47,12 +46,6 @@ class ProductCardRenter extends StatelessWidget {
                               fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const ProductPage()));
-                          },
-                          child: const Text("Product Test"))
                     ],
                   )),
                   SizedBox(width: _size.width / 40),

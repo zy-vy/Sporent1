@@ -35,7 +35,7 @@ class _SearchBarProductState extends State<SearchBarProduct> {
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             suffixIcon: const Icon(Icons.search_outlined),
-            hintText: "search",
+            hintText: "Search",
           contentPadding: const EdgeInsets.symmetric(horizontal: 15)
 
         ),

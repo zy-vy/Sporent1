@@ -38,6 +38,7 @@ class _AddProductState extends State<AddProduct> {
   String? productSubcategory;
   bool enabled = false;
   bool haveData = false;
+  List<File?> listImages = [];
   DocumentReference<Map<String, dynamic>>? referenceCategory;
   Stream<QuerySnapshot<Map<String, dynamic>>>? temp_snapshot_subcategory =
       FirebaseFirestore.instance.collection('subcategory').snapshots();
@@ -78,27 +79,49 @@ class _AddProductState extends State<AddProduct> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: _size.height / 50),
-                  Container(
-                    width: _size.width / 5,
-                    height: _size.height / 10,
-                    decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                                width: 2, color: HexColor("868686")))),
-                    child: TextButton(
-                      onPressed: () async {
-                        await openGallery();
-                      },
-                      child: image != null
-                          ? Image.file(image!)
-                          : FaIcon(
-                              FontAwesomeIcons.plus,
-                              color: HexColor("4164DE"),
-                              size: 35,
-                            ),
+                  Stack(children: [
+                    Container(
+                      width: _size.width / 5,
+                      height: _size.height / 10,
+                      decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                  width: 2, color: HexColor("868686")))),
+                      child: TextButton(
+                        onPressed: () async {
+                          await openGallery();
+                        },
+                        child: image != null
+                            ? Image.file(image!)
+                            : FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: HexColor("4164DE"),
+                                size: 35,
+                              ),
+                      ),
                     ),
-                  ),
+                    image != null
+                        ? Positioned(
+                            right: 0,
+                            child: Container(
+                                height: 25,
+                                width: 25,
+                                decoration: const BoxDecoration(
+                                    color: Colors.blueAccent,
+                                    shape: BoxShape.circle),
+                                child: IconButton(
+                                  icon: const FaIcon(FontAwesomeIcons.xmark,
+                                      size: 10, color: Colors.white),
+                                  onPressed: () {
+                                    setState(() {
+                                      image = null;
+                                    });
+                                  },
+                                )),
+                          )
+                        : const Positioned(right: 0, top: 0, child: SizedBox())
+                  ]),
                   SizedBox(height: _size.height / 23),
                   fieldText("Product Name", "Enter product name", _size,
                       nameController),
@@ -283,13 +306,18 @@ Column fieldText(String title, String desc, Size _size,
         Text(title,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         SizedBox(height: _size.height / 50),
-        TextField(
+        TextFormField(
           controller: controller,
           keyboardType: TextInputType.multiline,
           minLines: 1,
           maxLines: 5,
           decoration: InputDecoration(
               border: const OutlineInputBorder(), labelText: desc),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "$title must not be empty";
+            }
+          },
         ),
         SizedBox(height: _size.height / 23),
       ],
@@ -304,7 +332,7 @@ Column fieldPrice(String title, String desc, Size _size,
         Text(title,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         SizedBox(height: _size.height / 50),
-        TextField(
+        TextFormField(
           controller: controller,
           keyboardType: TextInputType.number,
           inputFormatters: [
@@ -312,6 +340,11 @@ Column fieldPrice(String title, String desc, Size _size,
           ],
           decoration: InputDecoration(
               border: const OutlineInputBorder(), labelText: desc),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "$title must not be empty";
+            }
+          },
         ),
         SizedBox(height: _size.height / 23),
       ],

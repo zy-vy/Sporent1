@@ -3,13 +3,15 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class EditPage extends StatefulWidget {
-  const EditPage(this.titleForm, this.descForm, this.labelText, this.type, this.page,
+  const EditPage(
+      this.titleForm, this.descForm, this.labelText, this.type, this.controller, this.page,
       {super.key});
 
   final String titleForm;
   final String descForm;
   final String labelText;
   final String type;
+  final TextEditingController controller;
   final Widget page;
 
   @override
@@ -34,10 +36,10 @@ class _EditPageState extends State<EditPage> {
             children: [
               topPage(widget.titleForm, _size, widget.descForm),
               widget.type == "Phone Number"
-                  ? fieldPhone(widget.labelText)
+                  ? fieldPhoneForm(widget.labelText)
                   : widget.type == "Gender"
-                      ? fieldGender()
-                      : fieldText(widget.labelText, widget.type),
+                      ? fieldGenderForm()
+                      : fieldTextForm(widget.labelText, widget.type, widget.controller),
               bottomPage(_size, _formKey, context, widget.page)
             ],
           ),
@@ -45,7 +47,10 @@ class _EditPageState extends State<EditPage> {
   }
 }
 
-TextFormField fieldText(String label, String type) => TextFormField(
+TextFormField fieldTextForm(
+        String label, String type, TextEditingController controller) =>
+    TextFormField(
+      controller: controller,
       keyboardType: TextInputType.multiline,
       minLines: 1,
       maxLines: 5,
@@ -63,7 +68,7 @@ TextFormField fieldText(String label, String type) => TextFormField(
       }),
     );
 
-IntlPhoneField fieldPhone(String labelText) => IntlPhoneField(
+IntlPhoneField fieldPhoneForm(String labelText) => IntlPhoneField(
       decoration: const InputDecoration(
           border: OutlineInputBorder(), labelText: 'Enter your phone number'),
       initialCountryCode: 'ID',
@@ -77,7 +82,7 @@ IntlPhoneField fieldPhone(String labelText) => IntlPhoneField(
         }
       }),
     );
-DropdownButtonFormField fieldGender() => DropdownButtonFormField(
+DropdownButtonFormField fieldGenderForm() => DropdownButtonFormField(
       decoration: const InputDecoration(
           border: OutlineInputBorder(), labelText: 'Select gender'),
       items: const [
@@ -117,7 +122,7 @@ Column bottomPage(Size _size, GlobalKey<FormState> _formKey,
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                   Navigator.of(context).push(
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => page,
                     ),

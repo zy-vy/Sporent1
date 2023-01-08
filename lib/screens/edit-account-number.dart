@@ -8,17 +8,23 @@ class EditAccountNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController controllerAccountNumber =
+        TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Transform(
-          transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-          child: const Text("Edit Account Number"),
+        appBar: AppBar(
+          centerTitle: false,
+          title: Transform(
+            transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
+            child: const Text("Edit Account Number"),
+          ),
+          backgroundColor: HexColor("4164DE"),
         ),
-        backgroundColor: HexColor("4164DE"),
-      ),
-      body: const EditPage("Edit Your Account Number", "Enter account number for deposit", "Enter your account number", "Account Number", DepositDetail())
-    );
+        body:EditPage(
+            "Edit Your Account Number",
+            "Enter account number for deposit",
+            "Enter your account number",
+            "Account Number",controllerAccountNumber,
+            const DepositDetail()));
   }
 }

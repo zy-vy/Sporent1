@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sporent/model/user.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,8 @@ class Product {
   int? deposit;
   @required
   String? location;
-  DocumentReference? ownerRef;
+  @required
+  DocumentReference<Map<String, dynamic>> owner;
   @required
   DocumentReference<Map<String, dynamic>> category;
   @required
@@ -29,7 +28,7 @@ class Product {
 
 
   Product(this.id, this.img, this.name, this.rentPrice, this.deposit,
-      this.location, this.category, this.subcategory, this.description);
+      this.location, this.owner, this.category, this.subcategory, this.description);
 
   static Product fromDocument(String id, Map<String, dynamic> json) {
     return Product(
@@ -39,6 +38,7 @@ class Product {
       json['rent_price'],
       json['deposit_price'],
       json['location'],
+      json['owner'],
       json['category'],
       json['subcategory'],
       json['description']
@@ -57,6 +57,7 @@ class Product {
         "price": rentPrice,
         "deposit": deposit,
         "location": location,
+        "owner" : owner,
         "category": category,
         "subcategory" : subcategory,
         "description": description

@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/category_screen.dart';
-import 'package:sporent/screens/test_screen.dart';
 import 'package:sporent/screens/transaction_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';

@@ -17,6 +17,7 @@ class ProductGridview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+        padding: const EdgeInsets.only(top: 10),
         physics: const ScrollPhysics(),
         scrollDirection: Axis.vertical,
         controller: ScrollController(),
@@ -30,11 +31,11 @@ class ProductGridview extends StatelessWidget {
         itemBuilder: (context, index) {
           // Product p = Product.fromJson(listDocs![index].data());
 
-          Product product =
-              Product.fromDocument(listDocs![index].id, listDocs![index].data());
+          Product product = Product.fromDocument(
+              listDocs![index].id, listDocs![index].data());
+         
           return Center(
-            child:
-            ProductCard(product: product),
+            child: ProductCard(product: product),
           );
         });
   }

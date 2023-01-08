@@ -1,18 +1,18 @@
 
-import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/component/cart_tile.dart';
-import 'package:sporent/controller/cart_controller.dart';
+import 'package:sporent/controller/test_user.dart';
+import 'package:sporent/model/cart.dart';
 
 class CartList extends StatelessWidget {
   const CartList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var cartController = CartController();
     return StreamBuilder(
-      stream: cartController.getCartList(),
+      stream: getCartList(),
       builder: (context, snapshot) {
 
         if (!snapshot.hasData){
@@ -35,5 +35,24 @@ class CartList extends StatelessWidget {
         );
 
     },);
+  }
+  Stream<List<Cart>?> getCartList() async* {
+
+    var firestore = FirebaseFirestore.instance;
+
+    var userRef = await TestUser().getUser()
+        .then((value) => value?.toReference());
+
+    Stream<List<Cart>?> listCart = firestore
+        .collection(Cart.path)
+        .where("user", isEqualTo: userRef)
+        .snapshots()
+        .map((value) {
+      var listCart = Cart.fromSnapshot(value.docs);
+
+      return listCart;
+    });
+
+    yield* listCart;
   }
 }
