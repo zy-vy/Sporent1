@@ -1,17 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sporent/screens/signin_screen.dart';
+import 'package:email_auth/email_auth.dart';
 import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/category_screen.dart';
 import 'package:sporent/screens/transaction_screen.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 import 'firebase_options.dart';
-import 'package:flutter/material.dart';
 import 'package:sporent/screens/home_screen.dart';
 
 import 'screens/cart.dart';
 import 'screens/profile.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,16 +24,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  //   int indexPage=0;
-  //   final List pageList = [
-  //   const HomeScreen(),
-  //   const TransactionScreen(),
-  //   const CartScreen(),
-  //   const ProfileScreen()
-  // ];
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
 
@@ -45,7 +38,13 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue
       ),
-      home: const BottomBarScreen()
+      home:
+      // MultiProvider(providers: [
+      //   ChangeNotifierProvider(create: (context) => UserViewModel(),)
+      // ],
+      //   child: const BottomBarScreen(),
+      // )
+        const BottomBarScreen()
     );
 
   }

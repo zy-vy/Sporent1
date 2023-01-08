@@ -64,7 +64,7 @@ class _CartPage extends State<CartPage> {
                       backgroundColor: HexColor("4164DE")),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const CheckoutPage()));
+                        builder: (context) => const CheckoutPage(totalAmount: 10,)));
                   },
                   child: const Text("Checkout",
                       style: TextStyle(

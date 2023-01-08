@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/item_price.dart';
@@ -24,6 +25,8 @@ import '../model/cart_detail.dart';
 import '../model/category.dart';
 import '../model/review.dart';
 import '../model/user.dart';
+
+import '../util/provider/cart_notifier.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   ProductDetailScreen({Key? key, required Product product})
@@ -181,6 +184,7 @@ class ProductDetailScreen extends StatelessWidget {
                                           await addToCart(_product, startDate!,
                                               endDate!, difference);
                                         }
+
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: HexColor("4164DE")),
@@ -228,12 +232,14 @@ class ProductDetailScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: size.width / 20),
               child: ItemPrice(
                 price: _product.rentPrice,
+
                 fontSize: 30,
                 trail: true,
                 color: "121212",
               ),
             ),
             Container(
+
               padding: EdgeInsets.symmetric(
                   horizontal: size.width / 20, vertical: size.width / 35),
               child: Row(

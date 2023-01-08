@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:sporent/authentication/models/user_model.dart';
 import 'package:sporent/component/bar-profile.dart';
 import 'package:sporent/screens/change-password.dart';
 import 'package:sporent/screens/deposit-information.dart';
@@ -11,41 +13,53 @@ import 'package:sporent/screens/become_owner.dart';
 import 'package:sporent/screens/edit-personal-info.dart';
 import 'package:sporent/screens/help-center.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         body: Center(
           child: Padding(
             padding: EdgeInsets.only(top: _size.height / 16),
-            child: Column(
-              children: [
-                const TopProfile(),
-                nameUser(_size),
-                const RenterButton(),
-                const BarProfile("Edit Personal Info", "Name, Phone, Email Address",FontAwesomeIcons.solidUser, EditPersonalInfo()),
-                const BarProfile(
-                    "Deposit Information",
-                    "All information about deposit",
-                    FontAwesomeIcons.coins,
-                    DepositInformation()),
-                const BarProfile("Change Password", "Change your old password",
-                    FontAwesomeIcons.lock, EditPassword()),
-                const BarProfile("Help Center", "Solution for your problem",
-                    FontAwesomeIcons.solidCircleQuestion, HelpCenter()),
-                logOutButton(_size)
-              ],
+            child: SingleChildScrollView(
+              child: Consumer<UserViewModel>(
+                builder: (context, userViewModel, child) => Column(
+                  children: [
+                    const TopProfile(),
+                    Text("${userViewModel.user?.name}",
+                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                    const RenterButton(),
+                    const BarProfile("Edit Personal Info", "Name, Phone, Email Address",FontAwesomeIcons.solidUser, EditPersonalInfo()),
+                    const BarProfile(
+                        "Deposit Information",
+                        "All information about deposit",
+                        FontAwesomeIcons.coins,
+                        DepositInformation()),
+                    const BarProfile("Change Password", "Change your old password",
+                        FontAwesomeIcons.lock, EditPassword()),
+                    const BarProfile("Help Center", "Solution for your problem",
+                        FontAwesomeIcons.solidCircleQuestion, HelpCenter()),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: _size.height / 50),
+                      child: TextButton(
+                          onPressed: () {
+                            userViewModel.signOut();
+                          },
+                          child: Text("Log Out",
+                              style: TextStyle(
+                                  color: HexColor("DE4141"),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18))),
+                    )
+                  ],
+                ),
+              )
             ),
           ),
         ));
@@ -134,19 +148,12 @@ class RenterButton extends StatelessWidget {
   }
 }
 
-Container nameUser(Size _size) => Container(
-      margin: EdgeInsets.symmetric(vertical: _size.height / 60),
-      child: const Text("Nasrul Ramadhan",
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-    );
+Widget nameUser(Size _size) {
+  return  Consumer<UserViewModel>(builder: (context, userViewModel, child) => Container(
+    margin: EdgeInsets.symmetric(vertical: _size.height / 60),
+    child: Text("${userViewModel.user?.name}",
+        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+  ),);
+}
 
-Container logOutButton(Size _size) => Container(
-      margin: EdgeInsets.symmetric(vertical: _size.height / 50),
-      child: TextButton(
-          onPressed: () {},
-          child: Text("Log Out",
-              style: TextStyle(
-                  color: HexColor("DE4141"),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18))),
-    );
+// Container logOutButton(Size _size) =>

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
+import 'package:sporent/component/cart_list_test.dart';
 import 'package:sporent/component/item_price.dart';
+import 'package:sporent/component/no_current_user.dart';
 import 'package:sporent/component/total_checkout.dart';
 import 'package:sporent/screens/cart_list.dart';
+import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
+import 'package:sporent/viewmodel/cart_viewmodel.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 
 import 'checkout.dart';
 
@@ -48,7 +53,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           child: RefreshIndicator(
               onRefresh: () async {
-                setState(() {});
+                // setState(() {});
               },
               child:
                   // SingleChildScrollView(
@@ -57,50 +62,24 @@ class _CartScreenState extends State<CartScreen> {
                   //     child:
                   MultiProvider(
                 providers: [
-                  ChangeNotifierProvider(
-                      create: (context) => TotalPriceProvider()),
-                  ChangeNotifierProvider(
-                      create: (context) => ItemCountProvider())
+                  // ChangeNotifierProvider(
+                  //     create: (context) => CartNotifier()),
+                  ChangeNotifierProvider(create: (context) => CartViewModel(),),
                 ],
-                child: Column(
-                  children: [
-                    const Expanded(child: CartList()),
-                    Divider(thickness: 1, color: HexColor("A3A3A3")),
-                    SizedBox(height: size.height / 30),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                                child: Text("Total: ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20))),
-                            const Text("Rp. 20"),
-                          ],
-                        ),
+                child: Consumer<UserViewModel>(
+                  builder: (context, userViewModel, child) => userViewModel.isLoggedIn? Column(
+                    // mainAxisSize: MainAxisSize.max,
+                      children:  [
+                        // Expanded(child: CartListTest()),
+                        Expanded(child: CartList()),
+                        Divider(thickness: 1, color: HexColor("A3A3A3")),
                         SizedBox(height: size.height / 30),
-                        SizedBox(
-                          width: size.width,
-                          height: size.height / 13,
-                          child:
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: HexColor("4164DE"),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)))),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const CheckoutPage()));
-                              },
-                              child: const Text("Checkout",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 18))),
-                        )
-                      ],
-                    ),
-                  ],
+                        const TotalCheckout()
+                      ]
+                  )
+                      :
+                      Container(
+                          child: const NoCurrentUser())
                 ),
               ))
           // )

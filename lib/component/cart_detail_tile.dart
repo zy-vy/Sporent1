@@ -8,14 +8,23 @@ import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/cart_detail.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/product_detail_screen.dart';
+import 'package:sporent/util/provider/cart_notifier.dart';
 import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
+import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
 
 class CartDetailTile extends StatelessWidget {
   final CartDetail cartDetail;
 
   const CartDetailTile({Key? key, required this.cartDetail}) : super(key: key);
+
+  _rebuild(BuildContext context)async{
+    // Provider.of<CartNotifier>(context,listen: false).setValue();
+    // Provider.of<CartViewModel>(context,listen: false).isLoading = true;
+    Provider.of<CartViewModel>(context,listen: false).fetchData();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +43,15 @@ class CartDetailTile extends StatelessWidget {
           product = snapshot.data!;
           var price = (product.rentPrice!*cartDetail.quantity!)+product.deposit!;
 
-          Future.delayed(const Duration(seconds: 1), () async {
-          });
-          Provider.of<TotalPriceProvider>(context,listen: true).addToCart(price);
+          // Future.delayed(const Duration(seconds: 1), () async {
+          // });
+          // Provider.of<TotalPriceProvider>(context,listen: true).addToCart(price);
 
           // Provider.of<ItemCountProvider>(context,listen: true).addToCart();
           return Card(
             child: ListTile(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product),)).then((value) => _rebuild(context));
               },
               leading: AspectRatio(
                 aspectRatio: 1,
@@ -92,7 +101,10 @@ class CartDetailTile extends StatelessWidget {
                 ],
               ),
               trailing: IconButton(onPressed: () {
-                  deleteCart(cartDetail);
+                // Provider.of<CartNotifier>(context,listen: false).setValue();
+                Provider.of<CartViewModel>(context, listen: false).removeCart(cartDetail);
+                // CartController().deleteCart(cartDetail);
+
               }, icon: const Icon(Icons.delete_outline_rounded))
             ),
           );

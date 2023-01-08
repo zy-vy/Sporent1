@@ -11,6 +11,7 @@ class Product {
   String? img;
   @required
   String? name;
+
   @required
   int? rentPrice;
   @required
@@ -32,6 +33,7 @@ class Product {
 
   static Product fromDocument(String id, Map<String, dynamic> json) {
     return Product(
+
       id,
       json['img'],
       json['name'],
