@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/product_gridview.dart';
 
 class ProductListScreen extends StatelessWidget {
@@ -12,14 +13,18 @@ class ProductListScreen extends StatelessWidget {
     var firestore = FirebaseFirestore.instance;
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-      margin: EdgeInsets.symmetric(vertical: _size.height / 100),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(15),
+      appBar: AppBar(
+        centerTitle: false,
+        title: Transform(
+          transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
+          child: const Text("Product Recommendation"),
+        ),
+        backgroundColor: HexColor("4164DE"),
       ),
+      body: Container(
+      margin: EdgeInsets.symmetric(horizontal: _size.width / 30, vertical: _size.height/60),
       child: StreamBuilder(
-          stream: firestore.collection('product').snapshots(),
+          stream: firestore.collection('product').snapshots().take(10),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error in receiving data: ${snapshot.error}');

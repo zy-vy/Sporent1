@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/cart.dart';
 import 'package:sporent/util/provider/cart_notifier.dart';
+
 import 'package:sporent/util/provider/total_price.dart';
 import 'package:sporent/viewmodel/cart_viewmodel.dart';
 

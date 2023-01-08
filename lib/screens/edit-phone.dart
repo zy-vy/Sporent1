@@ -12,6 +12,8 @@ class EditPhone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final TextEditingController controllerPhoneNumber =
+        TextEditingController();
 
     return Scaffold(
         appBar: AppBar(
@@ -22,7 +24,7 @@ class EditPhone extends StatelessWidget {
           ),  
           backgroundColor: hexStringToColor("4164DE"),
         ),
-        body: const EditPage("Edit Your Phone Number", "Enter phone number for your apps", "Enter your Phone Number", "Phone Number", EditPersonalInfo())
+        body: EditPage("Edit Your Phone Number", "Enter phone number for your apps", "Enter your Phone Number", "Phone Number", controllerPhoneNumber, EditPersonalInfo())
 
   );
   }

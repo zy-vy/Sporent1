@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:sporent/component/edit-page.dart';
 import 'package:sporent/screens/edit-personal-info-renter.dart';
-import '../component/edit-page.dart';
 
-class EditDescriptionRenter extends StatelessWidget {
-  const EditDescriptionRenter({super.key});
+class EditAddress extends StatelessWidget {
+  const EditAddress({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controllerDescriptionRenter =
+    final TextEditingController controllerAddress =
         TextEditingController();
 
     return Scaffold(
@@ -16,11 +16,11 @@ class EditDescriptionRenter extends StatelessWidget {
         centerTitle: false,
         title: Transform(
           transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-          child: const Text("Edit Description"),
+          child: const Text("Edit Address"),
         ),
         backgroundColor: HexColor("4164DE"),
       ),
-      body: EditPage("Edit Your Description", "Enter a description for your page", "Enter your Description", "Description", controllerDescriptionRenter, EditPersonalInfoRenter())
+      body:  EditPage("Edit Your Address", "Enter address for your page", "Enter your address", "Address", controllerAddress, const EditPersonalInfoRenter())
     );
   }
 }

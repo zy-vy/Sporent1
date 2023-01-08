@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/item_price.dart';
-import 'package:sporent/controller/product_controller.dart';
 import 'package:sporent/model/cart_detail.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/product_detail_screen.dart';
@@ -14,7 +13,6 @@ import 'package:sporent/util/provider/item_count.dart';
 import 'package:sporent/util/provider/total_price.dart';
 import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
-import '../controller/cart_controller.dart';
 
 class CartDetailTile extends StatelessWidget {
   final CartDetail cartDetail;
@@ -37,7 +35,7 @@ class CartDetailTile extends StatelessWidget {
     Product product;
 
     return FutureBuilder(
-        future: ProductController().getProduct(productRef.path),
+        future: getProduct(productRef.path),
         builder: (context, snapshot) {
           if (!snapshot.hasData){
             return const Center(child: CircularProgressIndicator(strokeWidth: 1),);
@@ -106,9 +104,33 @@ class CartDetailTile extends StatelessWidget {
                 // Provider.of<CartNotifier>(context,listen: false).setValue();
                 Provider.of<CartViewModel>(context, listen: false).removeCart(cartDetail);
                 // CartController().deleteCart(cartDetail);
+
               }, icon: const Icon(Icons.delete_outline_rounded))
             ),
           );
         });
+  }
+  Future<Product?> getProduct (String productRef) async {
+    var firestore = FirebaseFirestore.instance;
+
+    return firestore.doc(productRef).get().then((value) => Product.fromDocument(value.id, value.data()!));
+  }
+
+  Future<void> deleteCart(CartDetail cartDetail) async {
+    var firestore = FirebaseFirestore.instance;
+    var cartDetailRef = firestore.doc(cartDetail
+        .toReference()
+        .path);
+    var cartRef = cartDetail.cartRef;
+    var cartDetailList = await firestore
+        .collection(CartDetail.path)
+        .where("cart", isEqualTo: cartRef)
+        .get();
+    var batch = firestore.batch();
+    if (cartDetailList.docs.length == 1) {
+      batch.delete(cartRef!);
+    }
+    batch.delete(cartDetailRef);
+    batch.commit();
   }
 }

@@ -18,6 +18,8 @@ class _EditUsernameRenterState extends State<EditUsernameRenter> {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController controllerUsernameRenter =
+        TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +30,7 @@ class _EditUsernameRenterState extends State<EditUsernameRenter> {
         ),
         backgroundColor: hexStringToColor("4164DE"),
       ),
-      body: const EditPage("Edit Your Username", "Enter a username for your page", "Enter your Username", "Username", EditPersonalInfoRenter())
+      body: EditPage("Edit Your Username", "Enter a username for your page", "Enter your Username", "Username", controllerUsernameRenter,EditPersonalInfoRenter())
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sporent/screens/balance_information.dart';
 import 'package:sporent/screens/manage-product.dart';
 import 'package:sporent/screens/manage-transaction.dart';
 import '../component/bar-profile.dart';
@@ -31,7 +32,7 @@ class RenterProfile extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Center(
           child: Padding(
-              padding: EdgeInsets.only(top: _size.height / 16),
+              padding: EdgeInsets.only(top: _size.height / 25),
               child: Column(
                   children: const [
                     TopProfile(),
@@ -44,6 +45,7 @@ class RenterProfile extends StatelessWidget {
                     ManageProduct()),
                     BarProfile("Manage Transaction", "Show all transaction renter",
                     FontAwesomeIcons.receipt, ManageTransaction()),
+                    BarProfile("Balance Information", "All information about balance", FontAwesomeIcons.fileInvoiceDollar, BalanceInformation()),
                     BarProfile("Help Center", "Solution for your problem",
                     FontAwesomeIcons.question, HelpCenter()),
                   ],

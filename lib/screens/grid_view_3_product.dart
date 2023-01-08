@@ -7,11 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sporent/model/subcategory.dart';
 import '../model/category.dart';
 import 'package:sporent/screens/color.dart';
-
-import '../model/product.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -34,14 +31,10 @@ class _AddProductState extends State<AddProduct> {
       FirebaseFirestore.instance.collection("category").snapshots();
 
   File? image;
-  String? productCategory;
-  String? productSubcategory;
-  bool enabled = false;
-  bool haveData = false;
+  File? imageTemp;
   List<File?> listImages = [];
-  DocumentReference<Map<String, dynamic>>? referenceCategory;
-  Stream<QuerySnapshot<Map<String, dynamic>>>? temp_snapshot_subcategory =
-      FirebaseFirestore.instance.collection('subcategory').snapshots();
+  String? productCategory;
+  int counter = 1;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -51,6 +44,7 @@ class _AddProductState extends State<AddProduct> {
       image = File(imagePicked!.path);
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -75,60 +69,102 @@ class _AddProductState extends State<AddProduct> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Product Photo",
+                    "Product Photo (Maximum 3 Photo)",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: _size.height / 50),
-                  Stack(children: [
-                    Container(
-                      width: _size.width / 5,
-                      height: _size.height / 10,
-                      decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                  width: 2, color: HexColor("868686")))),
-                      child: TextButton(
-                        onPressed: () async {
-                          await openGallery();
-                        },
-                        child: image != null
-                            ? Image.file(image!)
-                            : FaIcon(
-                                FontAwesomeIcons.plus,
-                                color: HexColor("4164DE"),
-                                size: 35,
-                              ),
-                      ),
-                    ),
-                    image != null
-                        ? Positioned(
-                            right: 0,
-                            child: Container(
-                                height: 25,
-                                width: 25,
-                                decoration: const BoxDecoration(
-                                    color: Colors.blueAccent,
-                                    shape: BoxShape.circle),
-                                child: IconButton(
-                                  icon: const FaIcon(FontAwesomeIcons.xmark,
-                                      size: 10, color: Colors.white),
-                                  onPressed: () {
-                                    setState(() {
-                                      image = null;
-                                    });
-                                  },
-                                )),
-                          )
-                        : const Positioned(right: 0, top: 0, child: SizedBox())
-                  ]),
+                  Row(
+                    children: [
+                      for (int i = 0; i < counter; i++)
+                        Row(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                  width: _size.width / 5,
+                                  height: _size.height / 10,
+                                  decoration: ShapeDecoration(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          side: BorderSide(
+                                              width: 2,
+                                              color: HexColor("868686")))),
+                                  child: TextButton(
+                                      onPressed: () async {
+                                        await openGallery();
+                                        setState(() {
+                                          if (counter >= 2) {
+                                            listImages.remove(imageTemp);
+                                          }
+
+                                          listImages.add(image);
+
+                                          if (counter != 3) {
+                                            listImages.add(imageTemp);
+                                            counter += 1;
+                                          }
+                                        });
+                                      },
+                                      child: listImages.isEmpty == true
+                                          ? FaIcon(
+                                              FontAwesomeIcons.plus,
+                                              color: HexColor("4164DE"),
+                                              size: 35,
+                                            )
+                                          : listImages[i] != null
+                                              ? Image.file(listImages[i]!)
+                                              : FaIcon(
+                                                  FontAwesomeIcons.plus,
+                                                  color: HexColor("4164DE"),
+                                                  size: 35,
+                                                )),
+                                ),
+                                listImages.isEmpty == true
+                                    ? const Positioned(
+                                        right: 0, top: 0, child: SizedBox())
+                                    : listImages[i] != null
+                                        ? Positioned(
+                                            right: 0,
+                                            child: Container(
+                                                height: 25,
+                                                width: 25,
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.blueAccent,
+                                                    shape: BoxShape.circle),
+                                                child: IconButton(
+                                                  icon: const FaIcon(
+                                                      FontAwesomeIcons.xmark,
+                                                      size: 10,
+                                                      color: Colors.white),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      listImages.remove(
+                                                          listImages[i]);
+                                                      if (counter != 1) {
+                                                        counter -= 1;
+                                                      }
+                                                    });
+                                                  },
+                                                )),
+                                          )
+                                        : const Positioned(
+                                            right: 0, top: 0, child: SizedBox())
+                              ],
+                            ),
+                            counter != 1
+                                ? SizedBox(width: _size.width / 20)
+                                : const SizedBox(),
+                          ],
+                        ),
+                    ],
+                  ),
                   SizedBox(height: _size.height / 23),
                   fieldText("Product Name", "Enter product name", _size,
                       nameController),
                   fieldPrice("Product Price", "Enter product price", _size,
                       priceController),
-                  fieldPrice("Deposit Price", "Enter deposit price", _size,
-                      depositController),
+                  fieldPrice("Deposit Price", "Enter deposit price", _size, depositController),
                   const Text("Product Category",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
@@ -158,60 +194,9 @@ class _AddProductState extends State<AddProduct> {
                           onChanged: (value) {
                             setState(() {
                               productCategory = value!;
-                              referenceCategory = firestore
-                                  .collection("category")
-                                  .doc(productCategory);
-                              enabled = true;
-                              haveData = false;
                             });
                           },
                         );
-                      }
-                    },
-                  ),
-                  SizedBox(height: _size.height / 23),
-                  const Text("Product Subcategory",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  SizedBox(height: _size.height / 50),
-                  StreamBuilder(
-                    stream: firestore
-                        .collection('subcategory')
-                        .where('category', isEqualTo: referenceCategory)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        List<DropdownMenuItem> subcategoryItem = [];
-                        for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                          Subcategory subcategory = Subcategory.fromDocument(
-                              snapshot.data!.docs[i].data());
-                          subcategoryItem.add(DropdownMenuItem(
-                              value: snapshot.data!.docs[i].id,
-                              child: Text(subcategory.type)));
-                        }
-                        return enabled == true
-                            ? DropdownButtonFormField(
-                                value: haveData == false
-                                    ? null
-                                    : productSubcategory,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Select subcategory'),
-                                items: subcategoryItem,
-                                onChanged: (value) => setState(() {
-                                      productSubcategory = value!;
-                                      haveData = true;
-                                    }))
-                            : DropdownButtonFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Select subcategory'),
-                                items: subcategoryItem,
-                                onChanged: null);
                       }
                     },
                   ),
@@ -228,15 +213,14 @@ class _AddProductState extends State<AddProduct> {
                           int price = int.parse(priceController.text);
                           int deposit = int.parse(depositController.text);
 
-                          addProduct(
-                              image: image,
-                              name: nameController.text,
-                              price: price,
-                              deposit: deposit,
-                              location: locationController.text,
-                              category: productCategory,
-                              subcategory: productSubcategory,
-                              description: descriptionController.text);
+                          // addProduct(
+                          //     image: image,
+                          //     name: nameController.text,
+                          //     price: price,
+                          //     deposit: deposit,
+                          //     location: locationController.text,
+                          //     category: productCategory,
+                          //     description: descriptionController.text);
 
                           ScaffoldMessenger.of(context)
                               .showSnackBar(snackbar(_size));
@@ -258,44 +242,32 @@ class _AddProductState extends State<AddProduct> {
   }
 }
 
-Future addProduct(
-    {required File? image,
-    required String name,
-    required int price,
-    required int deposit,
-    required String? location,
-    required String? category,
-    required String? subcategory,
-    required String description}) async {
-  final docProduct =
-      FirebaseFirestore.instance.collection("product-renter").doc();
+// Future addProduct(
+//     {required File? image,
+//     required String name,
+//     required int price,
+//     required int deposit,
+//     required String? location,
+//     required String? category,
+//     required String description}) async {
+//   final docProduct =
+//       FirebaseFirestore.instance.collection("product-renter").doc();
 
-  final categoryReference =
-      FirebaseFirestore.instance.collection("category").doc(category);
+//   final categoryReference =
+//       FirebaseFirestore.instance.collection("category").doc(category);
 
-  final subcategoryReference =
-      FirebaseFirestore.instance.collection("subcategory").doc(subcategory);
+//   final ref = FirebaseStorage.instance
+//       .ref()
+//       .child('product-images/')
+//       .child(docProduct.id);
+//   await ref.putFile(image!);
 
-  final ref = FirebaseStorage.instance
-      .ref()
-      .child('product-images/')
-      .child(docProduct.id);
-  await ref.putFile(image!);
+//   var productRenter = ProductRenter(docProduct.id, docProduct.id, name, price,
+//           location, categoryReference, description)
+//       .toJson();
 
-  // var productRenter = Product(
-  //         docProduct.id,
-  //         docProduct.id,
-  //         name,
-  //         price,
-  //         deposit,
-  //         location,
-  //         categoryReference,
-  //         subcategoryReference,
-  //         description)
-  //     .toJson();
-
-  // await docProduct.set(productRenter);
-}
+//   await docProduct.set(productRenter);
+// }
 
 Column fieldText(String title, String desc, Size _size,
         TextEditingController controller) =>
@@ -306,18 +278,13 @@ Column fieldText(String title, String desc, Size _size,
         Text(title,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         SizedBox(height: _size.height / 50),
-        TextFormField(
+        TextField(
           controller: controller,
           keyboardType: TextInputType.multiline,
           minLines: 1,
           maxLines: 5,
           decoration: InputDecoration(
               border: const OutlineInputBorder(), labelText: desc),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "$title must not be empty";
-            }
-          },
         ),
         SizedBox(height: _size.height / 23),
       ],
@@ -332,7 +299,7 @@ Column fieldPrice(String title, String desc, Size _size,
         Text(title,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         SizedBox(height: _size.height / 50),
-        TextFormField(
+        TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           inputFormatters: [
@@ -340,11 +307,6 @@ Column fieldPrice(String title, String desc, Size _size,
           ],
           decoration: InputDecoration(
               border: const OutlineInputBorder(), labelText: desc),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "$title must not be empty";
-            }
-          },
         ),
         SizedBox(height: _size.height / 23),
       ],

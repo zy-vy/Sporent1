@@ -13,6 +13,8 @@ class EditGender extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
+    final TextEditingController controllerGender =
+        TextEditingController();
 
     return Scaffold(
         appBar: AppBar(
@@ -23,7 +25,7 @@ class EditGender extends StatelessWidget {
           ),  
           backgroundColor: hexStringToColor("4164DE"),
         ),
-        body: const EditPage("Edit Your Gender", "Enter gender for your apps", "Enter your Gender", "Gender", EditPersonalInfo())
+        body: EditPage("Edit Your Gender", "Enter gender for your apps", "Enter your Gender", "Gender", controllerGender, EditPersonalInfo())
   );
   }
 }

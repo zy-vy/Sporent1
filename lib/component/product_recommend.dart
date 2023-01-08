@@ -16,9 +16,6 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    // getProduct();
-    // testList();
     super.initState();
   }
 
@@ -27,16 +24,8 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
     Size _size = MediaQuery.of(context).size;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: _size.height / 100),
-      height: _size.height * 0.49,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Container(
-          // decoration: BoxDecoration(border: Border.all()),
-          padding: EdgeInsets.symmetric(
-              horizontal: _size.width / 30, vertical: _size.width / 30),
+          padding: EdgeInsets.only(
+              left: _size.width / 50),
           child: StreamBuilder(
               stream: firestore.collection('product').snapshots(),
               builder: (context, snapshot) {
@@ -57,8 +46,8 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      List<QueryDocumentSnapshot<Map<String, dynamic>>>? listDocs =
-                          snapshot.data?.docs;
+                      List<QueryDocumentSnapshot<Map<String, dynamic>>>?
+                          listDocs = snapshot.data?.docs;
                       inspect(listDocs);
                       int? productCount = listDocs?.length;
                       return ProductGridview(productCount: productCount, listDocs: listDocs);
@@ -88,7 +77,6 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
           //             }).toList());
           //       }
           //     }),
-          ),
     );
   }
 
@@ -109,5 +97,3 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
     inspect(result);
   }
 }
-
-
