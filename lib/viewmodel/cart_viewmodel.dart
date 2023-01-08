@@ -36,7 +36,7 @@ class CartViewModel with ChangeNotifier {
 
   void set isLoading(bool value){
     _isLoading = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> fetchData ( )async{

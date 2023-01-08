@@ -116,7 +116,7 @@ class _OTP extends State<OTP> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
+                                  builder: (context) => HomePage()));
                         } catch (e) {
                           print("wrong otp");
                         }

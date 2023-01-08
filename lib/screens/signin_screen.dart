@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/homepage.dart';
 import 'package:sporent/screens/otp.dart';
 import 'package:sporent/screens/signup_final.dart';
 import 'package:sporent/screens/signup_screen.dart';
 import 'package:sporent/utils/colors.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -21,6 +24,10 @@ class _SignInScreenState extends State<SignInScreen> {
 
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,12 +136,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                       email: _emailTextController.text,
                                       password: _passwordTextController.text)
                                   .then((value) {
-                                Navigator.push(
+
+                                    // Provider.of<UserViewModel>(context,listen: false).signIn();
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => HomeScreen()));
+                                        builder: (context) => const BottomBarScreen()));
                               }).onError((error, stackTrace) {
-                                print("error.toString()");
+                                print("${error.toString()}");
                               });
                             }
                           },

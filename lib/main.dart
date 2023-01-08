@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/screens/signin_screen.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/category_screen.dart';
 import 'package:sporent/screens/test_screen.dart';
 import 'package:sporent/screens/transaction_screen.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 import 'firebase_options.dart';
 import 'package:sporent/screens/home_screen.dart';
 
@@ -37,7 +39,13 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue
       ),
-      home: const BottomBarScreen()
+      home:
+      // MultiProvider(providers: [
+      //   ChangeNotifierProvider(create: (context) => UserViewModel(),)
+      // ],
+      //   child: const BottomBarScreen(),
+      // )
+        const BottomBarScreen()
     );
 
   }

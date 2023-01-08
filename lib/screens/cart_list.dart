@@ -2,8 +2,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/component/cart_tile.dart';
 import 'package:sporent/controller/cart_controller.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 
 import '../component/total_checkout.dart';
 
@@ -12,9 +14,10 @@ class CartList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserViewModel>(context,listen: false).user!;
     var cartController = CartController();
     return StreamBuilder(
-      stream: cartController.getCartList(),
+      stream: cartController.getCartList(user),
       builder: (context, snapshot) {
 
         if (!snapshot.hasData){

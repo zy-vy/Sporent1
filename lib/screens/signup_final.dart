@@ -316,22 +316,25 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                               _passwordTextController.text)
                                       .then((value) {
                                     final user = userModel(
+                                      id: value.user?.uid,
                                         name: _userNameTextController.text,
                                         birthdate:
                                             _birthDateTextController.text,
                                         email: _emailTextController.text,
                                         phonenumber:
-                                            _phoneNumberTextController.text);
+                                            _phoneNumberTextController.text,
+                                      createdAt: Timestamp.now()
+                                    );
                                     createUser(user);
                                     phoneAuthentication(
                                         _phoneNumberTextController.value.text);
 
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => OTP(
-                                                _phoneNumberTextController
-                                                    .value.text)));
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => OTP(
+                                    //             _phoneNumberTextController
+                                    //                 .value.text)));
                                   }).onError((error, stackTrace) {
                                     if (error.toString().contains("email")) {
                                       _showAlertDialog("Email Already In Use");

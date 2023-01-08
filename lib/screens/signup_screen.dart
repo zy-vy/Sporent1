@@ -221,7 +221,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomeScreen()));
+                              builder: (context) => HomePage()));
                     }).onError((error, stackTrace) {
                       print("Error ${error.toString()}");
                     });

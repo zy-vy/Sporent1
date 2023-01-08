@@ -67,10 +67,11 @@ class CartController {
     return cart;
   }
 
-  Stream<List<Cart>?> getCartList() async* {
-    var userRef = await AuthController()
-        .getCurrentUser()
-        .then((value) => value?.toReference());
+  Stream<List<Cart>?> getCartList(UserLocal user) async* {
+    // var userRef = await AuthController()
+    //     .getCurrentUser()
+    //     .then((value) => value?.toReference());
+    var userRef = user.toReference();
 
     Stream<List<Cart>?> listCart = firestore
         .collection(Cart.path)
