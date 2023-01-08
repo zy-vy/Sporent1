@@ -32,7 +32,7 @@ class ItemPrice extends StatelessWidget {
               style: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.bold,
-                  color: HexColor(color!))),
+                  color: HexColor(color??"121212"))),
           Text(
               trail != null
                   ? trail!
@@ -42,7 +42,7 @@ class ItemPrice extends StatelessWidget {
               style: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.bold,
-                  color: HexColor(color!))),
+                  color: HexColor(color??"121212"))),
         ],
       ),
     );
