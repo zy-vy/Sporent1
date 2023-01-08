@@ -4,12 +4,12 @@ import 'package:intl/intl.dart';
 
 class ItemPrice extends StatelessWidget {
 
-  const ItemPrice({Key? key, this.price, this.fontSize, this.trail, this.color})
+  const ItemPrice({Key? key, this.price, this.fontSize, this.trail, this.color, this.textStyle})
       : super(key: key);
 
   final TextStyle? textStyle;
 
-  // final double? fontSize;
+  final double? fontSize;
 
   final int? price;
 

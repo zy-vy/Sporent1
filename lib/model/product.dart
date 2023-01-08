@@ -27,9 +27,10 @@ class Product {
   @required
   String? description;
 
+  DocumentReference? ownerRef;
 
   Product(this.id, this.img, this.name, this.rentPrice, this.deposit,
-      this.location, this.owner, this.category, this.subcategory, this.description);
+      this.location, this.owner, this.category, this.subcategory, this.description,{this.ownerRef});
 
   static Product fromDocument(String id, Map<String, dynamic> json) {
     return Product(
