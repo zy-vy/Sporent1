@@ -13,6 +13,7 @@ import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/owner_thumbnail.dart';
 import 'package:sporent/component/review_component.dart';
+import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
 // import 'package:easy_image_viewer/easy_image_viewer.dart';
 // import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
@@ -181,7 +182,7 @@ class ProductDetailScreen extends StatelessWidget {
                                                   startDate!, endDate!) +
                                               1;
                                           log("--- diff $difference");
-                                          await addToCart(_product, startDate!,
+                                          await CartController().addToCart(_product, startDate!,
                                               endDate!, difference);
                                         }
 
