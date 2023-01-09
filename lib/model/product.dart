@@ -44,7 +44,8 @@ class Product {
       json['owner'],
       json['category'],
       json['subcategory'],
-      json['description']
+      json['description'],
+      ownerRef: json['owner']
     );
   }
 

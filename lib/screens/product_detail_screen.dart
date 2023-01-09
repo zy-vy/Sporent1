@@ -14,8 +14,8 @@ import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/owner_thumbnail.dart';
 import 'package:sporent/component/review_component.dart';
 import 'package:sporent/model/product.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
+// import 'package:easy_image_viewer/easy_image_viewer.dart';
+// import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:sporent/screens/renter_detail.dart';
 import 'package:sporent/screens/user_review_product.dart';
 
@@ -345,8 +345,7 @@ class ProductDetailScreen extends StatelessWidget {
             Divider(color: HexColor("E6E6E6"), thickness: 3),
             StreamBuilder(
               stream: firestore
-                  .collection("user")
-                  .doc(_product.owner.id)
+                  .doc(_product.ownerRef!.path)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -357,7 +356,7 @@ class ProductDetailScreen extends StatelessWidget {
                   var id = snapshot.data!.id;
                   var image = snapshot.data!.get("image");
                   var name = snapshot.data!.get("name");
-                  var location = snapshot.data!.get("multiplicity");
+                  var location = snapshot.data!.get("municipality");
                   return Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: size.width / 20, vertical: size.width / 35),
