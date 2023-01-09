@@ -56,6 +56,11 @@ class CartViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<CartDetail?>> getCartDetailList(Cart cart) async {
+    return _repository.getCartDetailList(cart);
+  }
+
+
   Future<void> removeCart (CartDetail cartDetail) async {
     isLoading = true;
     _repository.deleteCart(cartDetail);

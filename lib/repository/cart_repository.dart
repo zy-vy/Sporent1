@@ -8,7 +8,7 @@ import '../model/cart_detail.dart';
 import '../model/product.dart';
 
 class CartRepository {
-  var firestore = FirebaseFirestore.instance;
+  final firestore = FirebaseFirestore.instance;
 
   Future<List<Cart>?> getCartList() async {
     var userRef = await AuthController()
@@ -32,6 +32,7 @@ class CartRepository {
               cartDetail?.product = product;
               var price = (product!.rentPrice! * cartDetail!.quantity!) +
                   product.deposit!;
+              cartDetail.total = price;
               total += price;
             }
             cart.totalPrice = total;

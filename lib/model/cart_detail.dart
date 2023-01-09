@@ -8,6 +8,7 @@ class CartDetail{
   DocumentReference? cartRef;
   DocumentReference? productRef;
   int? quantity;
+  int? total;
   DateTime? startDate;
   DateTime? endDate;
   Product? product;

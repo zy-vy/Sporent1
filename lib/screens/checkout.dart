@@ -1,17 +1,27 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sporent/component/checkout-component-detail.dart';
 import 'package:sporent/component/field-row.dart';
 import 'package:sporent/component/item_price.dart';
+import 'package:sporent/model/order.dart';
+import 'package:sporent/viewmodel/cart_viewmodel.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
+
+import '../model/cart.dart';
+import '../viewmodel/transaction_viewmodel.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({super.key, required this.totalAmount});
+  const CheckoutPage({super.key, required this.totalAmount, required this.cartList});
 
   final int totalAmount;
+
+  final List<Cart> cartList;
 
   @override
   State<CheckoutPage> createState() => _CheckoutPage();
@@ -22,7 +32,7 @@ class _CheckoutPage extends State<CheckoutPage> {
   File? ktpImage;
   File? transferImage;
   String? _deliveryLocation;
-  String? _deliveryType;
+  String? _deliveryType = "Go-send instant";
   late int totalAmount;
 
   // String? _paymentMethod;
@@ -38,6 +48,7 @@ class _CheckoutPage extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     totalAmount = widget.totalAmount;
+    var cartList = widget.cartList;
 
     return Scaffold(
       appBar: AppBar(
@@ -135,15 +146,15 @@ class _CheckoutPage extends State<CheckoutPage> {
                   color: Colors.black),
             ),
             TextFormField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   filled: false,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.fire_truck_rounded,
                     size: 30,
                   ),
                   // hintText: "Input your delivery address",
-                  labelText: "Go-send instant"),
+                  labelText: _deliveryType),
               enabled: false,
               onSaved: (String? value) {
                 _deliveryType = value;
@@ -156,9 +167,9 @@ class _CheckoutPage extends State<CheckoutPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-            Text("BCA"),
-            Text("a.n Kratos Simanuntak"),
-            Text("12341235"),
+            const Text("BCA"),
+            const Text("a.n Kratos Simanuntak"),
+            const Text("12341235"),
             const Text(
               "Upload Payment Photo",
               style: TextStyle(
@@ -255,27 +266,67 @@ class _CheckoutPage extends State<CheckoutPage> {
             //     FontWeight.normal, FontWeight.w500),
             // const FieldRow("Price Total", "Rp 300.000", false, 17,
             //     FontWeight.normal, FontWeight.w500),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text("Total",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),), ItemPrice(price: totalAmount,textStyle: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),trail: false)],),
-              // const FieldRow("Deposit", "Rp 1.500.000", false, 17,
-              //     FontWeight.normal, FontWeight.w500),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Total",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ItemPrice(
+                    price: totalAmount,
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                    trail: false)
+              ],
+            ),
+            // const FieldRow("Deposit", "Rp 1.500.000", false, 17,
+            //     FontWeight.normal, FontWeight.w500),
             // const FieldRow("Total", "Rp 1.820.000", false, 20, FontWeight.bold,
             //     FontWeight.bold),
             SizedBox(height: _size.height / 70),
             Center(
               child: SizedBox(
-                height: _size.height / 13,
-                width: _size.width,
-                child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: HexColor("4164DE"),
-                    ),
-                    child: const Text("Confirm",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18))),
-              ),
+                  height: _size.height / 13,
+                  width: _size.width,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        if (ktpImage==null || transferImage==null){
+                          Fluttertoast.showToast(msg: "Please upload ktp and payment photo...");
+                          return;
+                        }
+                        // Fluttertoast.showToast(msg: "$_deliveryType, $_deliveryLocation");
+                        // Fluttertoast.showToast(msg: "${Provider.of<CartViewModel>(context,listen: false).totalAmount}");
+
+                        for (var cart in cartList!) {
+                          var cartDetailList = cart.listCartDetail;
+                          for (var cartDetail in cartDetailList!) {
+                            Order order = Order(
+                              total: cartDetail.total,
+                              quantity: cartDetail.quantity,
+                              productRef: cartDetail.productRef,
+                              deliveryMethod: _deliveryType,
+                              deliveryLocation: _deliveryLocation,
+                              startDate: cartDetail.startDate,
+                              endDate: cartDetail.endDate,
+                              ownerRef: cart.ownerRef,
+                              userRef: cart.userRef,
+                              ktpFile: ktpImage,
+                              paymentFile: transferImage,
+
+                            );
+                            TransactionViewModel().checkout(cartDetail!, order, null);
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: HexColor("4164DE"),
+                      ),
+                      child: const Text("Confirm",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18))),),
             ),
             SizedBox(height: _size.height / 70),
           ])),

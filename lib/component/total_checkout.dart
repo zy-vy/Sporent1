@@ -28,7 +28,7 @@ class _TotalCheckoutState extends State<TotalCheckout> {
     Size size = MediaQuery.of(context).size;
 
     return Consumer<CartViewModel>(
-      builder: (context, cartViewModel, child) =>  Column(
+        builder: (context, cartViewModel, child) => Column(
               children: [
                 Row(
                   children: [
@@ -63,8 +63,14 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)))),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CheckoutPage(totalAmount: cartViewModel.totalAmount,)));
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (context) => ChangeNotifierProvider(
+                            //           create: (context) => cartViewModel,
+                            //           builder: (context, child) => CheckoutPage(
+                            //             totalAmount: cartViewModel.totalAmount,
+                            //           ),
+                            //         )));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(totalAmount: cartViewModel.totalAmount, cartList: cartViewModel.listCart!),));
                           },
                           child: const Text("Checkout",
                               style: TextStyle(
@@ -72,7 +78,6 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                 )
               ],
               // ),
-            )
-    );
+            ));
   }
 }
