@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/cart-card.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/checkout.dart';
 
 class CartPage extends StatefulWidget {
@@ -64,7 +65,7 @@ class _CartPage extends State<CartPage> {
                       backgroundColor: HexColor("4164DE")),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const CheckoutPage(totalAmount: 10,)));
+                        builder: (context) => const BottomBarScreen()));
                   },
                   child: const Text("Checkout",
                       style: TextStyle(
