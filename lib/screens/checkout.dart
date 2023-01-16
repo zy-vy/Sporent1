@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,7 +18,8 @@ import '../model/cart.dart';
 import '../viewmodel/transaction_viewmodel.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({super.key, required this.totalAmount, required this.cartList});
+  const CheckoutPage(
+      {super.key, required this.totalAmount, required this.cartList});
 
   final int totalAmount;
 
@@ -287,46 +289,63 @@ class _CheckoutPage extends State<CheckoutPage> {
             SizedBox(height: _size.height / 70),
             Center(
               child: SizedBox(
-                  height: _size.height / 13,
-                  width: _size.width,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        if (ktpImage==null || transferImage==null){
-                          Fluttertoast.showToast(msg: "Please upload ktp and payment photo...");
-                          return;
-                        }
-                        // Fluttertoast.showToast(msg: "$_deliveryType, $_deliveryLocation");
-                        // Fluttertoast.showToast(msg: "${Provider.of<CartViewModel>(context,listen: false).totalAmount}");
+                height: _size.height / 13,
+                width: _size.width,
+                child: ElevatedButton(
+                    onPressed: () async {
+                      if (ktpImage == null || transferImage == null) {
+                        Fluttertoast.showToast(
+                            msg: "Please upload ktp and payment photo...");
+                        return;
+                      }
+                      // Fluttertoast.showToast(msg: "$_deliveryType, $_deliveryLocation");
+                      // Fluttertoast.showToast(msg: "${Provider.of<CartViewModel>(context,listen: false).totalAmount}");
 
-                        for (var cart in cartList!) {
-                          var cartDetailList = cart.listCartDetail;
-                          for (var cartDetail in cartDetailList!) {
-                            Order order = Order(
-                              total: cartDetail.total,
-                              quantity: cartDetail.quantity,
-                              productRef: cartDetail.productRef,
-                              deliveryMethod: _deliveryType,
-                              deliveryLocation: _deliveryLocation,
-                              startDate: cartDetail.startDate,
-                              endDate: cartDetail.endDate,
-                              ownerRef: cart.ownerRef,
-                              userRef: cart.userRef,
-                              ktpFile: ktpImage,
-                              paymentFile: transferImage,
-
-                            );
-                            TransactionViewModel().checkout(cartDetail!, order, null);
-                          }
+                      for (var cart in cartList!) {
+                        var cartDetailList = cart.listCartDetail;
+                        for (var cartDetail in cartDetailList!) {
+                          Order order = Order(
+                            total: cartDetail.total,
+                            quantity: cartDetail.quantity,
+                            productRef: cartDetail.productRef,
+                            deliveryMethod: _deliveryType,
+                            deliveryLocation: _deliveryLocation,
+                            startDate: cartDetail.startDate,
+                            endDate: cartDetail.endDate,
+                            ownerRef: cart.ownerRef,
+                            userRef: cart.userRef,
+                            ktpFile: ktpImage,
+                            paymentFile: transferImage,
+                          );
+                          await TransactionViewModel()
+                              .checkout(cartDetail!, order, null)
+                              .then((value) {
+                            if (value) {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  text:
+                                      "Checkout Success!\nYou can check in transaction menu").then((value) => Navigator.pop(context));
+                              //
+                            } else {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: "Sorry, something went wrong");
+                            }
+                          });
                         }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: HexColor("4164DE"),
-                      ),
-                      child: const Text("Confirm",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18))),),
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: HexColor("4164DE"),
+                    ),
+                    child: const Text("Confirm",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18))),
+              ),
             ),
             SizedBox(height: _size.height / 70),
           ])),

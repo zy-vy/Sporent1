@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
+import 'package:sporent/screens/ManageOrderScreen.dart';
 import 'package:sporent/screens/homepage.dart';
 
 import 'package:sporent/screens/profile.dart';
@@ -24,7 +25,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   int _selectedIdx=0;
   final List pageList = [
     const HomeScreen(),
-    const TransactionScreen(),
+    const ManageOrderScreen(),
     const CartScreen(),
     const ProfilePage()
   ];
