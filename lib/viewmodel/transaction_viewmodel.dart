@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sporent/model/cart_detail.dart';
@@ -11,12 +10,13 @@ import 'package:sporent/repository/order_repository.dart';
 import '../controller/auth_controller.dart';
 import '../model/order.dart';
 
-class TransactionViewModel with ChangeNotifier{
+class TransactionViewModel with ChangeNotifier {
   TransactionViewModel._internal();
 
-  static final TransactionViewModel _instance= TransactionViewModel._internal();
+  static final TransactionViewModel _instance =
+      TransactionViewModel._internal();
 
-  factory TransactionViewModel()=>_instance;
+  factory TransactionViewModel() => _instance;
 
   Order? order;
 
@@ -32,26 +32,25 @@ class TransactionViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<bool> checkout(CartDetail cartDetail, Order order,UserLocal? user) async {
+  Future<bool> checkout(
+      CartDetail cartDetail, Order order, UserLocal? user) async {
     isLoading = true;
     bool result = false;
 
+    user ??= await AuthController().getCurrentUser();
+    if (user == null) return false;
 
-    user ??= await AuthController()
-          .getCurrentUser();
-    if(user ==null)return false;
-
-var time = DateTime.now();
+    var time = DateTime.now();
 
     var fileName = "${user.id!}_";
     var fileNameKtp = "${fileName}ktp_$time";
     var fileNamePayment = "${fileName}payment_$time";
 
-    order.paymentRef = FirebaseFirestore.instance.doc( Payment.docPath) ;
-    order.status="WAITING";
-    order.issueDate= time;
-    order.ktpImage=fileNameKtp;
-    order.paymentImage=fileNamePayment;
+    order.paymentRef = FirebaseFirestore.instance.doc(Payment.docPath);
+    order.status = "WAITING";
+    order.issueDate = time;
+    order.ktpImage = fileNameKtp;
+    order.paymentImage = fileNamePayment;
 
     result = await OrderRepository().checkout(order);
 
@@ -61,13 +60,12 @@ var time = DateTime.now();
     }
 
     imageRepository.uploadFile(Order.ktpPath, fileNameKtp, order.ktpFile!);
-    imageRepository.uploadFile(Order.paymentPath, fileNamePayment, order.paymentFile!);
+    imageRepository.uploadFile(
+        Order.paymentPath, fileNamePayment, order.paymentFile!);
 
     CartRepository().deleteCart(cartDetail);
     //    remove cart
-    isLoading= false;
+    isLoading = false;
     return true;
   }
-
-
 }
