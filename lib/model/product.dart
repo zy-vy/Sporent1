@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sporent/model/user.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class Product {
   String? description;
 
   DocumentReference? ownerRef;
+  File? imageFile;
 
   Product(this.id, this.img, this.name, this.rentPrice, this.deposit,
       this.location, this.owner, this.category, this.subcategory, this.description,{this.ownerRef});
