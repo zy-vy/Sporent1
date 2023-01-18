@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/component-edit.dart';
 import 'package:sporent/component/detail-product-card.dart';
 import 'package:sporent/screens/color.dart';
-import 'package:sporent/screens/edit-account-number.dart';
-import 'package:sporent/screens/edit-bank-name.dart';
 
 class DepositDetail extends StatefulWidget {
   const DepositDetail({super.key});
@@ -71,8 +68,8 @@ Padding bankInformation(Size _size) => Padding(
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         SizedBox(height: _size.height / 50),
-        const FieldForm("Bank Name", "BCA", EditBankName(), 15, 15, 5, true),
-        const FieldForm("Account Number", "0211276484758", EditAccountNumber(),
-            15, 15, 10, true),
+        // const FieldForm("Bank Name", "BCA", EditBankName(), 15, 15, 5, true),
+        // const FieldForm("Account Number", "0211276484758", EditAccountNumber(),
+        //     15, 15, 10, true),
       ],
     ));

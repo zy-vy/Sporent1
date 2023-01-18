@@ -64,23 +64,25 @@ class _CartScreenState extends State<CartScreen> {
                 providers: [
                   // ChangeNotifierProvider(
                   //     create: (context) => CartNotifier()),
-                  ChangeNotifierProvider(create: (context) => CartViewModel(),),
+                  ChangeNotifierProvider(
+                    create: (context) => CartViewModel(),
+                  ),
                 ],
                 child: Consumer<UserViewModel>(
-                  builder: (context, userViewModel, child) => userViewModel.isLoggedIn? Column(
-                    // mainAxisSize: MainAxisSize.max,
-                      children:  [
-                        // Expanded(child: CartListTest()),
-                        Expanded(child: CartList()),
-                        Divider(thickness: 1, color: HexColor("A3A3A3")),
-                        SizedBox(height: size.height / 30),
-                        const TotalCheckout()
-                      ]
-                  )
-                      :
-                      Container(
-                          child: const NoCurrentUser())
-                ),
+                    builder: (context, userViewModel, child) =>
+                        userViewModel.isLoggedIn
+                            ? Column(
+                                // mainAxisSize: MainAxisSize.max,
+                                children: [
+                                    // Expanded(child: CartListTest()),
+                                    Expanded(child: CartList()),
+                                    Divider(
+                                        thickness: 1,
+                                        color: HexColor("A3A3A3")),
+                                    SizedBox(height: size.height / 30),
+                                    const TotalCheckout()
+                                  ])
+                            : const NoCurrentUser()),
               ))
           // )
           ,

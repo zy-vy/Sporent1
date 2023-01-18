@@ -8,7 +8,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/component/checkout-component-detail.dart';
-import 'package:sporent/component/field-row.dart';
+import 'package:sporent/component/field_row.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/viewmodel/cart_viewmodel.dart';

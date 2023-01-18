@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FieldRow extends StatelessWidget {
-  const FieldRow(
-      this.title, this.desc, this.expandedOrNot, this.fontSize, this.fontWeightTitle, this.fontWeightDesc, 
+  const FieldRow(this.title, this.desc, this.expandedOrNot, this.fontSize,
+      this.fontWeightTitle, this.fontWeightDesc,
       {super.key});
 
   final String title;
@@ -31,17 +31,17 @@ class FieldRow extends StatelessWidget {
                 ? Expanded(
                     child: Text(
                     desc,
-                    style:
-                        TextStyle(fontSize: fontSize, fontWeight: fontWeightDesc),
+                    style: TextStyle(
+                        fontSize: fontSize, fontWeight: fontWeightDesc),
                   ))
                 : Text(
                     desc,
-                    style:
-                        TextStyle(fontSize: fontSize, fontWeight: fontWeightDesc),
+                    style: TextStyle(
+                        fontSize: fontSize, fontWeight: fontWeightDesc),
                   )
           ],
         ),
-        SizedBox(height: _size.height / 40),
+        // SizedBox(height: _size.height / 40),
       ],
     );
   }

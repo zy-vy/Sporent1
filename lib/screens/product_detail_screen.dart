@@ -12,7 +12,6 @@ import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
-import 'package:sporent/component/owner_thumbnail.dart';
 import 'package:sporent/component/review_component.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
@@ -47,7 +46,6 @@ class ProductDetailScreen extends StatelessWidget {
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
     Size size = MediaQuery.of(context).size;
-    inspect(_product);
     DateTime? startDate =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var dateFormat = DateFormat('dd-MM-yyyy');
@@ -348,8 +346,8 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             Divider(color: HexColor("E6E6E6"), thickness: 3),
             StreamBuilder(
-              stream: firestore
-                  .doc(_product.ownerRef!.path)
+              stream: firestore.collection("user")
+                  .doc(_product.owner.id)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -358,9 +356,9 @@ class ProductDetailScreen extends StatelessWidget {
                   );
                 } else {
                   var id = snapshot.data!.id;
-                  var image = snapshot.data!.get("image");
-                  var name = snapshot.data!.get("name");
-                  var location = snapshot.data!.get("municipality");
+                  var image = snapshot.data!.get("owner_image");
+                  var name = snapshot.data!.get("owner_name");
+                  var location = snapshot.data!.get("owner_municipality");
                   return Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: size.width / 20, vertical: size.width / 35),

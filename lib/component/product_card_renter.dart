@@ -2,19 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:sporent/component/firebase_image.dart';
 
-import '../screens/edit-product.dart';
+import '../model/product.dart';
+import '../screens/edit_product.dart';
 
 class ProductCardRenter extends StatelessWidget {
-  final DocumentSnapshot dataProduct;
-  final String combineString;
-  const ProductCardRenter(this.dataProduct, this.combineString, {super.key});
+  const ProductCardRenter(this.product, {super.key});
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     Reference firebase = FirebaseStorage.instance.ref();
     Size _size = MediaQuery.of(context).size;
+    NumberFormat currencyFormatter =
+        NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _size.height / 50),
@@ -29,19 +33,19 @@ class ProductCardRenter extends StatelessWidget {
                       width: _size.width / 5,
                       height: _size.height / 8,
                       child: FirebaseImage(
-                          filePath: "product-images/${dataProduct['image']}")),
+                          filePath: "product-images/${product.img}")),
                   SizedBox(width: _size.width / 60),
                   Expanded(
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(dataProduct.get('name'),
+                      Text(product.name!,
                           style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.normal)),
                       SizedBox(height: _size.height / 70),
-                      Text(combineString,
+                      Text("${currencyFormatter.format(product.rentPrice)}/Day",
                           style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -60,7 +64,7 @@ class ProductCardRenter extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
-                                    EditProduct(dataProduct.get('id'))));
+                                    EditProduct(product.id!)));
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("4164DE")),
@@ -77,7 +81,7 @@ class ProductCardRenter extends StatelessWidget {
                         height: _size.height / 30,
                         child: ElevatedButton(
                           onPressed: () {
-                            showDeleteButton(context, dataProduct);
+                            showDeleteButton(context, product.id!);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("4164DE")),
@@ -96,7 +100,7 @@ class ProductCardRenter extends StatelessWidget {
   }
 }
 
-showDeleteButton(BuildContext context, DocumentSnapshot deleteObject) {
+showDeleteButton(BuildContext context, String id) {
   Size _size = MediaQuery.of(context).size;
 
   Widget confirmButton = SizedBox(
@@ -106,16 +110,12 @@ showDeleteButton(BuildContext context, DocumentSnapshot deleteObject) {
       onPressed: () {
         final product = FirebaseFirestore.instance
             .collection('product-renter')
-            .doc(deleteObject['id']);
-
-        product.delete();
+            .doc(id).delete();
 
         final ref = FirebaseStorage.instance
             .ref()
             .child('product-images/')
-            .child(deleteObject['id']);
-
-        ref.delete();
+            .child(id).delete();
 
         Navigator.of(context).pop();
       },

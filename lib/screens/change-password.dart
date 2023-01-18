@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/edit-page.dart';
+import 'package:sporent/component/edit_page.dart';
 import 'package:sporent/screens/color.dart';
 import 'package:sporent/screens/profile.dart';
 
