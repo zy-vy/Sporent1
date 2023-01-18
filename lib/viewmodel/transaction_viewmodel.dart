@@ -35,16 +35,23 @@ class TransactionViewModel with ChangeNotifier {
   Future<bool> checkout(
       CartDetail cartDetail, Order order, UserLocal? user) async {
     isLoading = true;
-    bool result = false;
+    String result = "";
 
     user ??= await AuthController().getCurrentUser();
     if (user == null) return false;
 
+    result = await OrderRepository().checkout(order);
+
+    if (result.isEmpty) {
+      debugPrint("+++ checkout : error insert");
+      return false;
+    }
+    order.id = result;
     var time = DateTime.now();
 
-    var fileName = "${user.id!}_";
-    var fileNameKtp = "${fileName}ktp_$time";
-    var fileNamePayment = "${fileName}payment_$time";
+    var fileName = "${order.id}_";
+    var fileNameKtp = "${fileName}ktp";
+    var fileNamePayment = "${fileName}payment";
 
     order.paymentRef = FirebaseFirestore.instance.doc(Payment.docPath);
     order.status = "WAITING";
@@ -54,7 +61,7 @@ class TransactionViewModel with ChangeNotifier {
 
     result = await OrderRepository().checkout(order);
 
-    if (!result) {
+    if (result.isEmpty) {
       debugPrint("+++ checkout : error insert");
       return false;
     }

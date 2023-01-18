@@ -27,6 +27,8 @@ class Order {
   String? paymentImage;
   String? status;
   String? trackingCode;
+  String? returnTrackingCode;
+  String? description;
   int? total;
 
   UserLocal? user;
@@ -70,7 +72,10 @@ class Order {
       this.beforeOwnerFile,
       this.afterOwnerFile,
       this.beforeUserFile,
-      this.afterUserFile});
+      this.afterUserFile,
+      this.returnTrackingCode,
+      this.description
+  });
 
   factory Order.fromDocument(String id, Map<String,dynamic> data){
     return Order(
@@ -93,7 +98,9 @@ class Order {
       total: data['total'],
       trackingCode: data['tracking_code'],
       userRef: data['user'],
-      paymentRef: data['payment']
+      paymentRef: data['payment'],
+      returnTrackingCode: data["return_tracking_code"],
+      description: data["description"]
     );
   }
 
@@ -121,7 +128,15 @@ class Order {
       if (status!=null) "status" :status ,
       if (trackingCode!=null) "tracking_code" : trackingCode,
       if (total!=null) "total" : total,
-      if(paymentRef!=null) "payment" : paymentRef
+      if(paymentRef!=null) "payment" : paymentRef,
+      if(returnTrackingCode!=null) "return_tracking_code" : returnTrackingCode,
+      if(description!= null) "description" :description
     };
+  }
+
+  DocumentReference toReference(){
+    var path = "orer/${id}";
+    return FirebaseFirestore.instance.doc(path);
+
   }
 }

@@ -27,7 +27,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   int _selectedIdx = 0;
   final List pageList = [
     const HomeScreen(),
-    const ManageOrderScreen(),
+    const TransactionScreen(),
     const CartScreen(),
     const ProfilePage()
   ];

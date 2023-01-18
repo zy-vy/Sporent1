@@ -1,12 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/model/product.dart';
+import 'package:sporent/model/user.dart';
 import 'package:sporent/repository/image_repository.dart';
 import 'package:sporent/repository/order_repository.dart';
 import 'package:sporent/repository/user_repository.dart';
 
+import '../controller/auth_controller.dart';
 import '../repository/product_repository.dart';
 
 class OrderViewModel with ChangeNotifier {
@@ -31,15 +35,18 @@ class OrderViewModel with ChangeNotifier {
 
   static final OrderViewModel _instance = OrderViewModel._internal();
 
-  factory OrderViewModel()=>_instance ;
+  factory OrderViewModel() {
+
+    return _instance;
+  }
 
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-
   Stream<List<Order>?> getAllOrderByOwner(String ownerId) {
+
     return orderRepository.getAllOrderByOwner(ownerId).map((event) {
       orderList = arrangeData(event);
       return orderList;
@@ -64,9 +71,67 @@ class OrderViewModel with ChangeNotifier {
     order.user = await UserRepository().getUserByRef(order.userRef!.path);
     order.product =
         await ProductRepository().getProductByRef(order.productRef!.path);
-    order.product?.imageFile = await ImageRepository()
+    order.product?.imageFile = await imageRepository
         .getImageFile("${Product.imagePath}/${order.product!.img}");
+    order.beforePhotoOwner != null? order.beforeOwnerFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.beforePhotoOwner}"):null;
+    order.afterPhotoOwner != null? order.afterOwnerFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoOwner}"):null;
+    order.beforePhotoUser != null? order.beforeUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.beforePhotoUser}"):null;
+    order.afterPhotoOwner != null? order.afterUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoUser}"):null;
     return order;
+  }
+
+  Future<bool> acceptOrder(Order order) async {
+    order.status = "ACCEPT";
+    return orderRepository.updateOrder(order);
+  }
+
+  Future<bool> declineOrder(Order order) async {
+    order.status = "DECLINE";
+    return orderRepository.updateOrder(order);
+  }
+
+  Future<bool> submitOrder(
+      Order order, File? beforeImage, String trackingLink) async {
+    order.status = "DELIVER";
+    var name = "${order.id}_owner_before";
+
+    order.trackingCode = trackingLink;
+    order.beforePhotoOwner = name;
+    order.beforeOwnerFile = beforeImage;
+
+
+    var task1 = imageRepository.uploadFile(
+        Order.conditionCheckPath, name, beforeImage!);
+    var task2 = orderRepository.updateOrder(order);
+
+
+    return Future.wait([task1, task2])
+        .then((value) => true)
+        .onError((error, stackTrace) {
+      log("$error$stackTrace");
+      return false;
+    });
+  }
+
+  Future<bool> finishOrder(Order order,File afterPhoto, String description) async {
+    var name = "${order.id}_owner_after";
+
+    order.status = "DONE";
+    order.afterPhotoOwner = "name";
+    order.afterOwnerFile = afterPhoto;
+    order.description = description;
+
+    var task1 = imageRepository.uploadFile(
+        Order.conditionCheckPath, name, afterPhoto);
+    var task2 = orderRepository.updateOrder(order);
+
+    return Future.wait([task1, task2])
+        .then((value) => true)
+        .onError((error, stackTrace) {
+      log("$error$stackTrace");
+      return false;
+    });
+    return false;
   }
 
   List<Order> arrangeData(List<Order>? orderList) {
@@ -77,7 +142,8 @@ class OrderViewModel with ChangeNotifier {
         deliverList = <Order>[],
         activeList = <Order>[],
         returnList = <Order>[],
-        doneList = <Order>[];
+        doneList = <Order>[],
+        declineList = <Order>[];
     orderList?.forEach((order) {
       var status = order.status ?? "";
       switch (status) {
@@ -102,10 +168,18 @@ class OrderViewModel with ChangeNotifier {
         case "DONE":
           doneList.add(order);
           break;
+        case "DECLINE":
+          declineList.add(order);
+          break;
       }
     });
-    finalList = waitingList+confirmList+acceptList+deliverList+activeList+returnList+doneList;
+    finalList = waitingList +
+        confirmList +
+        acceptList +
+        deliverList +
+        activeList +
+        returnList +
+        doneList;
     return finalList;
   }
-
 }

@@ -9,6 +9,7 @@ import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/screens/order_detail_screen.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 
 class ManageOrderScreen extends StatelessWidget {
   const ManageOrderScreen({Key? key}) : super(key: key);
@@ -16,15 +17,18 @@ class ManageOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
-    return Consumer<OrderViewModel>(
+    return Consumer<UserViewModel>(builder: (context, userViewModel, child) => Consumer<OrderViewModel>(
       builder: (context, orderViewModel, child) => Scaffold(
         body: StreamBuilder(
-          stream: orderViewModel.getAllOrderByOwner("gqDM311gkUykkJqRnPdY"),
+          stream: orderViewModel.getAllOrderByOwner(userViewModel.user!.id!),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
+            }
+            else if (snapshot.data!.isEmpty){
+              return const Center(child: Text("No Active Order"));
             }
 
             // var orderList = snapshot.data;
@@ -48,32 +52,32 @@ class ManageOrderScreen extends StatelessWidget {
                         margin: EdgeInsets.symmetric(
                             horizontal: size / 20, vertical: size / 50),
                         child: ListTile(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>OrderDetailScreen(order: order!)));
-                          },
-                          leading: AspectRatio(
-                              aspectRatio: 1,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Image.file(order!.product!.imageFile!,
-                                    fit: BoxFit.scaleDown),
-                              )),
-                          title: Text(order?.product?.name ?? "",maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
-                              ItemPrice(price: order?.product?.rentPrice,trail: true,),
-                              Text("Time: ${order?.quantity}",overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
-                              Text("status: ${order?.status?.toLowerCase()}",style: TextStyle(color: HexColor("416DDE")),overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
-                            ]),
-                          ),
-                          trailing:
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(IconlyLight.activity,size: 20,),
-                            ],
-                          )
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) =>OrderDetailScreen(order: order!)));
+                            },
+                            leading: AspectRatio(
+                                aspectRatio: 1,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Image.file(order!.product!.imageFile!,
+                                      fit: BoxFit.scaleDown),
+                                )),
+                            title: Text(order?.product?.name ?? "",maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
+                                ItemPrice(price: order?.product?.rentPrice,trail: true,),
+                                Text("Time: ${order?.quantity}",overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
+                                Text("status: ${order?.status?.toLowerCase()}",style: TextStyle(color: HexColor("416DDE")),overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
+                              ]),
+                            ),
+                            trailing:
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(IconlyLight.activity,size: 20,),
+                              ],
+                            )
 
                         ),
                       );
@@ -88,6 +92,6 @@ class ManageOrderScreen extends StatelessWidget {
           },
         ),
       ),
-    );
+    ));
   }
 }

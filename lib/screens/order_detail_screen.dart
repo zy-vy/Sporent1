@@ -2,16 +2,14 @@ import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
-
-import '../component/firebase_image.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   const OrderDetailScreen({Key? key, required this.order}) : super(key: key);
@@ -33,9 +31,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
   late String currentState;
 
-  File? beforeImage,afterImage;
+  File? beforeImage, afterImage;
 
   String? trackingLink;
+
+  String? description;
 
   @override
   void initState() {
@@ -54,7 +54,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       "submitOrder": submitOrder(),
       "completeOrder": completeOrder()
     };
-    return Scaffold(body: SingleChildScrollView(child: listWidget[currentState]!));
+    return Scaffold(
+        body: SingleChildScrollView(child: listWidget[currentState]!));
   }
 
   Widget orderDetail() {
@@ -65,8 +66,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       Container(
           height: size / 5,
           // decoration: BoxDecoration(border: Border.all()),
-          margin: EdgeInsets.symmetric(
-              horizontal: size / 30, vertical: size / 30),
+          margin:
+              EdgeInsets.symmetric(horizontal: size / 30, vertical: size / 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -91,8 +92,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       Container(
         margin:
             EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           heading("Detail product"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -114,13 +114,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                        // decoration: BoxDecoration(border: Border.all()),
-                        child: Text(order.product?.name ?? "",
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis)),
+                    Text(order.product?.name ?? "",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
                     Text("${order.quantity} day"),
                     const Text(
                       "total payment",
@@ -180,6 +177,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ],
         ),
       ),
+      conditionCheckOwner(),
+      trackingCode(),
+      conditionCheckUser(),
+      returnTrackingCode(),
       // const Divider(height: 0,thickness: 3,color: Colors.black38,indent: 20,endIndent: 20,),
       SizedBox(
         height: size / 10,
@@ -189,8 +190,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget submitOrder() {
-
-
     return Container(
       padding: EdgeInsets.fromLTRB(size / 15, size / 10, size / 15, size / 15),
       child: Column(
@@ -280,27 +279,40 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Live tracking link"),
-                    onChanged: (value) { trackingLink = value;},
+                    onChanged: (value) {
+                      trackingLink = value;
+                    },
                   ),
                   SizedBox(
                     height: size / 5,
                   ),
-                  ElevatedButton(onPressed: () {
-                    if (beforeImage==null || trackingLink==null || trackingLink!.isEmpty){
-                      CoolAlert.show(context: context, type: CoolAlertType.error,text: "Please input before photo and correct tracking link");
-                      return;
-                    }
-                    CoolAlert.show(context: context, type: CoolAlertType.success,text: "Success").then((value) {
-                      setState(() {
-                        currentState = "detailOrder";
+                  ElevatedButton(
+                      onPressed: () {
+                        if (beforeImage == null ||
+                            trackingLink == null ||
+                            trackingLink!.isEmpty) {
+                          CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text:
+                                  "Please input before photo and correct tracking link");
+                          return;
+                        }
+                        orderViewModel
+                            .submitOrder(order, beforeImage, trackingLink!)
+                            .then((value) => value != false
+                                ? CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.success).then((value) => setState(() {
+                          beforeImage = null;
+                          currentState = "detailOrder";
+                        }))
+                                : CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.error));
 
-                      });
-                    });
-                      setState(() {
-                        currentState = "detailOrder";
-                      });
-                      beforeImage = null;
-                  }, child: const Text("Submit"))
+                      },
+                      child: const Text("Submit"))
                 ],
               )),
         ],
@@ -309,14 +321,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget completeOrder() {
-
     return Container(
       padding: EdgeInsets.fromLTRB(size / 15, size / 10, size / 15, size / 15),
       child: Column(
         children: [
           Container(
-            // height: size/5,
-            // decoration: BoxDecoration(border: Border.all()),
+              // height: size/5,
+              // decoration: BoxDecoration(border: Border.all()),
               margin: EdgeInsets.symmetric(
                   horizontal: size / 30, vertical: size / 30),
               child: Column(
@@ -331,67 +342,39 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     children: [
                       afterImage != null
                           ? SizedBox(
-                          width: size / 6,
-                          height: size / 6,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                                side: BorderSide(
-                                    width: 2, color: HexColor("8DA6FE"))),
-                            onPressed: (() async {
-                              afterImage = await openGallery();
-                              setState(() {});
-                            }),
-                            child: Image.file(afterImage!),
-                          ))
+                              width: size / 6,
+                              height: size / 6,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                    side: BorderSide(
+                                        width: 2, color: HexColor("8DA6FE"))),
+                                onPressed: (() async {
+                                  afterImage = await openGallery();
+                                  setState(() {});
+                                }),
+                                child: Image.file(afterImage!),
+                              ))
                           : SizedBox(
-                        width: size / 6,
-                        height: size / 6,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: HexColor("8DA6FE")),
-                          onPressed: (() async {
-                            afterImage = await openGallery();
-                            setState(() {});
-                          }),
-                          child: const Center(
-                              child: FaIcon(FontAwesomeIcons.plus,
-                                  color: Colors.white, size: 30)),
-                        ),
-                      )
+                              width: size / 6,
+                              height: size / 6,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: HexColor("8DA6FE")),
+                                onPressed: (() async {
+                                  afterImage = await openGallery();
+                                  setState(() {});
+                                }),
+                                child: const Center(
+                                    child: FaIcon(FontAwesomeIcons.plus,
+                                        color: Colors.white, size: 30)),
+                              ),
+                            )
                     ],
                   ),
                   SizedBox(
                     height: size / 15,
                   ),
-                  heading("Delivery information"),
-                  SizedBox(
-                    height: size / 20,
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Expanded(child: Text("Courier")),
-                      Expanded(child: Text("${order.deliveryMethod}"))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Expanded(child: Text("Recipient")),
-                      Expanded(child: Text(order.user?.name ?? ""))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Expanded(child: Text("Address")),
-                      Expanded(child: Text(order.deliveryLocation ?? ""))
-                    ],
-                  ),
-                  SizedBox(
-                    height: size / 15,
-                  ),
-                  heading("Submit order live tracking link"),
+                  heading("Product description"),
                   SizedBox(
                     height: size / 20,
                   ),
@@ -399,17 +382,39 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Enter your product description"),
-                    onChanged: (value) {  },
+                    onChanged: (value) {
+                      description = value;
+                    },
                   ),
                   SizedBox(
                     height: size / 5,
                   ),
-                  ElevatedButton(onPressed: () {
+                  ElevatedButton(
+                      onPressed: () {
+                        if (afterImage == null || description == null) {
+                          CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text:
+                                  "please upload correct image and description");
+                          return;
+                        }
+                        orderViewModel
+                            .finishOrder(order, afterImage!, description!)
+                            .then((value) => value != false
+                                ? CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.success)
+                                : CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.error));
 
-
-
-                    afterImage = null;
-                  }, child: const Text("Submit"))
+                        setState(() {
+                          afterImage = null;
+                          currentState = "detailOrder";
+                        });
+                      },
+                      child: const Text("Submit"))
                 ],
               )),
         ],
@@ -418,20 +423,24 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget orderDetailButton() {
-    if(order.status == "CONFIRM"){
+    if (order.status == "CONFIRM") {
       return acceptDeclineButton();
-
-    }
-    else if (order.status == "ACCEPT"){
+    } else if (order.status == "ACCEPT") {
       return submitOrderButton();
-    }
-    else if (order.status == "RETURN"){
+    }  else if (order.status == "ACTIVE") {
+      return finishComplainButton();
+    } else if (order.status == "RETURN") {
       return finishComplainButton();
     }
-    return const SizedBox();
+    return  Container(
+      margin: EdgeInsets.fromLTRB(size/15,0,size/15,size/10),
+      height: size/10,
+      decoration: BoxDecoration(color: Colors.lightBlue,borderRadius: BorderRadius.circular(5)),
+      child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
+    );
   }
 
-  Widget acceptDeclineButton(){
+  Widget acceptDeclineButton() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -452,7 +461,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget submitOrderButton(){
+  Widget submitOrderButton() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -465,12 +474,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   });
                 },
                 child: const Text("Submit Order Tracking"))),
-
       ],
     );
   }
 
-  Widget finishComplainButton(){
+  Widget finishComplainButton() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -488,6 +496,204 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             child: ElevatedButton(
                 onPressed: () {}, child: const Text("Complain Order")))
       ],
+    );
+  }
+
+  Widget conditionCheckOwner(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(
+            height: 0,
+            thickness: 3,
+            color: Colors.black38,
+            indent: 0,
+            endIndent: 0,
+          ),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Condition check (Owner)"),
+          SizedBox(
+            height: size / 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              order.beforeOwnerFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+              order.afterOwnerFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget trackingCode(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(
+            height: 0,
+            thickness: 3,
+            color: Colors.black38,
+            indent: 0,
+            endIndent: 0,
+          ),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Live tracking code"),
+          SizedBox(
+            height: size / 20,
+          ),
+
+          TextFormField(
+
+            decoration:  const InputDecoration(
+                border: OutlineInputBorder(),
+
+            ),
+            readOnly: true,
+            initialValue: order.returnTrackingCode??"",
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget conditionCheckUser(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(
+            height: 0,
+            thickness: 3,
+            color: Colors.black38,
+            indent: 0,
+            endIndent: 0,
+          ),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Condition check (User)"),
+          SizedBox(
+            height: size / 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              order.beforeUserFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+              order.afterUserFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget returnTrackingCode(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(
+            height: 0,
+            thickness: 3,
+            color: Colors.black38,
+            indent: 0,
+            endIndent: 0,
+          ),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Return tracking code"),
+          SizedBox(
+            height: size / 20,
+          ),
+
+          TextFormField(
+
+            decoration:  const InputDecoration(
+              border: OutlineInputBorder(),
+
+            ),
+            readOnly: true,
+            initialValue: order.returnTrackingCode??"",
+          ),
+        ],
+      ),
     );
   }
 
