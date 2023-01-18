@@ -323,6 +323,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         email: _emailTextController.text,
                                         image: "",
                                         is_owner: false,
+                                        deposit: 0,
                                         phonenumber:
                                             _phoneNumberTextController.text
                                     );
@@ -330,12 +331,12 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                     phoneAuthentication(
                                         _phoneNumberTextController.value.text);
 
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => OTP(
-                                    //             _phoneNumberTextController
-                                    //                 .value.text)));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => OTP(
+                                                _phoneNumberTextController
+                                                    .value.text)));
                                   }).onError((error, stackTrace) {
                                     if (error.toString().contains("email")) {
                                       _showAlertDialog("Email Already In Use");
