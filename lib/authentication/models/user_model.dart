@@ -5,23 +5,27 @@ class userModel {
   final String name;
   final String birthdate;
   final String email;
+  final String image;
+  final bool is_owner;
   final String phonenumber;
-  final Timestamp? createdAt;
 
   const userModel(
       {this.id,
       required this.name,
       required this.birthdate,
       required this.email,
-      required this.phonenumber,this.createdAt});
+      required this.image,
+      required this.is_owner,
+      required this.phonenumber});
 
   toJSON() {
     return {
       "name": name,
       "birthdate": birthdate,
       "email": email,
+      "image" : image,
+      "is_owner" : is_owner,
       "phone_number": phonenumber,
-      "created_at": createdAt
     };
   }
 }

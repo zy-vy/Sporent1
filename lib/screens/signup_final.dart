@@ -321,9 +321,10 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         birthdate:
                                             _birthDateTextController.text,
                                         email: _emailTextController.text,
+                                        image: "",
+                                        is_owner: false,
                                         phonenumber:
-                                            _phoneNumberTextController.text,
-                                      createdAt: Timestamp.now()
+                                            _phoneNumberTextController.text
                                     );
                                     createUser(user);
                                     phoneAuthentication(
