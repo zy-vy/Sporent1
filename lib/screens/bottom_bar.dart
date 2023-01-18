@@ -14,6 +14,8 @@ import 'package:sporent/screens/signin_screen.dart';
 import 'package:sporent/screens/transaction_screen.dart';
 import 'package:sporent/viewmodel/user_viewmodel.dart';
 
+import '../viewmodel/order_viewmodel.dart';
+
 class BottomBarScreen extends StatefulWidget {
   const BottomBarScreen({Key? key}) : super(key: key);
 
@@ -22,24 +24,26 @@ class BottomBarScreen extends StatefulWidget {
 }
 
 class _BottomBarScreenState extends State<BottomBarScreen> {
-  int _selectedIdx=0;
+  int _selectedIdx = 0;
   final List pageList = [
     const HomeScreen(),
-    const ManageOrderScreen(),
+    const TransactionScreen(),
     const CartScreen(),
     const ProfilePage()
   ];
 
-  void selectedPage(int index){
+  void selectedPage(int index) {
     setState(() {
       _selectedIdx = index;
     });
   }
 
-  void checkUser(){
+  void checkUser() {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user ==null){
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInScreen(),));
+    if (user == null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const SignInScreen(),
+      ));
     }
   }
 
@@ -49,50 +53,58 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     super.initState();
     // checkUser();
   }
+
   @override
   Widget build(BuildContext context) {
-    return
-      MultiProvider(providers: [
-          ChangeNotifierProvider(create: (context) {
-            var vm = UserViewModel();
-            vm.signIn();
-            return vm;
-          },)
-        ],
-          child:  Scaffold(
-            body: pageList[_selectedIdx],
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              items: const [
-                BottomNavigationBarItem(
-                    label: 'Home',
-                    icon: ImageIcon(AssetImage("assets/icons/Home Before.png")),
-                    activeIcon: ImageIcon(AssetImage("assets/icons/Home After.png"))),
-                BottomNavigationBarItem(
-                    label: 'Transaction',
-                    icon: ImageIcon(AssetImage("assets/icons/Transaction Before.png")),
-                    activeIcon: FaIcon(FontAwesomeIcons.receipt)),
-                BottomNavigationBarItem(
-                    label: 'Cart',
-                    icon: ImageIcon(AssetImage("assets/icons/Cart Before.png")),
-                    activeIcon: ImageIcon(AssetImage("assets/icons/Cart After.png"))),
-                BottomNavigationBarItem(
-                    label: 'Profile',
-                    icon: ImageIcon(AssetImage("assets/icons/Profile Before.png")),
-                    activeIcon: ImageIcon(AssetImage("assets/icons/Profile After.png")))
-              ],
-              selectedItemColor: Colors.blueAccent,
-              unselectedItemColor: Colors.grey,
-              currentIndex: _selectedIdx,
-              onTap: (int index) {
-                setState(() {
-                  _selectedIdx = index;
-                });
-              },
-            ),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) {
+              var vm = UserViewModel();
+              vm.signIn();
+              return vm;
+            },
+          ),
+          ChangeNotifierProvider(
+            create: (context) => OrderViewModel(),
           )
-        );
-
-
+        ],
+        child: Scaffold(
+          body: pageList[_selectedIdx],
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                  label: 'Home',
+                  icon: ImageIcon(AssetImage("assets/icons/Home Before.png")),
+                  activeIcon:
+                      ImageIcon(AssetImage("assets/icons/Home After.png"))),
+              BottomNavigationBarItem(
+                  label: 'Transaction',
+                  icon: ImageIcon(
+                      AssetImage("assets/icons/Transaction Before.png")),
+                  activeIcon: FaIcon(FontAwesomeIcons.receipt)),
+              BottomNavigationBarItem(
+                  label: 'Cart',
+                  icon: ImageIcon(AssetImage("assets/icons/Cart Before.png")),
+                  activeIcon:
+                      ImageIcon(AssetImage("assets/icons/Cart After.png"))),
+              BottomNavigationBarItem(
+                  label: 'Profile',
+                  icon:
+                      ImageIcon(AssetImage("assets/icons/Profile Before.png")),
+                  activeIcon:
+                      ImageIcon(AssetImage("assets/icons/Profile After.png")))
+            ],
+            selectedItemColor: Colors.blueAccent,
+            unselectedItemColor: Colors.grey,
+            currentIndex: _selectedIdx,
+            onTap: (int index) {
+              setState(() {
+                _selectedIdx = index;
+              });
+            },
+          ),
+        ));
   }
 }

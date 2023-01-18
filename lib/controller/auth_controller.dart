@@ -39,7 +39,7 @@ class AuthController {
       GoogleSignInAccount? account = await GoogleSignIn().signIn();
 
       if (account != null) {
-        log("+++ email ${account.email}",level: 1);
+        // log("+++ email ${account.email}",level: 1);
         GoogleSignInAuthentication auth = await account.authentication;
         OAuthCredential credential = GoogleAuthProvider. credential(
             accessToken: auth.accessToken, idToken: auth.idToken);

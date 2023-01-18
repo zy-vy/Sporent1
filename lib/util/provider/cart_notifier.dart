@@ -11,7 +11,7 @@ class CartNotifier extends ChangeNotifier {
 
   void setValue(){
     _listenableValue = !_listenableValue;
-    log("+++ notify");
+    // log("+++ notify");
     notifyListeners();
   }
 
