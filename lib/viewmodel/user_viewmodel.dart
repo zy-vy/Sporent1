@@ -8,8 +8,7 @@ import 'package:sporent/repository/user_repository.dart';
 
 import '../controller/user_controller.dart';
 
-class UserViewModel with ChangeNotifier{
-
+class UserViewModel with ChangeNotifier {
   bool _isLoading = true;
 
   bool _isLoggedIn = false;
@@ -20,21 +19,20 @@ class UserViewModel with ChangeNotifier{
 
   final firebaseAuth = FirebaseAuth.instance;
 
-  UserViewModel ( ){
+  UserViewModel() {
     fetchUser();
   }
 
   UserLocal? get user {
     log("user viewmodel ${_user?.name}");
-    if (firebaseAuth.currentUser == null){
+    if (firebaseAuth.currentUser == null) {
       signIn();
     }
     fetchUser();
     return _user;
   }
 
-
-  set user (UserLocal? user){
+  set user(UserLocal? user) {
     _user = user;
     // notifyListeners();
   }
@@ -53,47 +51,46 @@ class UserViewModel with ChangeNotifier{
       //
       // }
       isLoggedIn = false;
-    }
-    else {
-      _user = await UserController().createUserFromAuth(firebaseAuth.currentUser!);
-      isLoggedIn =true;
-
+    } else {
+      _user =
+          await UserController().createUserFromAuth(firebaseAuth.currentUser!);
+      isLoggedIn = true;
     }
     notifyListeners();
   }
 
   Future<void> fetchUser() async {
-    isLoading=true;
-    if (firebaseAuth.currentUser!=null){
+    isLoading = true;
+    if (firebaseAuth.currentUser != null) {
       user = await _userRepository.getUserById(firebaseAuth.currentUser!.uid);
-      isLoggedIn= true;
+      isLoggedIn = true;
     }
 
     isLoading = false;
   }
 
   Future<void> signOut() async {
-    if (_user !=null){
-      await firebaseAuth.signOut().then((value) => log("User ${_user?.name} has sign out"));
-      user=null;
-      isLoggedIn=false;
+    if (_user != null) {
+      await firebaseAuth
+          .signOut()
+          .then((value) => log("User ${_user?.name} has sign out"));
+      user = null;
+      isLoggedIn = false;
       notifyListeners();
     }
   }
 
-
-  set isLoading(bool value){
+  set isLoading(bool value) {
     _isLoading = value;
     // notifyListeners();
   }
 
-  bool  get isLoggedIn {
-
+  bool get isLoggedIn {
     fetchUser();
     return _isLoggedIn;
   }
 
-  set isLoggedIn (bool value){
+  set isLoggedIn(bool value) {
     _isLoggedIn = value;
     // notifyListeners();
   }

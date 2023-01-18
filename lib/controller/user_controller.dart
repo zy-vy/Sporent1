@@ -41,7 +41,6 @@ class UserController {
     }
 
     userLocal = UserLocal.fromAuth(user);
-    userLocal.createdAt = Timestamp.now();
 
     await _firestore.doc(user.uid).set(userLocal.toFirestore(),SetOptions(merge:true)).
     onError( (e, _) {

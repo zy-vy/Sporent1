@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
+import 'package:sporent/screens/admin_screen.dart';
 import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/homepage.dart';
 import 'package:sporent/screens/otp.dart';
@@ -24,9 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
-
-
-
+  bool hidePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -87,12 +87,26 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       TextFormField(
                         controller: _passwordTextController,
-                        obscureText: true,
+                        obscureText: hidePassword,
                         enableSuggestions: !true,
                         autocorrect: !true,
                         cursorColor: Colors.white,
                         style: TextStyle(color: Colors.white.withOpacity(0.9)),
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              padding: const EdgeInsets.all(0),
+                              onPressed: () {
+                                setState(() {
+                                  hidePassword = !hidePassword;
+                                });
+                              },
+                              icon: FaIcon(
+                                hidePassword == true
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash,
+                                size: 20,
+                                color: Colors.white,
+                              )),
                           prefixIcon: const Icon(
                             Icons.lock_outline,
                             color: Colors.white70,
@@ -131,20 +145,26 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: _emailTextController.text,
-                                      password: _passwordTextController.text)
-                                  .then((value) {
-
-                                    // Provider.of<UserViewModel>(context,listen: false).signIn();
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const BottomBarScreen()));
-                              }).onError((error, stackTrace) {
-                                print("${error.toString()}");
-                              });
+                              if (_emailTextController.text == "admin@gmail.com" &&
+                                  _passwordTextController.text == "admin123") {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AdminProfile()));
+                              } else {
+                                FirebaseAuth.instance
+                                    .signInWithEmailAndPassword(
+                                        email: _emailTextController.text,
+                                        password: _passwordTextController.text)
+                                    .then((value) {
+                                  // Provider.of<UserViewModel>(context,listen: false).signIn();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const BottomBarScreen()));
+                                }).onError((error, stackTrace) {
+                                  print("${error.toString()}");
+                                });
+                              }
                             }
                           },
                           style: ButtonStyle(

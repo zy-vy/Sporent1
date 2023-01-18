@@ -14,8 +14,9 @@ import 'package:sporent/screens/color.dart';
 import '../model/subcategory.dart';
 
 class EditProduct extends StatefulWidget {
-  final String productId;
   const EditProduct(this.productId, {super.key});
+
+    final String productId;
 
   @override
   State<EditProduct> createState() => _EditProductState();
@@ -65,7 +66,7 @@ class _EditProductState extends State<EditProduct> {
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection("product-renter")
+                .collection("product")
                 .doc(widget.productId)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -77,10 +78,10 @@ class _EditProductState extends State<EditProduct> {
                 var docProduct = snapshot.data;
                 if (temp == 0) {
                   nameController.text = docProduct!.get('name');
-                  priceController.text = docProduct.get('price').toString();
+                  priceController.text = docProduct.get('rent_price').toString();
                   descriptionController.text = docProduct.get('description');
                   locationController.text = docProduct.get('location');
-                  depositController.text = docProduct['deposit'].toString();
+                  depositController.text = docProduct['deposit_price'].toString();
                   DocumentReference categoryReference =
                       firestore.doc(docProduct.get('category').toString());
                   var currentCategory =
@@ -333,7 +334,7 @@ SizedBox confirmButton(
 
             if (image != null) {
               FirebaseStorage.instance
-                  .refFromURL(docProduct!.get('image'))
+                  .refFromURL(docProduct!.get('img'))
                   .delete();
 
               final ref = FirebaseStorage.instance
@@ -344,57 +345,57 @@ SizedBox confirmButton(
 
               if (productCategory != null && productSubcategory != null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "category": categoryReference,
                   "subcategory": subcategoryReference,
-                  "image": id
+                  "img": id
                 });
               }
               if (productCategory == null && productSubcategory != null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "subcategory": subcategoryReference,
-                  "image": id
+                  "img": id
                 });
               }
 
               if (productCategory != null && productSubcategory == null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "category": categoryReference,
-                  "image": id
+                  "img": id
                 });
               }
 
               if (productCategory == null && productSubcategory == null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "image": id
@@ -403,12 +404,12 @@ SizedBox confirmButton(
             } else {
               if (productCategory != null && productSubcategory != null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "category": categoryReference,
@@ -417,12 +418,12 @@ SizedBox confirmButton(
               }
               if (productCategory == null && productSubcategory != null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "subcategory": subcategoryReference,
@@ -431,12 +432,12 @@ SizedBox confirmButton(
 
               if (productCategory != null && productSubcategory == null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                   "category": categoryReference,
@@ -445,12 +446,12 @@ SizedBox confirmButton(
 
               if (productCategory == null && productSubcategory == null) {
                 FirebaseFirestore.instance
-                    .collection("product-renter")
+                    .collection("product")
                     .doc(id)
                     .update({
                   "name": name.text,
-                  "price": int.parse(price.text),
-                  "deposit": int.parse(deposit.text),
+                  "rent_price": int.parse(price.text),
+                  "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
                 });

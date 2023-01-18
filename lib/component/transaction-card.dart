@@ -3,8 +3,8 @@ import 'package:hexcolor/hexcolor.dart';
 
 import '../screens/detail-transaction1.dart';
 
-class TransactionCard extends StatelessWidget {
-  const TransactionCard({super.key});
+class TransactionCardNew extends StatelessWidget {
+  const TransactionCardNew({super.key});
 
   @override
   Widget build(BuildContext context) {

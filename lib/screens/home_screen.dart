@@ -28,23 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-
-            padding: EdgeInsets.fromLTRB(_size.width/25, _size.height/20, _size.width/25,  0),
-            child: Column(
-              children: [
-                const SearchBarProduct(),
-                HeadingCategory(size: _size),
-                const PopularCategory(),
-                HeadingRecommend(size: _size),
-                const ProductRecommendation(),
-                
-
-
-              ],
-            ),
-          ),
-        ));
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+            _size.width / 25, _size.height / 20, _size.width / 25, _size.height / 20),
+        child: Column(
+          children: [
+            const SearchBarProduct(),
+            HeadingCategory(size: _size),
+            const PopularCategory(),
+            HeadingRecommend(size: _size),
+            const ProductRecommendation(),
+          ],
+        ),
+      ),
+    ));
   }
 
   // Stream<List<Product>> getProductList() {
@@ -70,7 +67,8 @@ class HeadingRecommend extends StatelessWidget {
   const HeadingRecommend({
     Key? key,
     required Size size,
-  }) : _size = size, super(key: key);
+  })  : _size = size,
+        super(key: key);
 
   final Size _size;
 
@@ -83,13 +81,16 @@ class HeadingRecommend extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text("Today's Recommendation",
-              style:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           Align(
             alignment: Alignment.bottomRight,
             child: InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductListScreen(),));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProductListScreen(),
+                    ));
               },
               child: const Text(
                 "See all",
@@ -103,15 +104,14 @@ class HeadingRecommend extends StatelessWidget {
   }
 }
 
-
 class HeadingCategory extends StatelessWidget {
   const HeadingCategory({
-    Key? key, 
+    Key? key,
     required Size size,
-  }) : _size = size, super(key: key);
+  })  : _size = size,
+        super(key: key);
 
   final Size _size;
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,18 +120,19 @@ class HeadingCategory extends StatelessWidget {
           horizontal: _size.width / 50, vertical: _size.height / 75),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children:  [
+        children: [
           const Text("Popular Categories",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 20)),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder:(context) => const AllCategory()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AllCategory()));
             },
-
             child: const Text(
               "See all",
-              style: TextStyle(color: Colors.grey, ),
+              style: TextStyle(
+                color: Colors.grey,
+              ),
             ),
           )
         ],

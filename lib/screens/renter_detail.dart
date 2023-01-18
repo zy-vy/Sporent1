@@ -37,7 +37,7 @@ class RenterDetail extends StatelessWidget {
               } else {
                 var id = snapshot.data!.id;
                 var name = snapshot.data!.get("name");
-                var multiplicity = snapshot.data!.get("multiplicity");
+                var multiplicity = snapshot.data!.get("municipality");
                 var description = snapshot.data!.get("description");
                 var image = snapshot.data!.get("image");
 

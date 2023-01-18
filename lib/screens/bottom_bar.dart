@@ -58,7 +58,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             return vm;
           },)
         ],
-          child:  Scaffold(
+          child:  
+          Scaffold(
             body: pageList[_selectedIdx],
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
