@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Reference storage = FirebaseStorage.instance.ref();
     final pathRef = storage.child("${Product.imagePath!}/${_product.id!}");
-    log("+++ product${_product.name}");
+    // log("+++ product${_product.name}");
 
     Size _size = MediaQuery.of(context).size;
 

@@ -13,7 +13,7 @@ class OrderRepository {
         .set(order.toFirestore(),SetOptions(merge: true))
         .then((value) => doc.id)
         .onError((error, stackTrace) {
-      log("+++ checkout $error \n$stackTrace");
+      // log("+++ checkout $error \n$stackTrace");
       return "";
     });
   }

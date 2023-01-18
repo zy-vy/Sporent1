@@ -25,7 +25,7 @@ class UserViewModel with ChangeNotifier{
   }
 
   UserLocal? get user {
-    log("user viewmodel ${_user?.name}");
+    // log("user viewmodel ${_user?.name}");
     if (firebaseAuth.currentUser == null){
       signIn();
     }
