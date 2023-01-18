@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/component/firebase_image.dart';
@@ -8,9 +7,6 @@ import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/cart_detail.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/product_detail_screen.dart';
-import 'package:sporent/util/provider/cart_notifier.dart';
-import 'package:sporent/util/provider/item_count.dart';
-import 'package:sporent/util/provider/total_price.dart';
 import 'package:sporent/viewmodel/cart_viewmodel.dart';
 
 
@@ -100,12 +96,15 @@ class CartDetailTile extends StatelessWidget {
                   ),
                 ],
               ),
-              trailing: IconButton(onPressed: () {
-                // Provider.of<CartNotifier>(context,listen: false).setValue();
-                Provider.of<CartViewModel>(context, listen: false).removeCart(cartDetail);
-                // CartController().deleteCart(cartDetail);
+              trailing: SizedBox(
+                width: 20,
+                child: IconButton(onPressed: () {
+                  // Provider.of<CartNotifier>(context,listen: false).setValue();
+                  Provider.of<CartViewModel>(context, listen: false).removeCart(cartDetail);
+                  // CartController().deleteCart(cartDetail);
 
-              }, icon: const Icon(Icons.delete_outline_rounded))
+                }, icon: const Icon(Icons.delete_outline_rounded,size: 20,)),
+              )
             ),
           );
         });

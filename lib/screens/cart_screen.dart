@@ -44,8 +44,8 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.white,
         body: Center(
             child: Container(
-          margin: EdgeInsets.symmetric(vertical: size.height / 100),
-          padding: EdgeInsets.symmetric(vertical: size.height / 100),
+          margin: EdgeInsets.symmetric(vertical: size.height / 100,horizontal: size.width/40),
+          padding: EdgeInsets.symmetric(vertical: size.height / 100,horizontal: size.width/35),
           height: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey[200],

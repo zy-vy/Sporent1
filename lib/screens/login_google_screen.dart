@@ -21,7 +21,7 @@ class _LoginGoogleScreenState extends State<LoginGoogleScreen> {
       GoogleSignInAccount? account = await GoogleSignIn().signIn();
 
       if (account != null) {
-        log("+++ ${account.email}");
+//        log("+++ ${account.email}");
         GoogleSignInAuthentication auth = await account.authentication;
         OAuthCredential credential = GoogleAuthProvider. credential(
             accessToken: auth.accessToken, idToken: auth.idToken);

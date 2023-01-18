@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -181,7 +182,9 @@ class ProductDetailScreen extends StatelessWidget {
                                               1;
                                           log("--- diff $difference");
                                           await CartController().addToCart(_product, startDate!,
-                                              endDate!, difference);
+                                              endDate!, difference).then((value) => 
+                                              CoolAlert.show(context: context, type: CoolAlertType.success,text: "Added to Cart !",autoCloseDuration: const Duration(seconds: 3))
+                                          ).onError((error, stackTrace) => CoolAlert.show(context: context, type: CoolAlertType.error,text: "Sorry, something went wrong..."));
                                         }
 
                                       },

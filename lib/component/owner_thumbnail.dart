@@ -33,7 +33,7 @@ class _OwnerThumbnailState extends State<OwnerThumbnail> {
     final user = await getUser();
     if (mounted){
       setState(() {
-        log("+++ user ${user?.id}");
+        // log("+++ user ${user?.id}");
         _user = user;
       });
     }
