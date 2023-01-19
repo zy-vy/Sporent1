@@ -13,7 +13,7 @@ class UserLocal extends BaseModel {
   String? image;
   String? birthdate;
   int? deposit;
-  bool? is_owner;
+  bool? isOwner;
   String? owner_name;
   String? owner_image;
   int? owner_balance;
@@ -29,7 +29,7 @@ class UserLocal extends BaseModel {
       this.image,
       this.birthdate,
       this.deposit,
-      this.is_owner,
+      this.isOwner,
       this.owner_name,
       this.owner_image,
       this.owner_balance,
@@ -51,7 +51,7 @@ class UserLocal extends BaseModel {
         image: json['image'],
         birthdate: json['birthdate'],
         deposit: json['deposit'],
-        is_owner: json['is_owner'],
+        isOwner: json['is_owner'],
         owner_name: json['owner_name'],
         owner_image: json['owner_image'],
         owner_balance: json['owner_balance'],
