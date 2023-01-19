@@ -45,8 +45,8 @@ class OwnerProfile extends StatelessWidget {
                   } else {
                     return Column(
                       children: [
-                        TopProfile(
-                            snapshot.data!.get("owner_image"), snapshot.data!.id),
+                        TopProfile(snapshot.data?.data()!["owner_image"],
+                            snapshot.data!.id),
                         nameProfile(
                           _size,
                           snapshot.data!.get("owner_name"),
@@ -66,7 +66,7 @@ class OwnerProfile extends StatelessWidget {
                             "Show all transaction renter",
                             FontAwesomeIcons.receipt,
                             ManageTransaction()),
-                       BarProfile(
+                        BarProfile(
                             "Balance Information",
                             "All information about balance",
                             FontAwesomeIcons.fileInvoiceDollar,
@@ -125,10 +125,13 @@ class _TopProfileState extends State<TopProfile> {
       children: [
         CircleAvatar(
           backgroundColor: Colors.grey.shade200,
-          backgroundImage: widget.image != ""
-              ? NetworkImage(widget.image!)
-              : const NetworkImage(
-                  "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6"),
+          backgroundImage: widget.image == null
+              ? const NetworkImage(
+                  "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6")
+              : widget.image != ""
+                  ? NetworkImage(widget.image!)
+                  : const NetworkImage(
+                      "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6"),
           radius: 100,
         ),
         Positioned(
