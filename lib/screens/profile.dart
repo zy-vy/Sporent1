@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
                             children: [
                               TopProfile(userViewModel),
                               nameProfile(_size, userViewModel.user!.name),
-                              OwnerButton(userViewModel.user!.is_owner,
+                              OwnerButton(userViewModel.user!.isOwner,
                                   userViewModel.user!.id),
                               BarProfile(
                                   "Edit Personal Info",
@@ -172,7 +172,7 @@ class OwnerButton extends StatelessWidget {
         height: _size.height / 18,
         child: ElevatedButton(
           onPressed: () {
-            if (is_owner == false) {
+            if (is_owner==null || is_owner == false) {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BecomeOwner(id),
