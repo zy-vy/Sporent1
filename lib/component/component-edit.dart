@@ -29,6 +29,7 @@ class FieldForm extends StatelessWidget {
             haveData == true
                 ? Expanded(
                     child: Text(desc,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: fontSizeDesc,
                             color: Colors.black,

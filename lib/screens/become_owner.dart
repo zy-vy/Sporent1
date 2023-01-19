@@ -1,21 +1,25 @@
 import 'package:checkbox_formfield/checkbox_formfield.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/edit-page.dart';
-import 'package:sporent/screens/add-product-renter.dart';
+import 'package:sporent/component/edit_page.dart';
+import 'package:sporent/model/owner.dart';
+import 'package:sporent/screens/add_product.dart';
 import 'package:sporent/screens/privacy_policy.dart';
-import 'package:sporent/screens/profile-renter.dart';
+import 'package:sporent/screens/profile_owner.dart';
 import 'package:sporent/screens/terms_and_condition.dart';
 
-class BecomOwner extends StatefulWidget {
-  const BecomOwner({super.key});
+class BecomeOwner extends StatefulWidget {
+  const BecomeOwner(this.id, {super.key});
+
+  final String? id;
 
   @override
-  State<BecomOwner> createState() => _BecomOwnerState();
+  State<BecomeOwner> createState() => _BecomeOwnerState();
 }
 
-class _BecomOwnerState extends State<BecomOwner> {
+class _BecomeOwnerState extends State<BecomeOwner> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController controllerOwnerName = TextEditingController();
   final TextEditingController controllerOwnerAddress = TextEditingController();
@@ -39,7 +43,6 @@ class _BecomOwnerState extends State<BecomOwner> {
           ),
           backgroundColor: HexColor("4164DE"),
         ),
-        resizeToAvoidBottomInset: false,
         body: Form(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             key: _formKey,
@@ -104,7 +107,44 @@ class _BecomOwnerState extends State<BecomOwner> {
                         }
                       },
                     ),
-                    bottomPage(_size, _formKey, context, const RenterProfile()),
+                    Column(
+                      children: [
+                        SizedBox(height: _size.height / 20),
+                        SizedBox(
+                            width: _size.width,
+                            height: _size.height / 15,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  
+                                  await FirebaseFirestore.instance
+                                      .collection("user")
+                                      .doc(widget.id)
+                                      .update({
+                                    "is_owner": true,
+                                    "owner_name": controllerOwnerName.text,
+                                    "owner_municipality":
+                                        controllerOwnerMunicipality.text,
+                                    "owner_address": controllerOwnerAddress.text,
+                                    "owner_description":
+                                        controllerOwnerDescription.text
+                                  });
+
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => OwnerProfile(widget.id),
+                                    ),
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: HexColor("4164DE"),
+                              ),
+                              child: const Text("Confirm",
+                                  textAlign: TextAlign.center),
+                            ))
+                      ],
+                    )
                   ],
                 ),
               ]),

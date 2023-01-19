@@ -321,20 +321,22 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         birthdate:
                                             _birthDateTextController.text,
                                         email: _emailTextController.text,
+                                        image: "",
+                                        is_owner: false,
+                                        deposit: 0,
                                         phonenumber:
-                                            _phoneNumberTextController.text,
-                                      createdAt: Timestamp.now()
+                                            _phoneNumberTextController.text
                                     );
                                     createUser(user);
                                     phoneAuthentication(
                                         _phoneNumberTextController.value.text);
 
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => OTP(
-                                    //             _phoneNumberTextController
-                                    //                 .value.text)));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => OTP(
+                                                _phoneNumberTextController
+                                                    .value.text)));
                                   }).onError((error, stackTrace) {
                                     if (error.toString().contains("email")) {
                                       _showAlertDialog("Email Already In Use");

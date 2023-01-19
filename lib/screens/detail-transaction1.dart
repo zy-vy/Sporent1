@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/detail-product-card.dart';
-import 'package:sporent/component/field-row.dart';
+import 'package:sporent/component/field_row.dart';
 import 'package:sporent/screens/detail-transaction2.dart';
 import 'package:sporent/screens/color.dart';
 

@@ -19,8 +19,6 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Reference storage = FirebaseStorage.instance.ref();
-    final pathRef = storage.child("${Product.imagePath!}/${_product.id!}");
-    // log("+++ product${_product.name}");
 
     Size _size = MediaQuery.of(context).size;
 
@@ -50,7 +48,6 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         _product.name ?? "",
                         style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),

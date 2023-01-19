@@ -24,7 +24,7 @@ class ManageOrderScreen extends StatelessWidget {
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Center(child: CircularProgressIndicator()),
               );
             }
             else if (snapshot.data!.isEmpty){
@@ -43,9 +43,7 @@ class ManageOrderScreen extends StatelessWidget {
                     builder: (context, snapshot) {
                       order = snapshot.data;
                       if (order == null) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Center();
                       }
                       return Card(
                         elevation: 3,

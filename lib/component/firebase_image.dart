@@ -65,7 +65,6 @@ class _FirebaseImageState extends State<FirebaseImage> {
 
   @override
   Widget build(BuildContext context) {
-    inspect(_file);
     // log("+++ file"+_file.toString());
     if(_file==null){
       return const Icon(Icons.error_outline);

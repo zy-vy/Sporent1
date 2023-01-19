@@ -2,19 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/product-card-renter.dart';
-import 'package:sporent/screens/add-product-renter.dart';
+import 'package:sporent/component/product_card_renter.dart';
+import 'package:sporent/screens/add_product.dart';
+import 'package:sporent/screens/profile_owner.dart';
+
+import '../model/product.dart';
 
 class ManageProduct extends StatefulWidget {
-  const ManageProduct({super.key});
+  const ManageProduct(this.id, {super.key});
+
+  final String? id;
 
   @override
   State<ManageProduct> createState() => _ManageProductState();
 }
 
 class _ManageProductState extends State<ManageProduct> {
-  Stream<QuerySnapshot> product() =>
-      FirebaseFirestore.instance.collection("product-renter").snapshots();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,13 @@ class _ManageProductState extends State<ManageProduct> {
 
     return Scaffold(
         appBar: AppBar(
+            leading: IconButton(
+            icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => OwnerProfile(widget.id)));
+            },
+          ),
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
@@ -38,7 +49,8 @@ class _ManageProductState extends State<ManageProduct> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AddProduct()),
+                  MaterialPageRoute(
+                      builder: (context) => AddProduct(widget.id)),
                 );
               },
               child: Row(
@@ -59,29 +71,30 @@ class _ManageProductState extends State<ManageProduct> {
             ),
             SizedBox(height: _size.height / 40),
             StreamBuilder(
-                stream: product(),
+                stream: firestore
+                    .collection("product")
+                    .where("owner",
+                        isEqualTo: firestore.collection("user").doc(widget.id))
+                    .snapshots(),
                 builder: ((context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
-                      child: Text("There is no data"),
+                      child: CircularProgressIndicator(),
                     );
                   }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (snapshot.data!.docs.isEmpty) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: Text("There is no data"),
                     );
                   } else {
                     return Expanded(
                         child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: ((context, index) {
-                              final DocumentSnapshot dataProduct =
-                                  snapshot.data!.docs[index];
-                              String priceString =
-                                  dataProduct['price'].toString();
-                              String combineString = 'Rp$priceString/day';
-                              return ProductCardRenter(
-                                  dataProduct, combineString);
+                              Product product = Product.fromDocument(
+                                  snapshot.data!.docs[index].id,
+                                  snapshot.data!.docs[index].data());
+                              return ProductCardRenter(product);
                             })));
                   }
                 }))

@@ -5,19 +5,40 @@ import 'package:sporent/model/product.dart';
 
 import 'abstract_model.dart';
 
-class UserLocal extends BaseModel{
+class UserLocal extends BaseModel {
   String? id;
   String? name;
   String? email;
   String? phoneNumber;
-  String? photoUrl;
-  String? location;
-  Timestamp? createdAt;
+  String? image;
+  String? birthdate;
+  int? deposit;
+  bool? is_owner;
+  String? owner_name;
+  String? owner_image;
+  int? owner_balance;
+  String? owner_municipality;
+  String? owner_address;
+  String? owner_description;
 
-  UserLocal({this.id, this.name, this.email, this.phoneNumber, this.photoUrl,this.createdAt,this.location}) ;
+  UserLocal(
+      {this.id,
+      this.name,
+      this.email,
+      this.phoneNumber,
+      this.image,
+      this.birthdate,
+      this.deposit,
+      this.is_owner,
+      this.owner_name,
+      this.owner_image,
+      this.owner_balance,
+      this.owner_municipality,
+      this.owner_address,
+      this.owner_description});
 
-  factory UserLocal.toOwner(UserLocal user, List<Product>? list){
-    (user as Owner).listProduct=list;
+  factory UserLocal.toOwner(UserLocal user, List<Product>? list) {
+    (user as Owner).listProduct = list;
     return user;
   }
 
@@ -27,11 +48,16 @@ class UserLocal extends BaseModel{
         name: json['name'],
         email: json['email'],
         phoneNumber: json['phone_number'],
-        photoUrl: json['photo_url'],
-        createdAt: json['created_at'],
-        location: json['location']
-    );
-
+        image: json['image'],
+        birthdate: json['birthdate'],
+        deposit: json['deposit'],
+        is_owner: json['is_owner'],
+        owner_name: json['owner_name'],
+        owner_image: json['owner_image'],
+        owner_balance: json['owner_balance'],
+        owner_municipality: json['owner_municipality'],
+        owner_address: json['owner_address'],
+        owner_description: json['owner_description']);
   }
 
   static List<UserLocal> fromSnapshot(
@@ -39,29 +65,33 @@ class UserLocal extends BaseModel{
     return snapshots.map((e) => fromDocument(e.id, e.data())).toList();
   }
 
-  Map<String,dynamic> toFirestore (){
+  Map<String, dynamic> toFirestore() {
     return {
-      if (name!=null) "name":name,
-      if (email!=null) "email": email,
-      if (phoneNumber!=null) "phone_number": phoneNumber,
-      if (photoUrl!=null) "photo_url": photoUrl ,
-      if (location!=null) "location": location ,
-      if (createdAt!=null) "created_at": createdAt ,
+      if (name != null) "name": name,
+      if (email != null) "email": email,
+      if (phoneNumber != null) "phone_number": phoneNumber,
+      if (image != null) "image": image,
+      if (birthdate != null) "birthdate" : birthdate,
+      if (deposit != null) "deposit" : deposit,
+      if (owner_name != null) "owner_name": owner_name,
+      if (owner_image != null) "owner_image": owner_image,
+      if (owner_balance != null) "owner_balance": owner_balance,
+      if (owner_municipality != null) "owner_municipality": owner_municipality,
+      if (owner_address != null) "owner_address": owner_address,
+      if (owner_description != null) "owner_description": owner_description,
     };
   }
 
-  DocumentReference<Map<String, dynamic>> toReference (){
+  DocumentReference<Map<String, dynamic>> toReference() {
     var path = "user/$id";
     return FirebaseFirestore.instance.doc(path);
   }
 
-  factory UserLocal.fromAuth (User user){
+  factory UserLocal.fromAuth(User user) {
     return UserLocal(
-        name: user.displayName,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        photoUrl: user.photoURL,
-        );
+      name: user.displayName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+    );
   }
-
 }
