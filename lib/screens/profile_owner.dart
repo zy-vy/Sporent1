@@ -5,10 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sporent/screens/ManageOrderScreen.dart';
 import 'package:sporent/screens/balance_information.dart';
 import 'package:sporent/screens/manage-product.dart';
 import 'package:sporent/screens/manage-transaction.dart';
 import 'package:sporent/screens/profile.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 import '../component/bar-profile.dart';
 import 'package:sporent/screens/help-center.dart';
 import 'package:image_picker/image_picker.dart';
@@ -61,11 +63,11 @@ class OwnerProfile extends StatelessWidget {
                             "Add, Edit, and Delete product",
                             FontAwesomeIcons.buffer,
                             ManageProduct(snapshot.data!.id)),
-                        const BarProfile(
+                        BarProfile(
                             "Manage Order",
                             "Show all transaction renter",
                             FontAwesomeIcons.receipt,
-                            ManageTransaction()),
+                            ManageOrderScreen(userViewModel: UserViewModel(),)),
                         BarProfile(
                             "Balance Information",
                             "All information about balance",
