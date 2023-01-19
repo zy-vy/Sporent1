@@ -75,7 +75,7 @@ class _CartScreenState extends State<CartScreen> {
                                 // mainAxisSize: MainAxisSize.max,
                                 children: [
                                     // Expanded(child: CartListTest()),
-                                    Expanded(child: CartList()),
+                                    const Expanded(child: CartList()),
                                     Divider(
                                         thickness: 1,
                                         color: HexColor("A3A3A3")),

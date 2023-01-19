@@ -28,6 +28,7 @@ class UserViewModel with ChangeNotifier {
     if (firebaseAuth.currentUser == null){
       signIn();
     }
+    // FirebaseAuth.instance.signOut();
     fetchUser();
     return _user;
   }
