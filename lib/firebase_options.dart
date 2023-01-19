@@ -23,10 +23,8 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
+
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,20 +48,32 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC4t5kIQg8AsNYXPWFk-3yr5OkucqP2OFM',
-    appId: '1:741097230737:web:89f07124ab8f76cc0f8a30',
-    messagingSenderId: '741097230737',
-    projectId: 'sporent-99abd',
-    authDomain: 'sporent-99abd.firebaseapp.com',
-    storageBucket: 'sporent-99abd.appspot.com',
-    measurementId: 'G-RVC3KDTCPE',
+    apiKey: 'AIzaSyDLyjd0Sj2pcE52HEmrdNIVUf1npojwrcs',
+    appId: '1:741669962898:web:9a5d58a0cca453af67924b',
+    messagingSenderId: '741669962898',
+    projectId: 'sporent-80b28',
+    authDomain: 'sporent-80b28.firebaseapp.com',
+    storageBucket: 'sporent-80b28.appspot.com',
+    measurementId: 'G-F49RRD03SE',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDb0y41mIsKwUgVVyMQRVq_fqUyahtsCEA',
-    appId: '1:741097230737:android:48137f634c1c5fe10f8a30',
-    messagingSenderId: '741097230737',
-    projectId: 'sporent-99abd',
-    storageBucket: 'sporent-99abd.appspot.com',
+    apiKey: 'AIzaSyA2x1V7uqc0TEoejpFFr3dNj-KPvc4L7-k',
+    appId: '1:741669962898:android:a2e49a38b60e84d867924b',
+    messagingSenderId: '741669962898',
+    projectId: 'sporent-80b28',
+    storageBucket: 'sporent-80b28.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDH4aD0XxiNV_Kr0TbwSv4qBIsA1syU8uY',
+    appId: '1:741669962898:ios:46401daf9e8f5eec67924b',
+    messagingSenderId: '741669962898',
+    projectId: 'sporent-80b28',
+    storageBucket: 'sporent-80b28.appspot.com',
+    androidClientId: '741669962898-0t825qs551snn7k89tl3f7afk76bf336.apps.googleusercontent.com',
+    iosClientId: '741669962898-m79o1g1pijjq61suldfg5k4f6a6a88h7.apps.googleusercontent.com',
+    iosBundleId: 'com.sporent.sporent',
+
   );
 }
