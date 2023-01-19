@@ -38,10 +38,13 @@ class ProductCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: FirebaseImage(
-                        filePath: "${Product.imagePath}/${_product.id}.jpg")),
+              AspectRatio(
+                aspectRatio: 1,
+                child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: FirebaseImage(
+                          filePath: "${Product.imagePath}/${_product.img}")),
+              ),
               Padding(
                 padding: EdgeInsets.only(left: _size.width/30, top: _size.height/50),
                 child: Column(
