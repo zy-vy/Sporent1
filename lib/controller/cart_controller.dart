@@ -86,7 +86,7 @@ class CartController {
             var product = await cartDetail?.productRef?.get().then((value) => Product.fromDocument(value.id, value.data() as Map<String,dynamic>));
             cartDetail?.product = product;
             var price =
-                (product!.rentPrice! * cartDetail!.quantity!) + product!.deposit!;
+                (product!.rentPrice! * cartDetail!.quantity!) + product.deposit!;
             total+= price;
           });
           cart.totalPrice = total;

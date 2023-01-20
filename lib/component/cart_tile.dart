@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/cart_detail_tile.dart';
 import 'package:sporent/component/owner_thumbnail.dart';
 import 'package:sporent/model/cart.dart';
@@ -12,7 +13,7 @@ class CartTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    var size = MediaQuery.of(context).size;
     return StreamBuilder(
       stream: getCartDetailList(cart),
       builder: (context, snapshot) {
@@ -21,10 +22,11 @@ class CartTile extends StatelessWidget {
         }
         var listCartDetail = snapshot.data;
         return Card(
-          elevation: 1,
           child: Column(
             children: [
+              SizedBox(height: size.width/30,),
               OwnerThumbnail(userRef: cart.ownerRef!.path),
+              Divider(color: HexColor("E0E0E0"),thickness: 2),
               ListView.builder(
                 itemCount: listCartDetail?.length??0,
                 physics: const NeverScrollableScrollPhysics(),

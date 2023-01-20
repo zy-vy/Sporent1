@@ -5,12 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/model/product.dart';
-import 'package:sporent/model/user.dart';
 import 'package:sporent/repository/image_repository.dart';
 import 'package:sporent/repository/order_repository.dart';
 import 'package:sporent/repository/user_repository.dart';
 
-import '../controller/auth_controller.dart';
 import '../repository/product_repository.dart';
 
 class OrderViewModel with ChangeNotifier {

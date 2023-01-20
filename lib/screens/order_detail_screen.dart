@@ -454,7 +454,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
             child: ElevatedButton(
-                onPressed: () {}, child: const Text("Decline Order")))
+                onPressed: () {
+                  orderViewModel.declineOrder(order);
+                  CoolAlert.show(context: context, type: CoolAlertType.success);
+                  Navigator.pop(context);
+                }, child: const Text("Decline Order")))
       ],
     );
   }
@@ -527,7 +531,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
@@ -541,7 +545,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
@@ -614,7 +618,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
@@ -628,7 +632,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))

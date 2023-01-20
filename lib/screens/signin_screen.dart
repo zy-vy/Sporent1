@@ -75,7 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         validator: (value) {
                           if (value!.isEmpty ||
                               !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}')
-                                  .hasMatch(value!)) {
+                                  .hasMatch(value)) {
                             return "Enter Correct Email";
                           } else {
                             return null;
