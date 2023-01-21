@@ -8,6 +8,7 @@ import 'package:sporent/component/no_current_user.dart';
 import 'package:sporent/screens/change-password.dart';
 import 'package:sporent/screens/deposit-information.dart';
 import 'package:sporent/screens/manage_balance_admin.dart';
+import 'package:sporent/screens/manage_complain_admin.dart';
 import 'package:sporent/screens/profile.dart';
 import 'package:sporent/screens/signin_screen.dart';
 
@@ -40,7 +41,7 @@ class AdminProfile extends StatelessWidget {
                       "Manage Complain",
                       "Show all complain product",
                       FontAwesomeIcons.circleQuestion,
-                      EditPassword()),
+                      ManageComplain()),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: _size.height / 50),
                     child: TextButton(

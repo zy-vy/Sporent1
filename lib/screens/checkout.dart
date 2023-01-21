@@ -301,7 +301,7 @@ class _CheckoutPage extends State<CheckoutPage> {
                       // Fluttertoast.showToast(msg: "$_deliveryType, $_deliveryLocation");
                       // Fluttertoast.showToast(msg: "${Provider.of<CartViewModel>(context,listen: false).totalAmount}");
 
-                      for (var cart in cartList!) {
+                      for (var cart in cartList) {
                         var cartDetailList = cart.listCartDetail;
                         for (var cartDetail in cartDetailList!) {
                           Order order = Order(
@@ -318,7 +318,7 @@ class _CheckoutPage extends State<CheckoutPage> {
                             paymentFile: transferImage,
                           );
                           await TransactionViewModel()
-                              .checkout(cartDetail!, order, null)
+                              .checkout(cartDetail, order, null)
                               .then((value) {
                             if (value) {
                               CoolAlert.show(

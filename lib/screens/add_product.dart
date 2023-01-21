@@ -336,20 +336,19 @@ Future addProduct(
   final ref = FirebaseStorage.instance
       .ref()
       .child('product-images/')
-      .child(docProduct.id);
+      .child("${docProduct.id}.jpg");
   await ref.putFile(image!);
 
   var productRenter = Product(
-          docProduct.id,
-          docProduct.id,
-          name,
-          price,
-          deposit,
-          location,
-          ownerReference,
-          categoryReference,
-          subcategoryReference,
-          description)
+          img: "${docProduct.id}.jpg",
+          name: name,
+          rent_price: price,
+          deposit_price: deposit,
+          location: location,
+          owner: ownerReference,
+          category: categoryReference,
+          subcategory: subcategoryReference,
+          description: description)
       .toJson();
 
   await docProduct.set(productRenter);

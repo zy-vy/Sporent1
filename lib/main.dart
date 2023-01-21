@@ -30,6 +30,6 @@ class MyApp extends StatelessWidget {
             // ],
             //   child: const BottomBarScreen(),
             // )
-            const BottomBarScreen());
+            const BottomBarScreen(indexPage: "0",));
   }
 }

@@ -30,8 +30,8 @@ class CartRepository {
                   Product.fromDocument(
                       value.id, value.data() as Map<String, dynamic>));
               cartDetail?.product = product;
-              var price = (product!.rentPrice! * cartDetail!.quantity!) +
-                  product.deposit!;
+              var price = (product!.rent_price! * cartDetail!.quantity!) +
+                  product.deposit_price!;
               cartDetail.total = price;
               total += price;
             }

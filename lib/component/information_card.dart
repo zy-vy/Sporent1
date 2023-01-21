@@ -84,7 +84,6 @@ class _InformationCardState extends State<InformationCard> {
                 } else {
                   request = Request.fromDocument(snapshot.data!.docs[index].id,
                       snapshot.data!.docs[index].data());
-                  print(request.id);
                 }
 
                 if (index == 0) {

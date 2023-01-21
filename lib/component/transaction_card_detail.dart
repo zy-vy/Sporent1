@@ -79,7 +79,6 @@ class DetailTransactionCard extends StatelessWidget {
                     ],
                   ),
                 ])),
-        Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
       ],
     );
   }

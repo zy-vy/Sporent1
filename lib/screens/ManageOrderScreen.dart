@@ -66,7 +66,7 @@ class ManageOrderScreen extends StatelessWidget {
                             subtitle: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
-                                ItemPrice(price: order?.product?.rentPrice,trail: true,),
+                                ItemPrice(price: order?.product?.rent_price,trail: true,),
                                 Text("Time: ${order?.quantity}",overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
                                 Text("status: ${order?.status?.toLowerCase()}",style: TextStyle(color: HexColor("416DDE")),overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,),
                               ]),

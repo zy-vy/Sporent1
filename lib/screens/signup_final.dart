@@ -99,7 +99,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                 : TextInputType.emailAddress,
                             validator: (value) {
                               if (value!.isEmpty ||
-                                  !RegExp(r'^[a-z A-Z]+$').hasMatch(value!)) {
+                                  !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                                 return "Enter Correct Name";
                               } else {
                                 return null;
@@ -196,7 +196,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             validator: (value) {
                               if (value!.isEmpty ||
                                   !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}')
-                                      .hasMatch(value!)) {
+                                      .hasMatch(value)) {
                                 return "Enter Correct Email";
                               }
                               // ignore: unrelated_type_equality_checks
@@ -241,7 +241,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             validator: (value) {
                               if (value!.isEmpty ||
                                   !RegExp(r'^(\+62|62|0)8[1-9][0-9]{6,9}$')
-                                      .hasMatch(value!)) {
+                                      .hasMatch(value)) {
                                 return "Enter Correct Phone Number";
                               }
                               // ignore: unrelated_type_equality_checks

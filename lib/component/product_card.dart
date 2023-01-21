@@ -38,10 +38,14 @@ class ProductCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: FirebaseImage(
-                        filePath: "${Product.imagePath}/${_product.id}.jpg")),
+              SizedBox(
+                height: _size.height/5,
+                width: _size.width,
+                child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: FirebaseImage(
+                          filePath: "${Product.imagePath}/${_product.id}.jpg")),
+              ),
               Padding(
                 padding: EdgeInsets.only(left: _size.width/30, top: _size.height/50),
                 child: Column(
@@ -54,7 +58,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       SizedBox(height: _size.height/90),
                       ItemPrice(
-                            price: _product.rentPrice!,
+                            price: _product.rent_price!,
                             trail: true,
                             fontSize: 16,
                             color: "494949",

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -42,6 +43,7 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    File? temp;
     NumberFormat currencyFormatter =
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
@@ -181,12 +183,23 @@ class ProductDetailScreen extends StatelessWidget {
                                                   startDate!, endDate!) +
                                               1;
                                           log("--- diff $difference");
-                                          await CartController().addToCart(_product, startDate!,
-                                              endDate!, difference).then((value) => 
-                                              CoolAlert.show(context: context, type: CoolAlertType.success,text: "Added to Cart !",autoCloseDuration: const Duration(seconds: 3))
-                                          ).onError((error, stackTrace) => CoolAlert.show(context: context, type: CoolAlertType.error,text: "Sorry, something went wrong..."));
+                                          await CartController()
+                                              .addToCart(_product, startDate!,
+                                                  endDate!, difference)
+                                              .then((value) => CoolAlert.show(
+                                                  context: context,
+                                                  type: CoolAlertType.success,
+                                                  text: "Added to Cart !",
+                                                  autoCloseDuration:
+                                                      const Duration(
+                                                          seconds: 3)))
+                                              .onError((error, stackTrace) =>
+                                                  CoolAlert.show(
+                                                      context: context,
+                                                      type: CoolAlertType.error,
+                                                      text:
+                                                          "Sorry, something went wrong..."));
                                         }
-
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: HexColor("4164DE")),
@@ -233,15 +246,13 @@ class ProductDetailScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: size.width / 20),
               child: ItemPrice(
-                price: _product.rentPrice,
-
+                price: _product.rent_price,
                 fontSize: 30,
                 trail: true,
                 color: "121212",
               ),
             ),
             Container(
-
               padding: EdgeInsets.symmetric(
                   horizontal: size.width / 20, vertical: size.width / 35),
               child: Row(
@@ -346,8 +357,9 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             Divider(color: HexColor("E6E6E6"), thickness: 3),
             StreamBuilder(
-              stream: firestore.collection("user")
-                  .doc(_product.owner.id)
+              stream: firestore
+                  .collection("user")
+                  .doc(_product.owner!.id)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -365,13 +377,23 @@ class ProductDetailScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          height: size.height / 13,
-                          width: size.width / 6,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(image), fit: BoxFit.fill),
-                              borderRadius: BorderRadius.circular(100)),
+                        GestureDetector(
+                          child: Container(
+                            height: size.height / 13,
+                            width: size.width / 6,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(image),
+                                    fit: BoxFit.fill),
+                                borderRadius: BorderRadius.circular(100)),
+                          ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => FullScreen(image, ""),
+                              ),
+                            );
+                          },
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -433,7 +455,8 @@ class ProductDetailScreen extends StatelessWidget {
                               "Untuk peminjaman barang ini, diperlukan deposito sebesar ",
                         ),
                         TextSpan(
-                            text: currencyFormatter.format(_product.deposit),
+                            text: currencyFormatter
+                                .format(_product.deposit_price),
                             style: const TextStyle(fontWeight: FontWeight.bold))
                       ])),
             ),
@@ -489,7 +512,8 @@ class ProductDetailScreen extends StatelessWidget {
                         snapshot.data!.docs[0].data());
 
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: size.width / 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width / 20),
                       child: ReviewComponent(review, false),
                     );
                   }

@@ -1,22 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class complainModel {
+class Complain {
   final String? id;
+  final String? status;
   final DocumentReference? transaction;
-  final String? description;
-  final List<String?> image;
 
-  const complainModel(
+  const Complain(
       {this.id,
-      required this.transaction,
-      required this.description,
-      required this.image});
+      this.status,
+      this.transaction});
 
+  static Complain fromDocument(String id, Map<String, dynamic> json) {
+    return Complain(
+      id: id,
+      status: json['status'],
+      transaction: json['transaction'],
+    );
+  }
+  
   toJSON() {
     return {
+      "status" : status,
       "transaction": transaction,
-      "description": description,
-      "image": image
     };
   }
 }
