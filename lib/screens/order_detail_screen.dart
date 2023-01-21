@@ -140,7 +140,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       ),
       Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
 
-
       Container(
         margin:
             EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 15),
@@ -185,6 +184,96 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       ),
       orderDetailButton()
     ]);
+  }
+
+  Widget orderDetailButton() {
+    if (order.status == "CONFIRM") {
+      return acceptDeclineButton();
+    } else if (order.status == "ACCEPT") {
+      return submitOrderButton();
+    }  else if (order.status == "ACTIVE") {
+      return finishComplainButton();
+    } else if (order.status == "RETURN") {
+      return finishComplainButton();
+    }
+    return  Column(
+      children: [
+        Container(
+          margin: EdgeInsets.fromLTRB(size/15,0,size/15,size/10),
+          height: size/10,
+          decoration: BoxDecoration(color: Colors.lightBlue,borderRadius: BorderRadius.circular(5)),
+          child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
+        ),
+        complainButton()
+      ],
+    );
+  }
+
+  Widget acceptDeclineButton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    currentState = "submitOrder";
+                  });
+                },
+                child: const Text("Accept Order"))),
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            child: ElevatedButton(
+                onPressed: () {
+                  orderViewModel.declineOrder(order);
+                  CoolAlert.show(context: context, type: CoolAlertType.success);
+                  Navigator.pop(context);
+                }, child: const Text("Decline Order")))
+      ],
+    );
+  }
+
+  Widget submitOrderButton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    currentState = "submitOrder";
+                  });
+                },
+                child: const Text("Submit Order Tracking"))),
+      ],
+    );
+  }
+
+  Widget finishComplainButton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    currentState = "completeOrder";
+                  });
+                },
+                child: const Text("Finish Order"))),
+        complainButton()
+      ],
+    );
+  }
+
+  Widget complainButton(){
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: size / 15),
+        child: ElevatedButton(
+            onPressed: () {}, child: const Text("Complain Order")));
   }
 
   Widget submitOrder() {
@@ -417,87 +506,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               )),
         ],
       ),
-    );
-  }
-
-  Widget orderDetailButton() {
-    if (order.status == "CONFIRM") {
-      return acceptDeclineButton();
-    } else if (order.status == "ACCEPT") {
-      return submitOrderButton();
-    }  else if (order.status == "ACTIVE") {
-      return finishComplainButton();
-    } else if (order.status == "RETURN") {
-      return finishComplainButton();
-    }
-    return  Container(
-      margin: EdgeInsets.fromLTRB(size/15,0,size/15,size/10),
-      height: size/10,
-      decoration: BoxDecoration(color: Colors.lightBlue,borderRadius: BorderRadius.circular(5)),
-      child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
-    );
-  }
-
-  Widget acceptDeclineButton() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15),
-            child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    currentState = "submitOrder";
-                  });
-                },
-                child: const Text("Accept Order"))),
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15),
-            child: ElevatedButton(
-                onPressed: () {
-                  orderViewModel.declineOrder(order);
-                  CoolAlert.show(context: context, type: CoolAlertType.success);
-                  Navigator.pop(context);
-                }, child: const Text("Decline Order")))
-      ],
-    );
-  }
-
-  Widget submitOrderButton() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15),
-            child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    currentState = "submitOrder";
-                  });
-                },
-                child: const Text("Submit Order Tracking"))),
-      ],
-    );
-  }
-
-  Widget finishComplainButton() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15),
-            child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    currentState = "completeOrder";
-                  });
-                },
-                child: const Text("Finish Order"))),
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15),
-            child: ElevatedButton(
-                onPressed: () {}, child: const Text("Complain Order")))
-      ],
     );
   }
 

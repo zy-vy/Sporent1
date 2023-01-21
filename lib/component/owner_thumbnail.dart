@@ -62,7 +62,7 @@ class _OwnerThumbnailState extends State<OwnerThumbnail> {
 
       return Column(
         children: [
-          Text("owner : ${user?.name}")
+          Text("owner : ${user?.owner_name}")
         ],
       );
     },);

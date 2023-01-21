@@ -54,7 +54,7 @@ class CartDetailTile extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: FirebaseImage(
-                        filePath: "$imagePath${productRef.id}.jpg")),
+                        filePath: "$imagePath${productRef.id}")),
                 // child: Icon(Icons.access_time)),
               ),
               title: Text("${product.name}",maxLines: 1,overflow: TextOverflow.ellipsis,),
