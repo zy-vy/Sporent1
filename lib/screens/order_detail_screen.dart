@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
+import 'package:sporent/screens/complainproduct.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
 
 import '../utils/colors.dart';
@@ -54,7 +57,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     Map<String, Widget> listWidget = {
       "detailOrder": orderDetail(),
       "submitOrder": submitOrder(),
-      "completeOrder": completeOrder()
+      "completeOrder": completeOrder(),
+      "complainOrder" : complainOrder(),
     };
     return Scaffold(
         appBar: AppBar(
@@ -201,7 +205,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         Container(
           margin: EdgeInsets.fromLTRB(size/15,0,size/15,size/10),
           height: size/10,
-          decoration: BoxDecoration(color: Colors.lightBlue,borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
           child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
         ),
         complainButton()
@@ -273,7 +277,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: size / 15),
         child: ElevatedButton(
-            onPressed: () {}, child: const Text("Complain Order")));
+            onPressed: () {
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ComplainProduct(FirebaseAuth.instance.currentUser!.uid, order.id!),));
+              setState(() {
+                currentState = "complainOrder";
+              });
+            }, child: const Text("Complain Order")));
   }
 
   Widget submitOrder() {
@@ -679,6 +688,166 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             readOnly: true,
             initialValue: order.returnTrackingCode??"",
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget complainOrder(){
+    int counter = 1;
+    List<File?> listImages = [];
+    File? image;
+    File? imageTemp;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: size/15,
+          horizontal: size/15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Please take a picture of your product",
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+          SizedBox(height: size/30),
+          Row(
+            children: [
+              for (int i = 0; i < counter; i++)
+                Row(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: size/6,
+                          height: size/6,
+                          decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(8),
+                                  side: BorderSide(
+                                      width: 1,
+                                      color: hexStringToColor(
+                                          "868686")))),
+                          child: TextButton(
+                              onPressed: () async {
+                                image = await openGallery();
+                                setState(() {
+                                  if (counter >= 2) {
+                                    listImages.remove(imageTemp);
+                                  }
+
+                                  listImages.add(image);
+
+                                  if (counter != 3) {
+                                    listImages.add(imageTemp);
+                                    counter += 1;
+                                  }
+                                });
+                              },
+                              child: listImages.isEmpty == true
+                                  ? FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: hexStringToColor(
+                                    "4164DE"),
+                                size: 35,
+                              )
+                                  : listImages[i] != null
+                                  ? Image.file(listImages[i]!)
+                                  : FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: hexStringToColor(
+                                    "4164DE"),
+                                size: 35,
+                              )),
+                        ),
+                        listImages.isEmpty == true
+                            ? const Positioned(
+                            right: 0, top: 0, child: SizedBox())
+                            : listImages[i] != null
+                            ? Positioned(
+                          right: 0,
+                          child: Container(
+                              height: 25,
+                              width: 25,
+                              decoration:
+                              const BoxDecoration(
+                                  color: Colors
+                                      .blueAccent,
+                                  shape: BoxShape
+                                      .circle),
+                              child: IconButton(
+                                icon: const FaIcon(
+                                    FontAwesomeIcons
+                                        .xmark,
+                                    size: 10,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    listImages.remove(
+                                        listImages[i]);
+                                    if (counter != 1) {
+                                      counter -= 1;
+                                    }
+                                  });
+                                },
+                              )),
+                        )
+                            : const Positioned(
+                            right: 0,
+                            top: 0,
+                            child: SizedBox())
+                      ],
+                    ),
+                    counter != 1
+                        ? SizedBox(width: size / 20)
+                        : const SizedBox(),
+                  ],
+                ),
+            ],
+          ),
+          SizedBox(height: size / 15),
+          const Text("Complain Description",
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: size/30),
+          TextFormField(
+            // controller: complainController,
+            keyboardType: TextInputType.multiline,
+            minLines: 1,
+            maxLines: 5,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Please describe your complain"),
+            // validator: (value) {
+            //   if (value!.isEmpty) {
+            //     return "Complain must be Filled";
+            //   } else {
+            //     return null;
+            //   }
+            // },
+          ),
+          SizedBox(height: size/30),
+          SizedBox(
+              width: size,
+              height: size/6,
+              child: ElevatedButton(
+                onPressed: () {
+                  // uploadFile(listImages, order.id,
+                  //     complainController.text);
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => NotifComplain()));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: hexStringToColor("4164DE"),
+                  // padding: const EdgeInsets.only(right: 300, bottom: 40)
+                ),
+                child: const Text("Complain Product",
+                    textAlign: TextAlign.center),
+              )),
         ],
       ),
     );

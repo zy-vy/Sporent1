@@ -241,7 +241,7 @@ Future uploadFile(
     _arrImageUrls.add(refcomplain.id + i.toString());
   }
   final complain = complainModel(
-          transaction: FirebaseFirestore.instance.collection("transction").doc(id),
+          transaction: FirebaseFirestore.instance.collection("transaction").doc(id),
           description: complainController,
           image: _arrImageUrls)
       .toJSON();

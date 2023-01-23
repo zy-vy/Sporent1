@@ -186,7 +186,8 @@ class OrderViewModel with ChangeNotifier {
           break;
       }
     });
-    finalList = waitingList +
+    finalList =
+        // waitingList +
         confirmList +
         acceptList +
         deliverList +
