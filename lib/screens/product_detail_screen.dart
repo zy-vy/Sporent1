@@ -231,7 +231,7 @@ class ProductDetailScreen extends StatelessWidget {
             SizedBox(
               width: size.width,
               height: size.height / 2,
-              child: FirebaseImage(filePath: "$productPath${_product.id}.jpg"),
+              child: FirebaseImage(filePath: "$productPath${_product.id}"),
             ),
             Container(
               padding: EdgeInsets.symmetric(

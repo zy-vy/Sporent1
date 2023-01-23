@@ -46,7 +46,7 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                   child: cartViewModel.isLoading
                       ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: HexColor("4164DE"),
+                              backgroundColor: HexColor("e0e0e0"),
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20)))),
@@ -55,6 +55,20 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                             child: CircularProgressIndicator(),
                           ))
                       :
+                      cartViewModel.listCart!.isEmpty
+                          ?ElevatedButton(
+
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: HexColor("e0e0e0"),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20)))),
+                          onPressed: () {},
+
+                          child: const Text("Checkout",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18)))
+                          :
                       // Future.delayed(, () => setState(() { ... }));
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -70,7 +84,7 @@ class _TotalCheckoutState extends State<TotalCheckout> {
                             //             totalAmount: cartViewModel.totalAmount,
                             //           ),
                             //         )));
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(totalAmount: cartViewModel.totalAmount, cartList: cartViewModel.listCart!),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage(totalAmount: cartViewModel.totalAmount, cartList: cartViewModel.listCart!),)).then((value) => cartViewModel.fetchData());
                           },
                           child: const Text("Checkout",
                               style: TextStyle(

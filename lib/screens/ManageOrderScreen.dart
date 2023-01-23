@@ -30,19 +30,12 @@ class ManageOrderScreen extends StatelessWidget {
     NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.only(top: size/35),
-          child: const Text(
-            "Order",
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 25),
-          ),
+        centerTitle: false,
+        title: Transform(
+          transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
+          child: const Text("Manage Order"),
         ),
-        elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: HexColor("4164DE"),
       ),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,

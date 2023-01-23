@@ -5,12 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/model/product.dart';
-import 'package:sporent/model/user.dart';
 import 'package:sporent/repository/image_repository.dart';
 import 'package:sporent/repository/order_repository.dart';
 import 'package:sporent/repository/user_repository.dart';
 
-import '../controller/auth_controller.dart';
 import '../repository/product_repository.dart';
 
 class OrderViewModel with ChangeNotifier {
@@ -134,6 +132,16 @@ class OrderViewModel with ChangeNotifier {
     return false;
   }
 
+  Future<bool> acceptPayment (Order order) async {
+    order.status = "CONFIRM";
+    return orderRepository.updateOrder(order);
+  }
+
+  Future<bool> rejectPayment(Order order) async {
+    order.status = "REJECT";
+    return orderRepository.updateOrder(order);
+  }
+
   List<Order> arrangeData(List<Order>? orderList) {
     List<Order> finalList = <Order>[],
         waitingList = <Order>[],
@@ -143,7 +151,9 @@ class OrderViewModel with ChangeNotifier {
         activeList = <Order>[],
         returnList = <Order>[],
         doneList = <Order>[],
-        declineList = <Order>[];
+        declineList = <Order>[],
+        rejectList = <Order>[]
+    ;
     orderList?.forEach((order) {
       var status = order.status ?? "";
       switch (status) {
@@ -171,15 +181,23 @@ class OrderViewModel with ChangeNotifier {
         case "DECLINE":
           declineList.add(order);
           break;
+        case "REJECT":
+          rejectList.add(order);
+          break;
       }
     });
-    finalList = waitingList +
+    finalList =
+        // waitingList +
         confirmList +
         acceptList +
         deliverList +
         activeList +
         returnList +
-        doneList;
+        declineList +
+        rejectList +
+        doneList
+
+    ;
     return finalList;
   }
 }
