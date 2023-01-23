@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 TopProfile(user),
                                 nameProfile(_size, user!.name),
-                                OwnerButton(user!.is_owner, user!.id),
+                                OwnerButton(user!.isOwner, user!.id),
                                 BarProfile(
                                     "Edit Personal Info",
                                     "Name, Phone, Email Address",
