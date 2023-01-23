@@ -208,7 +208,7 @@ class OwnerButton extends StatelessWidget {
         height: _size.height / 18,
         child: ElevatedButton(
           onPressed: () {
-            if (is_owner == false) {
+            if (is_owner==null || is_owner == false) {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BecomeOwner(id),
