@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/item_price.dart';
@@ -16,8 +15,6 @@ import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/review_component.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
-// import 'package:easy_image_viewer/easy_image_viewer.dart';
-// import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:sporent/screens/renter_detail.dart';
 import 'package:sporent/screens/user_review_product.dart';
 
@@ -28,7 +25,6 @@ import '../model/category.dart';
 import '../model/review.dart';
 import '../model/user.dart';
 
-import '../util/provider/cart_notifier.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   ProductDetailScreen({Key? key, required Product product})
@@ -231,7 +227,10 @@ class ProductDetailScreen extends StatelessWidget {
             SizedBox(
               width: size.width,
               height: size.height / 2,
-              child: FirebaseImage(filePath: "$productPath${_product.id}"),
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: FirebaseImage(filePath: "$productPath${_product.id}.jpg"),
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(

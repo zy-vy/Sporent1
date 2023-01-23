@@ -162,7 +162,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                           builder: (context) =>
                                               const BottomBarScreen(indexPage: "0",)));
                                 }).onError((error, stackTrace) {
-                                  print("${error.toString()}");
                                 });
                               }
                             }

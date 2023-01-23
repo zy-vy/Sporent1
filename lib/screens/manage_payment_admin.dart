@@ -97,7 +97,7 @@ class ManagePaymentAdmin extends StatelessWidget {
                                                     color: HexColor("416DDE"),
                                                     fontWeight: FontWeight.bold)),
                                             SizedBox(height: size/30),
-                                            Text('Total Payment : ${currencyFormatter.format(order?.total)}',
+                                            Text('Total Payment : ${currencyFormatter.format(order.total)}',
                                                 style: const TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.black,
