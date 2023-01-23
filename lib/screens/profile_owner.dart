@@ -5,11 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sporent/screens/ManageOrderScreen.dart';
 import 'package:sporent/screens/balance_information.dart';
 import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/manage-product.dart';
 import 'package:sporent/screens/manage-transaction.dart';
 import 'package:sporent/screens/profile.dart';
+import 'package:sporent/viewmodel/user_viewmodel.dart';
 import '../component/bar-profile.dart';
 import 'package:sporent/screens/help-center.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,8 +55,8 @@ class OwnerProfile extends StatelessWidget {
                   } else {
                     return Column(
                       children: [
-                        TopProfile(
-                            snapshot.data!.get("owner_image"), snapshot.data!.id),
+                        TopProfile(snapshot.data?.data()!["owner_image"],
+                            snapshot.data!.id),
                         nameProfile(
                           _size,
                           snapshot.data!.get("owner_name"),
@@ -69,12 +71,12 @@ class OwnerProfile extends StatelessWidget {
                             "Add, Edit, and Delete product",
                             FontAwesomeIcons.buffer,
                             ManageProduct(snapshot.data!.id)),
-                        const BarProfile(
+                        BarProfile(
                             "Manage Order",
                             "Show all transaction renter",
                             FontAwesomeIcons.receipt,
-                            ManageTransaction()),
-                       BarProfile(
+                            ManageOrderScreen(userViewModel: UserViewModel(),)),
+                        BarProfile(
                             "Balance Information",
                             "All information about balance",
                             FontAwesomeIcons.fileInvoiceDollar,
@@ -133,10 +135,13 @@ class _TopProfileState extends State<TopProfile> {
       children: [
         CircleAvatar(
           backgroundColor: Colors.grey.shade200,
-          backgroundImage: widget.image != ""
-              ? NetworkImage(widget.image!)
-              : const NetworkImage(
-                  "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6"),
+          backgroundImage: widget.image == null
+              ? const NetworkImage(
+                  "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6")
+              : widget.image != ""
+                  ? NetworkImage(widget.image!)
+                  : const NetworkImage(
+                      "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6"),
           radius: 100,
         ),
         Positioned(

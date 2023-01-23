@@ -11,6 +11,8 @@ import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
 
+import '../utils/colors.dart';
+
 class OrderDetailScreen extends StatefulWidget {
   const OrderDetailScreen({Key? key, required this.order}) : super(key: key);
 
@@ -55,40 +57,41 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       "completeOrder": completeOrder()
     };
     return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          title: Transform(
+            transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
+            child: const Text("Detail Transaction"),
+          ),
+          backgroundColor: hexStringToColor("4164DE"),
+        ),
         body: SingleChildScrollView(child: listWidget[currentState]!));
   }
 
   Widget orderDetail() {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      SizedBox(
-        height: size / 10,
-      ),
+
       Container(
-          height: size / 5,
-          // decoration: BoxDecoration(border: Border.all()),
+
           margin:
-              EdgeInsets.symmetric(horizontal: size / 30, vertical: size / 30),
+              EdgeInsets.symmetric( vertical: size / 25),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               heading("Booking period"),
+              SizedBox(height: size/25,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(dateFormat.format(order.startDate!)),
-                  const Text(" => "),
+                  const FaIcon(FontAwesomeIcons.arrowRight),
                   Text(dateFormat.format(order.endDate!))
                 ],
               )
             ],
           )),
-      const Divider(
-        height: 0,
-        thickness: 3,
-        color: Colors.black38,
-        indent: 20,
-        endIndent: 20,
-      ),
+      Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+
       Container(
         margin:
             EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
@@ -135,13 +138,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ),
         ]),
       ),
-      const Divider(
-        height: 0,
-        thickness: 3,
-        color: Colors.black38,
-        indent: 20,
-        endIndent: 20,
-      ),
+      Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+
 
       Container(
         margin:
@@ -181,7 +179,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       trackingCode(),
       conditionCheckUser(),
       returnTrackingCode(),
-      // const Divider(height: 0,thickness: 3,color: Colors.black38,indent: 20,endIndent: 20,),
+      // Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
       SizedBox(
         height: size / 10,
       ),
@@ -508,13 +506,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Divider(
-            height: 0,
-            thickness: 3,
-            color: Colors.black38,
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
+
           SizedBox(
             height: size / 15,
           ),
@@ -527,28 +520,28 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             children: [
               order.beforeOwnerFile != null
                   ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
               ,
               order.afterOwnerFile != null
                   ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
@@ -569,13 +562,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Divider(
-            height: 0,
-            thickness: 3,
-            color: Colors.black38,
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
           SizedBox(
             height: size / 15,
           ),
@@ -591,7 +578,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
             ),
             readOnly: true,
-            initialValue: order.returnTrackingCode??"",
+            initialValue: order.trackingCode??"",
           ),
         ],
       ),
@@ -607,13 +594,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Divider(
-            height: 0,
-            thickness: 3,
-            color: Colors.black38,
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
           SizedBox(
             height: size / 15,
           ),
@@ -626,28 +607,28 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             children: [
               order.beforeUserFile != null
                   ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
               ,
               order.afterUserFile != null
                   ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)))
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1),borderRadius: BorderRadius.circular(8),color: Colors.black12),
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: Colors.black12),
                   width: size / 6,
                   height: size / 6,
                   child: const Icon(IconlyBold.infoSquare))
@@ -668,13 +649,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Divider(
-            height: 0,
-            thickness: 3,
-            color: Colors.black38,
-            indent: 0,
-            endIndent: 0,
-          ),
+          Divider(color: HexColor("E0E0E0"), thickness: 2),
           SizedBox(
             height: size / 15,
           ),

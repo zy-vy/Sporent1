@@ -24,6 +24,7 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
+
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -73,5 +74,6 @@ class DefaultFirebaseOptions {
     androidClientId: '741669962898-0t825qs551snn7k89tl3f7afk76bf336.apps.googleusercontent.com',
     iosClientId: '741669962898-m79o1g1pijjq61suldfg5k4f6a6a88h7.apps.googleusercontent.com',
     iosBundleId: 'com.sporent.sporent',
+
   );
 }

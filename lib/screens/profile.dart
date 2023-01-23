@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 TopProfile(user),
                                 nameProfile(_size, user!.name),
-                                OwnerButton(user!.is_owner, user!.id),
+                                OwnerButton(user!.isOwner, user!.id),
                                 BarProfile(
                                     "Edit Personal Info",
                                     "Name, Phone, Email Address",
@@ -208,7 +208,7 @@ class OwnerButton extends StatelessWidget {
         height: _size.height / 18,
         child: ElevatedButton(
           onPressed: () {
-            if (is_owner == false) {
+            if (is_owner==null || is_owner == false) {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BecomeOwner(id),
