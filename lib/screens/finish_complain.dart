@@ -1,20 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/condition_check.dart';
+import 'package:sporent/screens/manage_complain_admin.dart';
+import 'package:sporent/screens/minus_deposit.dart';
+import 'package:sporent/screens/return_balance.dart';
 
-class FinishComplain extends StatelessWidget {
-  const FinishComplain(this.idTransaction, this.idUser, this.idOwner, this.idComplain, {super.key});
+class FinishComplain extends StatefulWidget {
+  const FinishComplain(this.idTransaction, this.idComplain, {super.key});
 
   final String idTransaction;
-  final String idUser;
-  final String idOwner;
   final String idComplain;
 
   @override
+  State<FinishComplain> createState() => _FinishComplainState();
+}
+
+class _FinishComplainState extends State<FinishComplain> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController controller = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
     Size _size = MediaQuery.of(context).size;
-    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
         appBar: AppBar(
@@ -25,7 +31,7 @@ class FinishComplain extends StatelessWidget {
           ),
           backgroundColor: HexColor("4164DE"),
         ),
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: Form(
             key: _formKey,
             child: Padding(
@@ -63,7 +69,20 @@ class FinishComplain extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("4164DE")),
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
+                            if (_formKey.currentState!.validate()) {
+                              FirebaseFirestore.instance
+                                  .collection("complain")
+                                  .doc(widget.idComplain)
+                                  .update({
+                                "status": "Complain Accepted",
+                                "date": DateTime.now(),
+                                "conclusion" : controller.text
+                              });
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      MinusDeposit(widget.idTransaction)));
+                            }
                           },
                           child: const Text(
                             "Minus Deposit",
@@ -79,7 +98,20 @@ class FinishComplain extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("4164DE")),
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
+                            if (_formKey.currentState!.validate()) {
+                              FirebaseFirestore.instance
+                                  .collection("complain")
+                                  .doc(widget.idComplain)
+                                  .update({
+                                "status": "Complain Accepted",
+                                "date": DateTime.now(),
+                                "conclusion" : controller.text
+                              });
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ReturnBalance(widget.idTransaction)));
+                            }
                           },
                           child: const Text("Return Balance & End Date",
                               style: TextStyle(
@@ -91,7 +123,25 @@ class FinishComplain extends StatelessWidget {
                       height: _size.height / 14,
                       child: TextButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
+                            if (_formKey.currentState!.validate()) {
+                              FirebaseFirestore.instance
+                                  .collection("complain")
+                                  .doc(widget.idComplain)
+                                  .update({
+                                "status": "Complain Declined",
+                                "date": DateTime.now(),
+                                "conclusion" : controller.text
+                              });
+
+                              FirebaseFirestore.instance
+                                  .collection("transaction")
+                                  .doc(widget.idTransaction)
+                                  .update({"status": "ACTIVE"});
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ManageComplain()));
+                            }
                           },
                           child: Text(
                             "Cancel Complain",
