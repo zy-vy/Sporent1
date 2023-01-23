@@ -68,7 +68,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                 } else {
                   TransactionModel transaction = TransactionModel.fromDocument(
                       snapshot.data!.id, snapshot.data!.data()!);
-                  final Uri _url = Uri.parse(transaction.tracking_code_owner!);
+                  final Uri _url = Uri.parse(transaction.tracking_code_owner??"");
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,10 +119,10 @@ class _DetailTransaction extends State<DetailTransaction> {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w500)),
                       SizedBox(height: _size.height / 40),
-                      transaction.tracking_code_owner == ""
+                      transaction.tracking_code_owner == null
                           ? const Text("Owner has not input the live tracking")
                           : InkWell(
-                              child: Text(transaction.tracking_code_owner!,
+                              child: Text(transaction.tracking_code_owner??"",
                                   style: const TextStyle(
                                       color: Colors.blueAccent)),
                               onTap: () async => await launchUrl(_url),
@@ -148,9 +148,9 @@ class _DetailTransaction extends State<DetailTransaction> {
                                               ConditionCheckBeforeUser(
                                                   transaction.id!,
                                                   transaction
-                                                      .image_before_user!,
+                                                      .image_before_user??"",
                                                   transaction
-                                                      .description_before_user!)));
+                                                      .description_before_user??"")));
                                     },
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -212,8 +212,8 @@ class _DetailTransaction extends State<DetailTransaction> {
                               ],
                             ),
                           )),
-                      transaction.image_after_user != "" ? SizedBox(height: _size.height / 30) : SizedBox(height: _size.height / 20),
-                      transaction.image_after_user != ""
+                      transaction.image_after_user != null ? SizedBox(height: _size.height / 30) : SizedBox(height: _size.height / 20),
+                      transaction.image_after_user != null
                           ? TextButton(
                               style: TextButton.styleFrom(
                                   side: BorderSide(
@@ -229,8 +229,8 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                       ReturnProduct(
                                                           transaction.id!,
                                                           transaction
-                                                              .image_after_user!,
-                                                          transaction.tracking_code_user!,
+                                                              .image_after_user??"",
+                                                          transaction.tracking_code_user??"",
                                                           idOwner: "")));
                                         },
                               child: Padding(
@@ -272,7 +272,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                 ),
                               ))
                           : const SizedBox(),
-                      transaction.image_after_user != ""
+                      transaction.image_after_user != null
                           ? const SizedBox()
                           : SizedBox(
                               width: _size.width,
@@ -305,7 +305,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                     textAlign: TextAlign.center),
                               )),
                       SizedBox(height: _size.height / 40),
-                      transaction.image_after_user != ""
+                      transaction.image_after_user != null
                           ? const SizedBox()
                           : Center(
                               child: TextButton(

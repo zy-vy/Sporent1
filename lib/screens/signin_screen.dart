@@ -160,7 +160,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const BottomBarScreen()));
+                                              const BottomBarScreen(indexPage: "0",)));
                                 }).onError((error, stackTrace) {
                                   print("${error.toString()}");
                                 });
