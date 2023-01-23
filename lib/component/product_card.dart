@@ -57,7 +57,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       SizedBox(height: _size.height/90),
                       ItemPrice(
-                            price: _product.rentPrice!,
+                            price: _product.rent_price!,
                             trail: true,
                             fontSize: 13,
                             color: "494949",

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sporent/screens/ManageOrderScreen.dart';
 import 'package:sporent/screens/balance_information.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/manage-product.dart';
 import 'package:sporent/screens/manage-transaction.dart';
 import 'package:sporent/screens/profile.dart';
@@ -29,6 +30,13 @@ class OwnerProfile extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          leading: IconButton(
+            icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const BottomBarScreen(indexPage: "3",)));
+            },
+          ),
             centerTitle: false,
             title: Transform(
               transform: Matrix4.translationValues(-15.0, 0.0, 0.0),

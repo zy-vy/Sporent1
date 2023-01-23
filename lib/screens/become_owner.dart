@@ -140,7 +140,7 @@ class _BecomeOwnerState extends State<BecomeOwner> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: HexColor("4164DE"),
                               ),
-                              child: const Text("Confirm",
+                              child: const Text("Confirm",style: TextStyle(fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.center),
                             ))
                       ],

@@ -36,8 +36,6 @@ class _PopularCategoryState extends State<PopularCategory> {
               child: CircularProgressIndicator(),
             );
           }
-          // var docs = snapshot.data!.docs;
-          // List<Category> listCategory = Category.fromSnapshot(docs);
           List<Category> listCategory = snapshot.data!;
           List<IconData> icon = [FontAwesomeIcons.basketball, FontAwesomeIcons.volleyball, FontAwesomeIcons.personBiking, FontAwesomeIcons.dumbbell];
           return ListView.builder(

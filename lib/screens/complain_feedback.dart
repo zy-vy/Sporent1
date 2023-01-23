@@ -3,25 +3,21 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sporent/model/complain_detail.dart';
 import 'package:sporent/screens/notif_complain.dart';
 import 'package:sporent/utils/colors.dart';
-import 'package:path/path.dart';
 
-import '../model/complain.dart';
-
-class ComplainProduct extends StatefulWidget {
-  const ComplainProduct(this.idOwner, this.idTransaction, {super.key});
-  final String idOwner;
-  final String idTransaction;
+class ComplainFeedback extends StatefulWidget {
+  const ComplainFeedback(this.idComplain, {super.key});
+  final String idComplain;
 
   @override
-  State<ComplainProduct> createState() => _ComplainProduct();
+  State<ComplainFeedback> createState() => _ComplainFeedbackState();
 }
 
-class _ComplainProduct extends State<ComplainProduct> {
+class _ComplainFeedbackState extends State<ComplainFeedback> {
   final photoController = TextEditingController();
   final complainController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -30,7 +26,6 @@ class _ComplainProduct extends State<ComplainProduct> {
   late DocumentReference imgRef;
   bool enabled = false;
   bool haveData = false;
-  DocumentReference<Map<String, dynamic>>? referenceCategory;
   File? image;
   File? imageTemp;
   List<File?> listImages = [];
@@ -52,14 +47,13 @@ class _ComplainProduct extends State<ComplainProduct> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    // listImages.add(image_temp);
 
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Complain Product"),
+            child: const Text("Complain Feedback"),
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
@@ -103,13 +97,13 @@ class _ComplainProduct extends State<ComplainProduct> {
                                           onPressed: () async {
                                             await openGallery();
                                             setState(() {
-                                              if (counter >= 2) {
+                                              if (counter >= 1) {
                                                 listImages.remove(imageTemp);
                                               }
 
                                               listImages.add(image);
 
-                                              if (counter != 3) {
+                                              if (counter != 2) {
                                                 listImages.add(imageTemp);
                                                 counter += 1;
                                               }
@@ -177,7 +171,7 @@ class _ComplainProduct extends State<ComplainProduct> {
                         ],
                       ),
                       SizedBox(height: _size.height / 23),
-                      const Text("Complain Description",
+                      const Text("Complain Feedback",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w500)),
                       SizedBox(height: _size.height / 50),
@@ -189,32 +183,34 @@ class _ComplainProduct extends State<ComplainProduct> {
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: "Please describe your complain"),
-                        // validator: (value) {
-                        //   if (value!.isEmpty) {
-                        //     return "Complain must be Filled";
-                        //   } else {
-                        //     return null;
-                        //   }
-                        // },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Complain must be Filled";
+                          } else {
+                            return null;
+                          }
+                        },
                       ),
-                      SizedBox(height: _size.height / 50),
+                      SizedBox(height: _size.height / 20),
                       SizedBox(
                           width: _size.width,
-                          height: _size.height / 15,
+                          height: _size.height / 12,
                           child: ElevatedButton(
                             onPressed: () {
-                              uploadFile(listImages, widget.idTransaction,
+                              uploadFile(listImages, widget.idComplain,
                                   complainController.text);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => NotifComplain()));
+                                      builder: (context) =>
+                                          const NotifComplain()));
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: hexStringToColor("4164DE"),
-                              // padding: const EdgeInsets.only(right: 300, bottom: 40)
                             ),
                             child: const Text("Complain Product",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
                                 textAlign: TextAlign.center),
                           )),
                     ],
@@ -227,25 +223,45 @@ class _ComplainProduct extends State<ComplainProduct> {
 
 Future uploadFile(
     List<File?> listImages, String id, String complainController) async {
-  final refcomplain = FirebaseFirestore.instance.collection('complain').doc();
-  final List<String> _arrImageUrls = [];
-  print(complainController);
-  print(complainController.length);
-  print(listImages.length);
-  print(listImages);
-  for (int i = 0; i < listImages.length; i++) {
-    Reference reference = FirebaseStorage.instance
-        .ref()
-        .child('complain-images/${refcomplain.id + i.toString()}');
-    reference.putFile(listImages[i]!);
-    _arrImageUrls.add(refcomplain.id + i.toString());
+  final refcomplain = FirebaseFirestore.instance.collection('complain').doc(id);
+  final refComplainDetail =
+      FirebaseFirestore.instance.collection("complain_detail").doc();
+
+  List<String> _arrImageUrls = [];
+
+  if (listImages.isEmpty) {
+    final complainDetail = ComplainDetail(
+            date: DateTime.now(),
+            description: complainController,
+            complain: refcomplain)
+        .toJSON();
+
+    await FirebaseFirestore.instance
+        .collection("complain_detail")
+        .doc()
+        .set(complainDetail);
+  } else {
+    for (int i = 0; i < listImages.length; i++) {
+      Reference reference = FirebaseStorage.instance
+          .ref()
+          .child('complain-images/${refComplainDetail.id + i.toString()}');
+      await reference.putFile(listImages[i]!);
+      String urlImage = await reference.getDownloadURL();
+      _arrImageUrls.add(urlImage);
+    }
+
+    final complainDetail = ComplainDetail(
+            date: DateTime.now(),
+            description: complainController,
+            image: _arrImageUrls,
+            complain: refcomplain)
+        .toJSON();
+
+    await FirebaseFirestore.instance
+        .collection("complain_detail")
+        .doc()
+        .set(complainDetail);
   }
-  final complain = complainModel(
-          transaction: FirebaseFirestore.instance.collection("transaction").doc(id),
-          description: complainController,
-          image: _arrImageUrls)
-      .toJSON();
-  await refcomplain.set(complain);
 }
 
 Column fieldText(String title, String desc, Size _size,

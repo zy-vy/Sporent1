@@ -40,7 +40,6 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                     return const Text('Awaiting for interaction');
 
                   case ConnectionState.active:
-                    log("Stream has started but not finished");
                     if (!snapshot.hasData) {
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -48,7 +47,6 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                     } else {
                       List<QueryDocumentSnapshot<Map<String, dynamic>>>?
                           listDocs = snapshot.data?.docs;
-                      inspect(listDocs);
                       int? productCount = listDocs?.length;
                       return ProductGridview(productCount: productCount, listDocs: listDocs);
                     }
@@ -57,43 +55,6 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                     return const Text('Streaming is done');
                 }
               })
-
-          // StreamBuilder(
-          //     stream: firestore.collection('product').snapshots(),
-          //     builder: (context, snapshot) {
-          //       if (!snapshot.hasData) {
-          //         return const Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       } else {
-          //         return GridView(
-          //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //                 crossAxisCount: 2),
-          //             scrollDirection: Axis.vertical,
-          //             controller: ScrollController(),
-          //             children: snapshot.data!.docs.map((e) {
-          //               Map<String, dynamic> list = e.data();
-          //               return Text(list['name'] ?? "");
-          //             }).toList());
-          //       }
-          //     }),
     );
-  }
-
-  void testList() {
-    firestore.collection('product').snapshots().forEach((element) {
-      log("=== elements: ${element.toString()}");
-      inspect(element);
-      for (var element1 in element.docs) {
-        log("=== doc element: ${element1.toString()}");
-        inspect(element1);
-      }
-    });
-  }
-
-  Future<void> getProduct() async {
-    var result = firestore.collection('product').snapshots();
-
-    inspect(result);
   }
 }

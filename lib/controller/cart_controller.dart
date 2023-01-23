@@ -13,8 +13,8 @@ class CartController {
   Future<void> addToCart(Product product, DateTime startDate, DateTime endDate,
       int quantity) async {
     UserLocal? user = await AuthController().getCurrentUser();
-    log("=== user ${user?.name}", level: 3);
-    var ownerRef = product.ownerRef;
+    //log("=== user ${user?.name}", level: 3);
+    var ownerRef = product.owner;
     Cart? cart;
     cart = await getCart(ownerRef!);
     DocumentReference? cartDoc = cart?.toReference();
@@ -86,7 +86,7 @@ class CartController {
             var product = await cartDetail?.productRef?.get().then((value) => Product.fromDocument(value.id, value.data() as Map<String,dynamic>));
             cartDetail?.product = product;
             var price =
-                (product!.rentPrice! * cartDetail!.quantity!) + product.deposit!;
+                (product!.rent_price! * cartDetail!.quantity!) + product.deposit_price!;
             total+= price;
           });
           cart.totalPrice = total;
@@ -273,7 +273,7 @@ class CartController {
         // log("=== ${cartDetail.quantity}");
 
         var price =
-            (product!.rentPrice! * cartDetail.quantity!) + product.deposit!;
+            (product!.rent_price! * cartDetail.quantity!) + product.deposit_price!;
         total+= price;
 
       }

@@ -43,24 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ));
   }
-
-  // Stream<List<Product>> getProductList() {
-  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  //   CollectionReference products = firestore.collection('product');
-  //
-  //   Stream<List<Product>> list = products.snapshots().map(
-  //           (snapshot) =>
-  //           snapshot.docs.map(
-  //                   (doc) =>
-  //                   Product.fromDocument(doc.id,doc.data() as Map<String, dynamic>))
-  //               .toList());
-  //   log("====data $list");
-  //   return list;
-  //
-  //   // return FirebaseFirestore.instance.collection('product').snapshots().map(
-  //   //     (snapshot) =>
-  //   //         snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
-  // }
 }
 
 class HeadingRecommend extends StatelessWidget {

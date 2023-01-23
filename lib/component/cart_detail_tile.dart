@@ -37,7 +37,7 @@ class CartDetailTile extends StatelessWidget {
             return const Center(child: CircularProgressIndicator(strokeWidth: 1),);
           }
           product = snapshot.data!;
-          var price = (product.rentPrice!*cartDetail.quantity!)+product.deposit!;
+          var price = (product.rent_price!*cartDetail.quantity!)+product.deposit_price!;
 
           // Future.delayed(const Duration(seconds: 1), () async {
           // });
@@ -74,7 +74,7 @@ class CartDetailTile extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ItemPrice(price: product.rentPrice,trail: true,),
+                      ItemPrice(price: product.rent_price,trail: true,),
                       Text(" x ${cartDetail.quantity}  "),
                     ],
                   ),
@@ -82,7 +82,7 @@ class CartDetailTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("Deposit :"),
-                      ItemPrice(price: product.deposit,trail: false,),
+                      ItemPrice(price: product.deposit_price,trail: false,),
                     ],
                   ),
                   const Divider(thickness: 0.3, color: Colors.lightBlueAccent),

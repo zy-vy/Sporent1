@@ -1,12 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:sporent/utils/colors.dart';
+import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:sporent/utils/colors.dart';
+import '../component/loading.dart';
 import '../component/no_current_user.dart';
 import '../component/transaction_card.dart';
-import '../viewmodel/user_viewmodel.dart';
+import '../model/user.dart';
+import '../repository/user_repository.dart';
 import '../model/transaction.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -19,49 +21,65 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreen extends State<TransactionScreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  final _userRepository = UserRepository();
+  UserLocal? user;
+  bool isLoggedIn = false;
+  bool isLoading = true;
+  int counter = 0;
+
+  Future fetchUser() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      user = await _userRepository
+          .getUserById(FirebaseAuth.instance.currentUser!.uid);
+      setState(() {
+        isLoggedIn = true;
+        isLoading = false;
+        counter = 1;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Padding(
-            padding: EdgeInsets.only(top: _size.height / 80),
-            child: const Text(
-              "Transaction",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25),
+    counter == 0 ? fetchUser() : counter;
+
+    return isLoading
+        ? const Loading()
+        : Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Padding(
+                padding: EdgeInsets.only(top: _size.height / 80),
+                child: const Text(
+                  "Transaction",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25),
+                ),
+              ),
+              elevation: 0,
+              backgroundColor: Colors.white,
             ),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.white,
-        ),
-        resizeToAvoidBottomInset: false,
-        backgroundColor: hexStringToColor("ffffff"),
-        body: Padding(
-            padding: EdgeInsets.only(right: _size.width/30, left: _size.width/30, bottom: _size.height/40),
-            child: Consumer<UserViewModel>(
-                builder: (context, userViewModel, child) => userViewModel
-                        .isLoggedIn
+            resizeToAvoidBottomInset: false,
+            backgroundColor: hexStringToColor("ffffff"),
+            body: Padding(
+                padding: EdgeInsets.only(
+                    right: _size.width / 30,
+                    left: _size.width / 30,
+                    bottom: _size.height / 40),
+                child: isLoggedIn
                     ? StreamBuilder(
                         stream: firestore
                             .collection("transaction")
                             .where("user",
-                                isEqualTo: firestore
-                                    .collection("user")
-                                    .doc(userViewModel.user!.id))
+                                isEqualTo:
+                                    firestore.collection("user").doc(user!.id))
                             .snapshots(),
                         builder: ((context, snapshot) {
                           if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
@@ -73,10 +91,10 @@ class _TransactionScreen extends State<TransactionScreen> {
                                       TransactionModel.fromDocument(
                                           snapshot.data!.docs[index].id,
                                           snapshot.data!.docs[index].data());
-                                  return TransactionCard(transaction);
+                                  return TransactionCard(transaction, user!.id);
                                 }));
                           }
                         }))
-                    : const NoCurrentUser())));
+                    : const NoCurrentUser()));
   }
 }

@@ -45,7 +45,7 @@ class ProductCardRenter extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.normal)),
                       SizedBox(height: _size.height / 70),
-                      Text("${currencyFormatter.format(product.rentPrice)}/Day",
+                      Text("${currencyFormatter.format(product.rent_price)}/Day",
                           style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
