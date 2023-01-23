@@ -83,23 +83,23 @@ class Order {
       ownerRef: data['owner'],
       endDate: data['end_date'].toDate(),
       startDate: data['start_date'].toDate(),
-      afterPhotoOwner: data['after_photo_owner'],
-      afterPhotoUser: data['after_photo_user'],
-      beforePhotoOwner: data['before_photo_owner'],
-      beforePhotoUser: data['before_photo_user'],
+      afterPhotoOwner: data['image_after_owner'],
+      afterPhotoUser: data['image_after_user'],
+      beforePhotoOwner: data['image_before_owner'],
+      beforePhotoUser: data['image_before_user'],
       deliveryLocation: data['delivery_location'],
       deliveryMethod: data['delivery_method'],
       issueDate: data['issue_date'].toDate(),
       ktpImage: data['ktp_image'],
-      paymentImage: data['payment_iamge'],
+      paymentImage: data['payment_image'],
       productRef: data['product'],
       quantity: data['quantity'],
       status: data['status'],
       total: data['total'],
-      trackingCode: data['tracking_code'],
+      trackingCode: data['tracking_code_owner'],
       userRef: data['user'],
       paymentRef: data['payment'],
-      returnTrackingCode: data["return_tracking_code"],
+      returnTrackingCode: data["tracking_code_user"],
       description: data["description"]
     );
   }
@@ -117,26 +117,26 @@ class Order {
       if (startDate!=null) "start_date" : startDate,
       if (endDate!=null) "end_date" : endDate,
       if (issueDate!=null) "issue_date" : issueDate,
-      if (beforePhotoOwner!=null) "before_photo_owner" : beforePhotoOwner,
-      if (afterPhotoOwner!=null) "after_photo_owner" : afterPhotoOwner,
-      if (beforePhotoUser!=null) "before_photo_user" : beforePhotoUser,
-      if (afterPhotoUser!=null) "after_photo_user" : afterPhotoOwner,
+      if (beforePhotoOwner!=null) "image_before_owner" : beforePhotoOwner,
+      if (afterPhotoOwner!=null) "image_after_owner" : afterPhotoOwner,
+      if (beforePhotoUser!=null) "image_before_user" : beforePhotoUser,
+      if (afterPhotoUser!=null) "image_after_user" : afterPhotoOwner,
       if (deliveryLocation!=null) "delivery_location" : deliveryLocation,
       if (deliveryMethod!=null) "delivery_method" : deliveryMethod,
       if (ktpImage!=null) "ktp_image" : ktpImage,
       if (paymentImage!=null) "payment_image" : paymentImage ,
       if (status!=null) "status" :status ,
-      if (trackingCode!=null) "tracking_code" : trackingCode,
+      if (trackingCode!=null) "tracking_code_owner" : trackingCode,
       if (total!=null) "total" : total,
       if(paymentRef!=null) "payment" : paymentRef,
-      if(returnTrackingCode!=null) "return_tracking_code" : returnTrackingCode,
+      if(returnTrackingCode!=null) "tracking_code_user" : returnTrackingCode,
       if(description!= null) "description" :description
     };
   }
 
   DocumentReference toReference(){
-    var path = "orer/${id}";
-    return FirebaseFirestore.instance.doc(path);
+    var doc = "$path/$id";
+    return FirebaseFirestore.instance.doc(doc);
 
   }
 }

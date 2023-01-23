@@ -60,15 +60,10 @@ class _OwnerThumbnailState extends State<OwnerThumbnail> {
         }
         UserLocal? user = snapshot.data;
 
-      return Card(
-        elevation: 3,
-        child: Container(
-          child: Column(
-            children: [
-              Text("owner : ${user?.name}")
-            ],
-          ),
-        ),
+      return Column(
+        children: [
+          Text("owner : ${user?.owner_name}")
+        ],
       );
     },);
   }

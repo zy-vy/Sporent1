@@ -13,7 +13,7 @@ class CartController {
   Future<void> addToCart(Product product, DateTime startDate, DateTime endDate,
       int quantity) async {
     UserLocal? user = await AuthController().getCurrentUser();
-    log("=== user ${user?.name}", level: 3);
+    //log("=== user ${user?.name}", level: 3);
     var ownerRef = product.owner;
     Cart? cart;
     cart = await getCart(ownerRef!);
