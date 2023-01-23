@@ -94,7 +94,7 @@ class ManageComplain extends StatelessWidget {
                                                               complain.id!,
                                                               product.name!,
                                                               product.img!,
-                                                              transaction.total!, "admin")));
+                                                              transaction.total!, "admin", idUser: transaction.user!.id, idOwner: transaction.owner!.id,idTransaction: transaction.id,)));
                                             },
                                             child: Row(
                                               children: [

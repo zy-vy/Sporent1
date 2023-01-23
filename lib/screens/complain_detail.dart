@@ -6,6 +6,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/model/complain_detail.dart';
 import 'package:sporent/screens/complain_feedback.dart';
+import 'package:sporent/screens/finish_complain.dart';
 
 import '../component/complain_card.dart';
 import '../component/transaction_card_detail.dart';
@@ -14,13 +15,16 @@ import '../model/complain.dart';
 class DetailComplain extends StatelessWidget {
   const DetailComplain(
       this.id, this.product_name, this.product_image, this.total, this.role,
-      {super.key});
+      {super.key, this.idUser, this.idOwner, this.idTransaction});
 
   final String id;
   final String product_name;
   final String product_image;
   final int total;
   final String role;
+  final String? idUser;
+  final String? idOwner;
+  final String? idTransaction;
 
   @override
   Widget build(BuildContext context) {
@@ -134,20 +138,25 @@ class DetailComplain extends StatelessWidget {
                                       fontSize: 18),
                                   textAlign: TextAlign.center),
                             )),
-                        SizedBox(height: _size.height/30),
-                        role == "admin" ? Center(
-                          child: TextButton(
-                              onPressed: () {
-                                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ,))
-                              },
-                              child: Text(
-                                "Finish Complain",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: HexColor("4164DE"),
-                                    fontWeight: FontWeight.bold),
-                              )),
-                        ) : const SizedBox(),
+                        SizedBox(height: _size.height / 30),
+                        role == "admin"
+                            ? Center(
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FinishComplain(idTransaction!,id ,idUser!, idOwner!)));
+                                    },
+                                    child: Text(
+                                      "Finish Complain",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: HexColor("4164DE"),
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              )
+                            : const SizedBox(),
                       ],
                     );
                   }

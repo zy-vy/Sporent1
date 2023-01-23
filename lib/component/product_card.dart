@@ -31,55 +31,63 @@ class ProductCard extends StatelessWidget {
             ));
       },
       child: Card(
-          color: const Color.fromRGBO(238, 238, 238, 1),
-          shape: const RoundedRectangleBorder(
-            side: BorderSide(color: Color.fromRGBO(238, 238, 238, 1), width: 2)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: _size.height/5,
-                width: _size.width,
-                child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: FirebaseImage(
-                          filePath: "${Product.imagePath}/${_product.id}.jpg")),
+        color: const Color.fromRGBO(238, 238, 238, 1),
+        shape: const RoundedRectangleBorder(
+            side:
+                BorderSide(color: Color.fromRGBO(238, 238, 238, 1), width: 2)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: _size.height / 5,
+              width: _size.width,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: FirebaseImage(
+                        filePath: "${Product.imagePath}/${_product.id}.jpg")),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: _size.width/30, top: _size.height/50),
-                child: Column(
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: _size.width / 30, top: _size.height / 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _product.name ?? "",
+                    style: const TextStyle(
+                        fontSize: 15, overflow: TextOverflow.ellipsis),
+                  ),
+                  SizedBox(height: _size.height / 90),
+                  ItemPrice(
+                    price: _product.rent_price!,
+                    trail: true,
+                    fontSize: 16,
+                    color: "494949",
+                  ),
+                  SizedBox(height: _size.height / 90),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        _product.name ?? "",
-                        style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),
+                      FaIcon(
+                        FontAwesomeIcons.locationDot,
+                        color: HexColor("494949"),
+                        size: 20,
                       ),
-                      SizedBox(height: _size.height/90),
-                      ItemPrice(
-                            price: _product.rent_price!,
-                            trail: true,
-                            fontSize: 16,
-                            color: "494949",
-                      ),
-                      SizedBox(height: _size.height/90),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          FaIcon(FontAwesomeIcons.locationDot, color: HexColor("494949"), size: 20,),
-                          SizedBox(width: _size.width/70),
-                          Text(_product.location ?? "")
-                        ],
-                      ),
+                      SizedBox(width: _size.width / 70),
+                      Text(_product.location ?? "")
                     ],
                   ),
+                ],
               ),
-              
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
     );
   }
 }

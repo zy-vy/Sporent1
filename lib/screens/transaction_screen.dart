@@ -36,6 +36,8 @@ class _TransactionScreen extends State<TransactionScreen> {
         isLoading = false;
         counter = 1;
       });
+    }else{
+      isLoading = false;
     }
   }
 
