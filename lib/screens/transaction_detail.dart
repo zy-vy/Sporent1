@@ -278,11 +278,13 @@ class _DetailTransaction extends State<DetailTransaction> {
                               width: _size.width,
                               height: _size.height / 12,
                               child: ElevatedButton(
-                                onPressed: dateFormat
-                                            .format(transaction.end_date!) !=
-                                        dateFormat.format(DateTime.now())
-                                    ? null
-                                    : transaction.status != "ACTIVE"
+                                onPressed:
+                                // dateFormat
+                                //             .format(transaction.end_date!) !=
+                                //         dateFormat.format(DateTime.now())
+                                //     ? null
+                                //     :
+                                transaction.status != "ACTIVE"
                                         ? null
                                         : () {
                                             Navigator.of(context).push(
