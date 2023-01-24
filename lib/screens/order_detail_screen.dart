@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -18,6 +19,7 @@ import 'package:sporent/viewmodel/order_viewmodel.dart';
 import '../model/complain.dart';
 import '../model/complain_detail.dart';
 import '../utils/colors.dart';
+import 'complain_detail.dart';
 import 'notif_complain.dart';
 
 class OrderDetailScreen extends StatefulWidget {
@@ -70,6 +72,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       "submitOrder": submitOrder(),
       "completeOrder": completeOrder(),
       "complainOrder" : complainOrder(),
+      // "complainDetailOrder": complainDetailOrder()
     };
     return Scaffold(
         appBar: AppBar(
@@ -207,9 +210,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     } else if (order.status == "ACCEPT") {
       return submitOrderButton();
     }  else if (order.status == "ACTIVE") {
-      return finishComplainButton();
+      return complainButton();
     } else if (order.status == "RETURN") {
       return finishComplainButton();
+    } else if (order.status == "COMPLAIN") {
+      return complainDetailButton();
     }
     return  Column(
       children: [
@@ -219,7 +224,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
           child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
         ),
-        complainButton()
+        if (order.status != "DONE") complainButton()
       ],
     );
   }
@@ -297,6 +302,33 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     currentState = "complainOrder";
                   });
                 }, child: const Text("Complain Order"))),
+      ],
+    );
+  }
+
+  Widget complainDetailButton () {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            child: ElevatedButton(
+                onPressed: () {
+                  // setState(() {
+                  //   currentState = "submitOrder";
+                  // });
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            DetailComplain(
+                                order
+                                    .complainRef!.id,
+                                order.product!.name!,
+                                order.product!.img!,
+                                order.total!, "owner")),
+                  );
+                },
+                child: const Text("complain detail"))),
       ],
     );
   }
@@ -886,6 +918,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     final refcomplain = FirebaseFirestore.instance.collection('complain').doc();
     final List<String> _arrImageUrls = [];
     for (int i = 0; i < listImages.length; i++) {
+      if (listImages[i]==null) continue;
       Reference reference = FirebaseStorage.instance
           .ref()
           .child('complain-images/${refcomplain.id + i.toString()}');
@@ -900,7 +933,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         FirebaseFirestore.instance.collection("transaction").doc(id))
         .toJSON();
 
-    await refcomplain.set(complain);
+    await refcomplain.set(complain).onError((error, stackTrace) => log("$error , $stackTrace"));
 
     final complainDetail = ComplainDetail(
         date: DateTime.now(),
@@ -912,12 +945,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     await FirebaseFirestore.instance
         .collection("complain_detail")
         .doc()
-        .set(complainDetail);
+        .set(complainDetail).onError((error, stackTrace) => log("$error , $stackTrace"));
 
     FirebaseFirestore.instance
         .collection("transaction")
         .doc(id)
-        .update({"complain": refcomplain, "status" : "COMPLAIN"});
+        .update({"complain": refcomplain, "status" : "COMPLAIN"}).onError((error, stackTrace) => log("$error , $stackTrace"));
   }
 
 }
