@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -68,12 +69,12 @@ class TransactionCard extends StatelessWidget {
                                 horizontal: _size.height / 50),
                             child: Row(
                               children: [
-                                SizedBox(
-                                  width: _size.width / 3,
-                                  height: _size.height / 7,
-                                  child: FirebaseImage(
-                                      filePath: "product-images/$image"),
-                                ),
+                                CachedNetworkImage(
+                                    imageUrl: image,
+                                    width: _size.width / 3,
+                                    height: _size.height / 7,
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator()),
                                 SizedBox(width: _size.width / 60),
                                 Expanded(
                                     child: Column(

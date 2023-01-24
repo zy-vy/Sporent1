@@ -17,30 +17,40 @@ class CartTile extends StatelessWidget {
     return StreamBuilder(
       stream: getCartDetailList(cart),
       builder: (context, snapshot) {
-        if (!snapshot.hasData){
+        if (!snapshot.hasData) {
           // return const Center(child: CircularProgressIndicator());
         }
         var listCartDetail = snapshot.data;
-        return Card(
-          child: Column(
-            children: [
-              SizedBox(height: size.width/30,),
-              OwnerThumbnail(userRef: cart.ownerRef!.path),
-              Divider(color: HexColor("E0E0E0"),thickness: 2),
-              ListView.builder(
-                itemCount: listCartDetail?.length??0,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                // return Text("data1");
-                return CartDetailTile(cartDetail: listCartDetail![index]!);
-              },)
-            ],
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: size.height/70),
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: const BorderSide(width: 1, color: Colors.grey)),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: size.width / 30,
+                ),
+                OwnerThumbnail(userRef: cart.ownerRef!.path),
+                Divider(color: HexColor("E0E0E0"), thickness: 2),
+                ListView.builder(
+                  itemCount: listCartDetail?.length ?? 0,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    // return Text("data1");
+                    return CartDetailTile(cartDetail: listCartDetail![index]!);
+                  },
+                )
+              ],
+            ),
           ),
         );
       },
     );
   }
+
   Stream<List<CartDetail?>> getCartDetailList(Cart cart) async* {
     // Stream<List<Cart?>> stream= const Stream.empty();
     var firestore = FirebaseFirestore.instance;
@@ -56,6 +66,4 @@ class CartTile extends StatelessWidget {
     yield* listCart;
     // return stream;
   }
-
-
 }

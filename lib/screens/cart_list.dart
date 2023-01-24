@@ -17,6 +17,7 @@ class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserViewModel>(context,listen: false).user!;
+    
     var cartController = CartController();
     return StreamBuilder(
       stream: cartController.getCartList(user),
@@ -30,7 +31,7 @@ class CartList extends StatelessWidget {
           return const Center(child: Text("Your cart is Empty"));
         }
         var listCart = snapshot.data;
-        return Container(
+        return SizedBox(
           height: double.infinity,
           child: ListView.builder(
 
