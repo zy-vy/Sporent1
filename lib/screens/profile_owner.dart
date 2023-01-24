@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -131,18 +132,24 @@ class _TopProfileState extends State<TopProfile> {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Stack(
       children: [
-        CircleAvatar(
-          backgroundColor: Colors.grey.shade200,
-          backgroundImage: widget.image == null
-              ? const NetworkImage(
-                  "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6")
-              : widget.image != ""
-                  ? NetworkImage(widget.image!)
-                  : const NetworkImage(
-                      "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6"),
-          radius: 100,
+        ClipOval(
+            child: widget.image.toString() != "" ? CachedNetworkImage(
+              imageUrl: widget.image.toString(),
+              fit: BoxFit.fill,
+              width: _size.width/2,
+              height: _size.height/4,
+              placeholder: (context, url) => const CircularProgressIndicator())
+              : CachedNetworkImage(
+              imageUrl: "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6",
+              fit: BoxFit.fill,
+              width: _size.width/2,
+              height: _size.height/4,
+              placeholder: (context, url) => const CircularProgressIndicator() 
+            )
         ),
         Positioned(
           right: 0,

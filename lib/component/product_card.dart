@@ -1,10 +1,7 @@
-import 'dart:developer';
-
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/product_detail_screen.dart';
@@ -18,8 +15,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Reference storage = FirebaseStorage.instance.ref();
-
     Size _size = MediaQuery.of(context).size;
 
     return InkWell(
@@ -43,10 +38,10 @@ class ProductCard extends StatelessWidget {
               width: _size.width,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: FirebaseImage(
-                        filePath: "${Product.imagePath}/${_product.id}.jpg")),
+                child: CachedNetworkImage(
+              imageUrl: _product.img!,
+              fit: BoxFit.fitHeight,
+              placeholder: (context, url) => const CircularProgressIndicator())
               ),
             ),
             Padding(
@@ -59,7 +54,7 @@ class ProductCard extends StatelessWidget {
                   Text(
                     _product.name ?? "",
                     style: const TextStyle(
-                        fontSize: 15, overflow: TextOverflow.ellipsis),
+                        fontSize: 18, overflow: TextOverflow.ellipsis),
                   ),
                   SizedBox(height: _size.height / 90),
                   ItemPrice(
@@ -73,31 +68,19 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        _product.name ?? "",
-                        style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),
-                      ),
-                      SizedBox(height: _size.height/90),
-                      ItemPrice(
-                            price: _product.rent_price!,
-                            trail: true,
-                            fontSize: 13,
-                            color: "494949",
-                      ),
-                      SizedBox(height: _size.height/90),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          FaIcon(FontAwesomeIcons.locationDot, color: HexColor("494949"), size: 12,),
-                          SizedBox(width: _size.width/70),
-                          Text(_product.location ?? "",style: const TextStyle(fontSize: 12),)
-                        ],
+                      FaIcon(
+                        FontAwesomeIcons.locationDot,
+                        color: HexColor("494949"),
+                        size: 14,
                       ),
                       SizedBox(width: _size.width / 70),
-                      Text(_product.location ?? "")
+                      Text(
+                        _product.location ?? "",
+                        style: const TextStyle(fontSize: 14),
+                      )
                     ],
                   ),
+                  SizedBox(width: _size.width / 70),
                 ],
               ),
             ),

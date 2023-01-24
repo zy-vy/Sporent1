@@ -28,16 +28,19 @@ class _TransactionScreen extends State<TransactionScreen> {
   int counter = 0;
 
   Future fetchUser() async {
+    await Future.delayed(const Duration(seconds: 1));
     if (FirebaseAuth.instance.currentUser != null) {
       user = await _userRepository
           .getUserById(FirebaseAuth.instance.currentUser!.uid);
-      setState(() {
-        isLoggedIn = true;
-        isLoading = false;
-        counter = 1;
+      setState(()  {
+          isLoggedIn = true;
+          isLoading = false;
+          counter = 1;
       });
-    }else{
-      isLoading = false;
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -49,31 +52,31 @@ class _TransactionScreen extends State<TransactionScreen> {
 
     return isLoading
         ? const Loading()
-        : Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Padding(
-                padding: EdgeInsets.only(top: _size.height / 80),
-                child: const Text(
-                  "Transaction",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+        : isLoggedIn
+            ? Scaffold(
+                appBar: AppBar(
+                  centerTitle: true,
+                  title: Padding(
+                    padding: EdgeInsets.only(top: _size.height / 80),
+                    child: const Text(
+                      "Transaction",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                  ),
+                  elevation: 0,
+                  backgroundColor: Colors.white,
                 ),
-              ),
-              elevation: 0,
-              backgroundColor: Colors.white,
-            ),
-            resizeToAvoidBottomInset: false,
-            backgroundColor: hexStringToColor("ffffff"),
-            body: Padding(
-                padding: EdgeInsets.only(
-                    right: _size.width / 30,
-                    left: _size.width / 30,
-                    bottom: _size.height / 40),
-                child: isLoggedIn
-                    ? StreamBuilder(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: hexStringToColor("ffffff"),
+                body: Padding(
+                    padding: EdgeInsets.only(
+                        right: _size.width / 30,
+                        left: _size.width / 30,
+                        bottom: _size.height / 40),
+                    child: StreamBuilder(
                         stream: firestore
                             .collection("transaction")
                             .where("user",
@@ -96,7 +99,7 @@ class _TransactionScreen extends State<TransactionScreen> {
                                   return TransactionCard(transaction, user!.id);
                                 }));
                           }
-                        }))
-                    : const NoCurrentUser()));
+                        }))))
+            : const NoCurrentUser();
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   int counter = 0;
 
   Future fetchUser() async {
+    await Future.delayed(const Duration(seconds: 1));
     if (FirebaseAuth.instance.currentUser != null) {
       user = await _userRepository
           .getUserById(FirebaseAuth.instance.currentUser!.uid);
@@ -50,18 +52,21 @@ class _ProfilePageState extends State<ProfilePage> {
         counter = 1;
       });
     } else {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   Future<void> signOut() async {
+    await Future.delayed(const Duration(seconds: 1));
     if (user != null) {
       await FirebaseAuth.instance
           .signOut()
           .then((value) => log("User ${user?.name} has sign out"));
       setState(() {
-        user = null;
-        isLoggedIn = false;
+          user = null;
+          isLoggedIn = false;
       });
     }
   }
@@ -158,15 +163,24 @@ class _TopProfileState extends State<TopProfile> {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+
     return Stack(
       children: [
-        CircleAvatar(
-          backgroundColor: Colors.grey.shade200,
-          backgroundImage: widget.user!.image.toString() != ""
-              ? NetworkImage(widget.user!.image.toString())
-              : const NetworkImage(
-                  "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6"),
-          radius: 100,
+        ClipOval(
+            child: widget.user!.image.toString() != "" ? CachedNetworkImage(
+              imageUrl: widget.user!.image.toString(),
+              fit: BoxFit.fill,
+              width: _size.width/2,
+              height: _size.height/4,
+              placeholder: (context, url) => const CircularProgressIndicator())
+              : CachedNetworkImage(
+              imageUrl: "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6",
+              fit: BoxFit.fill,
+              width: _size.width/2,
+              height: _size.height/4,
+              placeholder: (context, url) => const CircularProgressIndicator() 
+            )
         ),
         Positioned(
           right: 0,
@@ -208,7 +222,7 @@ class OwnerButton extends StatelessWidget {
         height: _size.height / 18,
         child: ElevatedButton(
           onPressed: () {
-            if (is_owner==null || is_owner == false) {
+            if (is_owner == null || is_owner == false) {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => BecomeOwner(id),

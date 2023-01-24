@@ -1,12 +1,6 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
 import 'package:sporent/screens/order_detail_screen.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';

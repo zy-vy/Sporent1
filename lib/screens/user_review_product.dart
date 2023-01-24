@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/review_component.dart';
-
-import '../component/item_title.dart';
-import '../component/product_gridview.dart';
 import '../model/review.dart';
 
 class UserReview extends StatelessWidget {
@@ -44,13 +41,11 @@ class UserReview extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text("This Product Don't Have Review"),
-                    );
+                    return const Center(child: Text("This Product Don't Have Review"));
                   } else {
-                    snapshot.data!.docs.forEach((element) {
+                    for (var element in snapshot.data!.docs) {
                       total += element.get("star");
-                    });
+                    }
                     total /= snapshot.data!.docs.length;
                     return Column(
                       children: [
