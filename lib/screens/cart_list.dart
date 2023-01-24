@@ -7,7 +7,6 @@ import 'package:sporent/component/cart_tile.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/viewmodel/user_viewmodel.dart';
 
-import '../component/total_checkout.dart';
 import '../controller/test_user.dart';
 import '../model/cart.dart';
 

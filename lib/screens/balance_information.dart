@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/screens/deposit-information.dart';
 import 'package:sporent/screens/profile_owner.dart';
 import 'package:sporent/screens/request_history.dart';
 

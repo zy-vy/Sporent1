@@ -21,9 +21,9 @@ class NoCurrentUser extends StatelessWidget {
                       builder: (context) => SignInScreen(),
                     ));
               },
-              child: const Text("Log in here."),
               style: ElevatedButton.styleFrom(
-                  backgroundColor: HexColor("4164DE"))),
+                  backgroundColor: HexColor("4164DE")),
+              child: const Text("Log in here.")),
         ],
       ),
     );

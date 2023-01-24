@@ -46,7 +46,7 @@ class BarProfile extends StatelessWidget {
                                 color: Colors.black, fontSize: 18)),
                         Text(desc,
                             style: const TextStyle(
-                                color: Colors.grey, fontSize: 12)),
+                                color: Colors.grey, fontSize: 14)),
                       ],
                     ),
                   ),
