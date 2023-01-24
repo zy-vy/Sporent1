@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +15,10 @@ import 'package:sporent/model/order.dart';
 // import 'package:sporent/screens/complainproduct.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
 
+import '../model/complain.dart';
+import '../model/complain_detail.dart';
 import '../utils/colors.dart';
+import 'notif_complain.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   const OrderDetailScreen({Key? key, required this.order}) : super(key: key);
@@ -41,6 +45,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   String? trackingLink;
 
   String? description;
+
+  int counterComplain = 1;
+  List<File?> listImagesComplain = [];
+  File? imageComplain;
+  File? imageTempComplain;
+  final complainController = TextEditingController();
+
 
   @override
   void initState() {
@@ -274,15 +285,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget complainButton(){
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: size / 15),
-        child: ElevatedButton(
-            onPressed: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => ComplainProduct(FirebaseAuth.instance.currentUser!.uid, order.id!),));
-              setState(() {
-                currentState = "complainOrder";
-              });
-            }, child: const Text("Complain Order")));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            child: ElevatedButton(
+                onPressed: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ComplainProduct(FirebaseAuth.instance.currentUser!.uid, order.id!),));
+                  setState(() {
+                    currentState = "complainOrder";
+                  });
+                }, child: const Text("Complain Order"))),
+      ],
+    );
   }
 
   Widget submitOrder() {
@@ -694,10 +710,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget complainOrder(){
-    int counter = 1;
-    List<File?> listImages = [];
-    File? image;
-    File? imageTemp;
+
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -714,7 +727,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           SizedBox(height: size/30),
           Row(
             children: [
-              for (int i = 0; i < counter; i++)
+              for (int i = 0; i < counterComplain; i++)
                 Row(
                   children: [
                     Stack(
@@ -732,29 +745,29 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           "868686")))),
                           child: TextButton(
                               onPressed: () async {
-                                image = await openGallery();
+                                imageComplain = await openGallery();
                                 setState(() {
-                                  if (counter >= 2) {
-                                    listImages.remove(imageTemp);
+                                  if (counterComplain >= 2) {
+                                    listImagesComplain.remove(imageTempComplain);
                                   }
 
-                                  listImages.add(image);
+                                  listImagesComplain.add(imageComplain);
 
-                                  if (counter != 3) {
-                                    listImages.add(imageTemp);
-                                    counter += 1;
+                                  if (counterComplain != 3) {
+                                    listImagesComplain.add(imageTempComplain);
+                                    counterComplain += 1;
                                   }
                                 });
                               },
-                              child: listImages.isEmpty == true
+                              child: listImagesComplain.isEmpty == true
                                   ? FaIcon(
                                 FontAwesomeIcons.plus,
                                 color: hexStringToColor(
                                     "4164DE"),
                                 size: 35,
                               )
-                                  : listImages[i] != null
-                                  ? Image.file(listImages[i]!)
+                                  : listImagesComplain[i] != null
+                                  ? Image.file(listImagesComplain[i]!)
                                   : FaIcon(
                                 FontAwesomeIcons.plus,
                                 color: hexStringToColor(
@@ -762,10 +775,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 size: 35,
                               )),
                         ),
-                        listImages.isEmpty == true
+                        listImagesComplain.isEmpty == true
                             ? const Positioned(
                             right: 0, top: 0, child: SizedBox())
-                            : listImages[i] != null
+                            : listImagesComplain[i] != null
                             ? Positioned(
                           right: 0,
                           child: Container(
@@ -785,10 +798,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     color: Colors.white),
                                 onPressed: () {
                                   setState(() {
-                                    listImages.remove(
-                                        listImages[i]);
-                                    if (counter != 1) {
-                                      counter -= 1;
+                                    listImagesComplain.remove(
+                                        listImagesComplain[i]);
+                                    if (counterComplain != 1) {
+                                      counterComplain -= 1;
                                     }
                                   });
                                 },
@@ -800,7 +813,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             child: SizedBox())
                       ],
                     ),
-                    counter != 1
+                    counterComplain != 1
                         ? SizedBox(width: size / 20)
                         : const SizedBox(),
                   ],
@@ -813,20 +826,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: size/30),
           TextFormField(
-            // controller: complainController,
+            controller: complainController,
             keyboardType: TextInputType.multiline,
             minLines: 1,
             maxLines: 5,
             decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Please describe your complain"),
-            // validator: (value) {
-            //   if (value!.isEmpty) {
-            //     return "Complain must be Filled";
-            //   } else {
-            //     return null;
-            //   }
-            // },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Complain must be Filled";
+              } else {
+                return null;
+              }
+            },
           ),
           SizedBox(height: size/30),
           SizedBox(
@@ -834,12 +847,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               height: size/6,
               child: ElevatedButton(
                 onPressed: () {
-                  // uploadFile(listImages, order.id,
-                  //     complainController.text);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => NotifComplain()));
+                  uploadFile(listImagesComplain, order.id!,
+                      complainController.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          const NotifComplain()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: hexStringToColor("4164DE"),
@@ -866,4 +880,44 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         await picker.pickImage(source: ImageSource.gallery);
     return File(imagePicked!.path);
   }
+
+  Future uploadFile(
+      List<File?> listImages, String id, String complainController) async {
+    final refcomplain = FirebaseFirestore.instance.collection('complain').doc();
+    final List<String> _arrImageUrls = [];
+    for (int i = 0; i < listImages.length; i++) {
+      Reference reference = FirebaseStorage.instance
+          .ref()
+          .child('complain-images/${refcomplain.id + i.toString()}');
+      await reference.putFile(listImages[i]!);
+      String urlImage = await reference.getDownloadURL();
+      _arrImageUrls.add(urlImage);
+    }
+
+    final complain = Complain(
+        status: "In Progress",
+        transaction:
+        FirebaseFirestore.instance.collection("transaction").doc(id))
+        .toJSON();
+
+    await refcomplain.set(complain);
+
+    final complainDetail = ComplainDetail(
+        date: DateTime.now(),
+        description: complainController,
+        image: _arrImageUrls,
+        complain: refcomplain)
+        .toJSON();
+
+    await FirebaseFirestore.instance
+        .collection("complain_detail")
+        .doc()
+        .set(complainDetail);
+
+    FirebaseFirestore.instance
+        .collection("transaction")
+        .doc(id)
+        .update({"complain": refcomplain, "status" : "COMPLAIN"});
+  }
+
 }
