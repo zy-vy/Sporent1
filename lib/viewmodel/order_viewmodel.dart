@@ -152,7 +152,8 @@ class OrderViewModel with ChangeNotifier {
         returnList = <Order>[],
         doneList = <Order>[],
         declineList = <Order>[],
-        rejectList = <Order>[]
+        rejectList = <Order>[],
+        complainList = <Order>[]
     ;
     orderList?.forEach((order) {
       var status = order.status ?? "";
@@ -184,10 +185,14 @@ class OrderViewModel with ChangeNotifier {
         case "REJECT":
           rejectList.add(order);
           break;
+        case "COMPLAIN":
+          confirmList.add(order);
+          break;
       }
     });
     finalList =
         // waitingList +
+        complainList +
         confirmList +
         acceptList +
         deliverList +

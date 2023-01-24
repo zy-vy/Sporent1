@@ -13,6 +13,7 @@ class Order {
   DocumentReference? ownerRef;
   DocumentReference? productRef;
   DocumentReference? paymentRef;
+  DocumentReference? complainRef;
   int? quantity;
   DateTime? startDate;
   DateTime? endDate;
@@ -74,7 +75,8 @@ class Order {
       this.beforeUserFile,
       this.afterUserFile,
       this.returnTrackingCode,
-      this.description
+      this.description,
+      this.complainRef
   });
 
   factory Order.fromDocument(String id, Map<String,dynamic> data){
@@ -100,7 +102,8 @@ class Order {
       userRef: data['user'],
       paymentRef: data['payment'],
       returnTrackingCode: data["tracking_code_user"],
-      description: data["description"]
+      description: data["description"],
+      complainRef: data["complain"]
     );
   }
 
@@ -130,7 +133,8 @@ class Order {
       if (total!=null) "total" : total,
       if(paymentRef!=null) "payment" : paymentRef,
       if(returnTrackingCode!=null) "tracking_code_user" : returnTrackingCode,
-      if(description!= null) "description" :description
+      if(description!= null) "description" :description,
+      if(complainRef!= null) "complain" :complainRef
     };
   }
 

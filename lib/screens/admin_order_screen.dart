@@ -541,9 +541,9 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
   }
 
   Widget conditionCheckOwner(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"){
-      return const SizedBox();
-    }
+    // if (order.status== "WAITING" || order.status == "CONFIRM"){
+    //   return const SizedBox();
+    // }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
       child: Column(
@@ -597,9 +597,9 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
   }
 
   Widget trackingCode(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"){
-      return const SizedBox();
-    }
+    // if (order.status== "WAITING" || order.status == "CONFIRM"){
+    //   return const SizedBox();
+    // }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
       child: Column(
@@ -629,9 +629,9 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
   }
 
   Widget conditionCheckUser(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
-      return const SizedBox();
-    }
+    // if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
+    //   return const SizedBox();
+    // }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
       child: Column(
@@ -684,9 +684,9 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
   }
 
   Widget returnTrackingCode(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
-      return const SizedBox();
-    }
+    // if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
+    //   return const SizedBox();
+    // }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
       child: Column(
