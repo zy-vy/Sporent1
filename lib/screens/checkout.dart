@@ -43,9 +43,7 @@ class _CheckoutPage extends State<CheckoutPage> {
   var index = 0;
   int counter = 0;
   // late int price =0 , totalDeposit=0;
-  var isRebuild = false;
   final TextEditingController controller = TextEditingController();
-  var totalDeposit = TotalDeposit();
   NumberFormat currencyFormatter =
       NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
   // String? _paymentMethod;
@@ -351,7 +349,6 @@ class _CheckoutPage extends State<CheckoutPage> {
                                       backgroundColor: HexColor("8DA6FE")),
                                   onPressed: (() async {
                                     ktpImage = await openGallery();
-                                    isRebuild = true;
                                     setState(() {});
                                   }),
                                   child: const Center(
@@ -465,7 +462,6 @@ class _CheckoutPage extends State<CheckoutPage> {
                                   return;
                                 }
                                 setState(() {
-                                  isRebuild = true;
                                   index = 1;
                                 });
                               }
@@ -603,7 +599,6 @@ class _CheckoutPage extends State<CheckoutPage> {
                             backgroundColor: HexColor("8DA6FE")),
                         onPressed: (() async {
                           transferImage = await openGallery();
-                          isRebuild = true;
                           setState(() {});
                         }),
                         child: const Center(
