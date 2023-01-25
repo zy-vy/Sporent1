@@ -20,9 +20,13 @@ import '../viewmodel/transaction_viewmodel.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage(
-      {super.key, required this.totalAmount, required this.cartList});
+      {super.key, required this.totalAmount, required this.cartList,required this.totalPrice,required this.totalDeposit});
 
   final int totalAmount;
+
+  final int totalPrice;
+
+  final int totalDeposit;
 
   final List<Cart> cartList;
 
@@ -39,9 +43,7 @@ class _CheckoutPage extends State<CheckoutPage> {
   var index = 0;
   int counter = 0;
   // late int price =0 , totalDeposit=0;
-  var isRebuild = false;
   final TextEditingController controller = TextEditingController();
-  var totalDeposit = TotalDeposit();
   NumberFormat currencyFormatter =
       NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
   // String? _paymentMethod;
@@ -114,18 +116,11 @@ class _CheckoutPage extends State<CheckoutPage> {
                                         .doc(cartDetail.productRef!.path)
                                         .get(),
                                     builder: (context, snapshot) {
-                                      if (!snapshot.hasData)
+                                      if (!snapshot.hasData) {
                                         return const Center();
-                                      var product = snapshot.data!;
-                                      if (!isRebuild) {
-                                        totalDeposit.price +=
-                                            (product.get("rent_price") as int) *
-                                                cartDetail.quantity!;
-                                        totalDeposit.deposit +=
-                                            product.get("deposit_price") as int;
-                                        // Provider.of<TotalDeposit>(context,listen: false).price += (product.get("rent_price") as int )* cartDetail.quantity!;
-                                        // Provider.of<TotalDeposit>(context,listen: false).deposit += product.get("deposit_price") as int;
                                       }
+                                      var product = snapshot.data!;
+
                                       return Padding(
                                         padding: EdgeInsets.symmetric(
                                             vertical: size.width / 35),
@@ -354,7 +349,6 @@ class _CheckoutPage extends State<CheckoutPage> {
                                       backgroundColor: HexColor("8DA6FE")),
                                   onPressed: (() async {
                                     ktpImage = await openGallery();
-                                    isRebuild = true;
                                     setState(() {});
                                   }),
                                   child: const Center(
@@ -373,59 +367,50 @@ class _CheckoutPage extends State<CheckoutPage> {
                           color: Colors.black),
                     ),
                     SizedBox(height: size.width / 30),
-                    FutureBuilder(
-                      future: wait(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData)
-                          return const Center(
-                            child: LinearProgressIndicator(),
-                          );
-                        return Column(
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  "Price total",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black54),
-                                ),
-                                // Consumer<TotalDeposit>( builder: (context, totalDrposit, child) =>  ItemPrice(textStyle:  const TextStyle(color: Colors.black54,fontSize: 14,fontWeight: FontWeight.bold), price: price,)),
-                                ItemPrice(
-                                  textStyle: const TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  price: totalDeposit.price,
-                                )
-                              ],
+                            const Text(
+                              "Price total",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
                             ),
-                            SizedBox(height: size.width / 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  "Deposit",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black54),
-                                ),
-                                // Consumer<TotalDeposit>( builder: (context, totalDrposit, child) =>  ItemPrice(textStyle:  const TextStyle(color: Colors.black54,fontSize: 14,fontWeight: FontWeight.bold), price: totalDeposit,)),
-                                ItemPrice(
-                                  textStyle: const TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  price: totalDeposit.deposit,
-                                )
-                              ],
-                            ),
+                            // Consumer<TotalDeposit>( builder: (context, totalDrposit, child) =>  ItemPrice(textStyle:  const TextStyle(color: Colors.black54,fontSize: 14,fontWeight: FontWeight.bold), price: price,)),
+                            ItemPrice(
+                              textStyle: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                              price: widget.totalPrice,
+                            )
                           ],
-                        );
-                      },
+                        ),
+                        SizedBox(height: size.width / 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Deposit",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
+                            ),
+                            // Consumer<TotalDeposit>( builder: (context, totalDrposit, child) =>  ItemPrice(textStyle:  const TextStyle(color: Colors.black54,fontSize: 14,fontWeight: FontWeight.bold), price: totalDeposit,)),
+                            ItemPrice(
+                              textStyle: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                              price: widget.totalDeposit,
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(height: size.width / 30),
                     Row(
@@ -477,7 +462,6 @@ class _CheckoutPage extends State<CheckoutPage> {
                                   return;
                                 }
                                 setState(() {
-                                  isRebuild = true;
                                   index = 1;
                                 });
                               }
@@ -615,7 +599,6 @@ class _CheckoutPage extends State<CheckoutPage> {
                             backgroundColor: HexColor("8DA6FE")),
                         onPressed: (() async {
                           transferImage = await openGallery();
-                          isRebuild = true;
                           setState(() {});
                         }),
                         child: const Center(
@@ -690,28 +673,4 @@ class _CheckoutPage extends State<CheckoutPage> {
     );
   }
 
-  Future<bool> wait() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return true;
-  }
-}
-
-class TotalDeposit {
-  int _price = 0;
-  int _deposit = 0;
-  // bool isRebuild = false;
-
-  int get price => _price;
-
-  set price(int value) {
-    _price = value;
-    // notifyListeners();
-  }
-
-  int get deposit => _deposit;
-
-  set deposit(int value) {
-    _deposit = value;
-    // notifyListeners();
-  }
 }
