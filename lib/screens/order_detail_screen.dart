@@ -16,15 +16,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
-import 'package:sporent/screens/transaction_detail.dart';
 // import 'package:sporent/screens/complainproduct.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../component/field_row.dart';
 import '../component/image_full_screen.dart';
-import '../component/transaction_card_detail.dart';
 import '../model/complain.dart';
 import '../model/complain_detail.dart';
 import '../utils/colors.dart';
@@ -43,7 +40,7 @@ class OrderDetailScreen extends StatefulWidget {
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final orderViewModel = OrderViewModel();
 
-  var dateFormat = DateFormat('d MMMM ' 'yyyy');
+  var dateFormat = DateFormat('dd-MM-yyyy');
 
   late double size;
 
@@ -63,6 +60,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   File? imageTempComplain;
   final complainController = TextEditingController();
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -79,7 +77,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       "detailOrder": orderDetail(),
       "submitOrder": submitOrder(),
       "completeOrder": completeOrder(),
-      "complainOrder": complainOrder(),
+      "complainOrder" : complainOrder(),
       // "complainDetailOrder": complainDetailOrder()
     };
     return Scaffold(
@@ -87,7 +85,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Order Detail"),
+            child: const Text("Detail Transaction"),
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
@@ -95,73 +93,131 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget orderDetail() {
-    Size _size = MediaQuery.of(context).size;
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
 
-    return Padding(
-      padding: EdgeInsets.only(
-          top: _size.height / 40,
-          bottom: _size.height / 40,
-          left: _size.width / 18,
-          right: _size.width / 10),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                              Text("Status: ${order.status}",
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w600)),
-                      SizedBox(height: _size.height / 70),
-                      Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-                      SizedBox(height: _size.height / 70),
-        const Text(
-          "Booking Period",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: _size.height / 40),
-        bookingPeriod(dateFormat.format(order.startDate!),
-            dateFormat.format(order.endDate!), _size),
-        SizedBox(height: _size.height / 70),
-        Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-        DetailTransactionCard(18, 16, 15, 18, "Total Payment",
-            order.product!.img!, order.product!.name!, order.total!),
-        SizedBox(height: _size.height / 70),
-        Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-        SizedBox(height: _size.height / 50),
-        const Text(
-          "Delivery Information",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: _size.height / 40),
-        FieldRow("Delivery Type", order.deliveryMethod!, true, 15,
-            FontWeight.normal, FontWeight.w500),
-        SizedBox(height: _size.height / 70),
-        FieldRow("Address", order.deliveryLocation!, true, 15,
-            FontWeight.normal, FontWeight.w500),
-        SizedBox(height: _size.height / 40),
-        Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-        SizedBox(height: _size.height / 40),
-        const Text("Live Tracking Gojek",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        SizedBox(height: _size.height / 40),
-        order.returnTrackingCode == null
-            ? const Text("User has not input the live tracking")
-            : InkWell(
-                child: Text(order.returnTrackingCode ?? "",
-                    style: const TextStyle(color: Colors.blueAccent)),
-                onTap: () async {
-                  Uri _url = Uri.parse(order.returnTrackingCode ?? "");
-                  await launchUrl(_url);
-                },
+      Container(
+          margin:
+              EdgeInsets.symmetric( vertical: size / 25),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              heading("Booking period"),
+              SizedBox(height: size/25,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(dateFormat.format(order.startDate!)),
+                  const FaIcon(FontAwesomeIcons.arrowRight),
+                  Text(dateFormat.format(order.endDate!))
+                ],
+              )
+            ],
+          )),
+      Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+
+      Container(
+        margin:
+            EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          heading("Detail product"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: size / 3,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                    child: CachedNetworkImage(imageUrl: "${order.product?.img}",progressIndicatorBuilder: (context, url, progress) => SizedBox(width: size/10 ,child: const CircularProgressIndicator(),),),
+                    // child: Icon(Icons.access_time)),
+                  )
+                ),
               ),
-        SizedBox(height: _size.height / 40),
-        Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-        SizedBox(height: _size.height / 40),
-        const Text("Condition Check",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        SizedBox(height: _size.height / 40),
-        conditionCheckOwner(),
-        SizedBox(height: _size.height / 40),
-        conditionCheckUser(),
-        orderDetailButton()
-      ]),
-    );
+              SizedBox(
+                width: size / 20,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(order.product?.name ?? "",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                    Text("${order.quantity} day"),
+                    const Text(
+                      "total payment",
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                    ItemPrice(
+                      price: order.total!,
+                      trail: false,
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ]),
+      ),
+      Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+
+      Container(
+        margin:
+            EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            heading("Delivery information"),
+            SizedBox(
+              height: size / 20,
+            ),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Expanded(child: Text("Courier")),
+                Expanded(child: Text("${order.deliveryMethod}"))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Expanded(child: Text("Recipient")),
+                Expanded(child: Text(order.user?.name ?? ""))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Expanded(child: Text("Address")),
+                Expanded(child: Text(order.deliveryLocation ?? ""))
+              ],
+            ),
+          ],
+        ),
+      ),
+      conditionCheckOwner(),
+      trackingCode(),
+      conditionCheckUser(),
+      returnTrackingCode(),
+      // Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+      SizedBox(
+        height: size / 15,
+      ),
+      Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(size/15),
+            height: size/10,
+            decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
+            child: Center(child: Text("status: ${order.status}",style: const TextStyle(color: Colors.white),),),
+          ),
+        ],
+      ),
+      orderDetailButton()
+    ]);
   }
 
   Widget orderDetailButton() {
@@ -178,7 +234,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     } else if (order.status == "COMPLAIN") {
       return complainDetailButton();
     }
-    return const SizedBox();
+    return  const SizedBox();
   }
 
   Widget acceptDeclineButton() {
@@ -187,50 +243,43 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size / 6,
+            height: size/6,
             child: ElevatedButton(
+
                 onPressed: () {
-                  CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.confirm,
-                    onConfirmBtnTap: () {
-                      orderViewModel.acceptOrder(order);
-                      Navigator.pop(context);
-                      setState(() {
-                        currentState = "submitOrder";
-                      });
-                    },
-                  );
+                  CoolAlert.show(context: context, type: CoolAlertType.confirm, onConfirmBtnTap: () {
+                    orderViewModel.acceptOrder(order);
+                    Navigator.pop(context);
+                    setState(() {
+                      currentState = "submitOrder";
+                    });
+                  },);
+
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Accept Order",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
+                child: const Text("Accept Order", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)))),
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size / 6,
+            height: size/6,
             child: TextButton(
                 onPressed: () {
                   // CoolAlert.show(context: context, type: CoolAlertType.success);
-                  CoolAlert.show(
-                    context: context,
-                    type: CoolAlertType.confirm,
-                    onConfirmBtnTap: () {
-                      orderViewModel.declineOrder(order);
-                      // Fluttertoast.showToast(msg: "decline");
-                      Navigator.pop(context);
-                    },
-                  ).then((value) {
+                  CoolAlert.show(context: context, type: CoolAlertType.confirm, onConfirmBtnTap: () {
+                    orderViewModel.declineOrder(order);
+                    // Fluttertoast.showToast(msg: "decline");
                     Navigator.pop(context);
+                  },).then((value) {                  Navigator.pop(context);
                   });
+
                 },
-                child: Text("Decline Order",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: HexColor("4164DE")))))
+
+                child: Text("Decline Order", style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,color: HexColor("4164DE")))))
       ],
     );
   }
@@ -241,7 +290,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size / 6,
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -251,9 +300,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Submit Order Tracking",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
+                child: const Text("Submit Order Tracking", style: TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18)))),
       ],
     );
   }
@@ -264,7 +313,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size / 6,
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -274,21 +323,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Finish Order",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
+                child: const Text("Finish Order", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)))),
         complainButton()
       ],
     );
   }
 
-  Widget complainButton() {
+  Widget complainButton(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(
-            width: size,
-            height: size / 6,
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: size / 15,vertical: size/15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => ComplainProduct(FirebaseAuth.instance.currentUser!.uid, order.id!),));
@@ -299,20 +348,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Complain Order",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
+                child: const Text("Complain Order", style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18)))),
       ],
     );
   }
 
-  Widget complainDetailButton() {
+  Widget complainDetailButton () {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size / 6,
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   // setState(() {
@@ -320,20 +369,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   // });
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => DetailComplain(
-                            order.complainRef!.id,
-                            order.product!.name!,
-                            order.product!.img!,
-                            order.total!,
-                            "owner")),
+                        builder: (context) =>
+                            DetailComplain(
+                                order
+                                    .complainRef!.id,
+                                order.product!.name!,
+                                order.product!.img!,
+                                order.total!, "owner")),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("complain detail",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
+                child: const Text("complain detail", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)))),
       ],
     );
   }
@@ -362,12 +412,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           ? Container(
                               width: size / 6,
                               height: size / 6,
-                              decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
-                                          width: 2,
-                                          color: HexColor("868686")))),
+                          decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(10),
+                                  side: BorderSide(
+                                      width: 2,
+                                      color: HexColor("868686")))),
                               child: TextButton(
                                 // style: TextButton.styleFrom(
                                 //     side: BorderSide(
@@ -381,12 +432,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           : Container(
                               width: size / 6,
                               height: size / 6,
-                              decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
-                                          width: 2,
-                                          color: HexColor("868686")))),
+                        decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10),
+                                side: BorderSide(
+                                    width: 2,
+                                    color: HexColor("868686")))),
                               child: TextButton(
                                 // style: TextButton.styleFrom(
                                 //     backgroundColor: HexColor("8DA6FE")),
@@ -448,8 +500,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     height: size / 5,
                   ),
                   SizedBox(
-                    height: size / 6,
+                    height: size/6,
                     child: ElevatedButton(
+
                         onPressed: () {
                           if (beforeImage == null ||
                               trackingLink == null ||
@@ -465,24 +518,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               .submitOrder(order, beforeImage, trackingLink!)
                               .then((value) => value != false
                                   ? CoolAlert.show(
-                                          context: context,
-                                          type: CoolAlertType.success)
-                                      .then((value) => setState(() {
-                                            beforeImage = null;
-                                            currentState = "detailOrder";
-                                          }))
+                                      context: context,
+                                      type: CoolAlertType.success).then((value) => setState(() {
+                            beforeImage = null;
+                            currentState = "detailOrder";
+                          }))
                                   : CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.error));
+
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: HexColor("4164DE"),
+                          backgroundColor : HexColor("4164DE"),
                         ),
-                        child: const Text(
-                          "Submit",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        )),
+                        child: const Text("Submit", style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),
                   )
                 ],
               )),
@@ -517,7 +566,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               height: size / 6,
                               decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                      BorderRadius.circular(10),
                                       side: BorderSide(
                                           width: 2,
                                           color: HexColor("868686")))),
@@ -536,7 +586,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               height: size / 6,
                               decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                      BorderRadius.circular(10),
                                       side: BorderSide(
                                           width: 2,
                                           color: HexColor("868686")))),
@@ -573,7 +624,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     height: size / 5,
                   ),
                   SizedBox(
-                    height: size / 6,
+                    height: size/6,
                     child: ElevatedButton(
                         onPressed: () {
                           if (afterImage == null || description == null) {
@@ -600,13 +651,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: HexColor("4164DE"),
+                          backgroundColor : HexColor("4164DE"),
                         ),
-                        child: const Text(
-                          "Submit",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        )),
+                        child: const Text("Submit", style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),
+
                   )
                 ],
               )),
@@ -615,17 +663,22 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget complainOrder() {
+  Widget complainOrder(){
+
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: size / 15, horizontal: size / 15),
+      padding: EdgeInsets.symmetric(
+          vertical: size/15,
+          horizontal: size/15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             "Please take a picture of your product",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w500),
           ),
-          SizedBox(height: size / 30),
+          SizedBox(height: size/30),
           Row(
             children: [
               for (int i = 0; i < counterComplain; i++)
@@ -634,21 +687,22 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     Stack(
                       children: [
                         Container(
-                          width: size / 6,
-                          height: size / 6,
+                          width: size/6,
+                          height: size/6,
                           decoration: ShapeDecoration(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius:
+                                  BorderRadius.circular(8),
                                   side: BorderSide(
                                       width: 2,
-                                      color: hexStringToColor("868686")))),
+                                      color: hexStringToColor(
+                                          "868686")))),
                           child: TextButton(
                               onPressed: () async {
                                 imageComplain = await openGallery();
                                 setState(() {
                                   if (counterComplain >= 2) {
-                                    listImagesComplain
-                                        .remove(imageTempComplain);
+                                    listImagesComplain.remove(imageTempComplain);
                                   }
 
                                   listImagesComplain.add(imageComplain);
@@ -661,48 +715,56 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               },
                               child: listImagesComplain.isEmpty == true
                                   ? FaIcon(
-                                      FontAwesomeIcons.plus,
-                                      color: hexStringToColor("4164DE"),
-                                      size: 35,
-                                    )
+                                FontAwesomeIcons.plus,
+                                color: hexStringToColor(
+                                    "4164DE"),
+                                size: 35,
+                              )
                                   : listImagesComplain[i] != null
-                                      ? Image.file(listImagesComplain[i]!)
-                                      : FaIcon(
-                                          FontAwesomeIcons.plus,
-                                          color: hexStringToColor("4164DE"),
-                                          size: 35,
-                                        )),
+                                  ? Image.file(listImagesComplain[i]!)
+                                  : FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: hexStringToColor(
+                                    "4164DE"),
+                                size: 35,
+                              )),
                         ),
                         listImagesComplain.isEmpty == true
                             ? const Positioned(
-                                right: 0, top: 0, child: SizedBox())
+                            right: 0, top: 0, child: SizedBox())
                             : listImagesComplain[i] != null
-                                ? Positioned(
-                                    right: 0,
-                                    child: Container(
-                                        height: 25,
-                                        width: 25,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.blueAccent,
-                                            shape: BoxShape.circle),
-                                        child: IconButton(
-                                          icon: const FaIcon(
-                                              FontAwesomeIcons.xmark,
-                                              size: 10,
-                                              color: Colors.white),
-                                          onPressed: () {
-                                            setState(() {
-                                              listImagesComplain.remove(
-                                                  listImagesComplain[i]);
-                                              if (counterComplain != 1) {
-                                                counterComplain -= 1;
-                                              }
-                                            });
-                                          },
-                                        )),
-                                  )
-                                : const Positioned(
-                                    right: 0, top: 0, child: SizedBox())
+                            ? Positioned(
+                          right: 0,
+                          child: Container(
+                              height: 25,
+                              width: 25,
+                              decoration:
+                              const BoxDecoration(
+                                  color: Colors
+                                      .blueAccent,
+                                  shape: BoxShape
+                                      .circle),
+                              child: IconButton(
+                                icon: const FaIcon(
+                                    FontAwesomeIcons
+                                        .xmark,
+                                    size: 10,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    listImagesComplain.remove(
+                                        listImagesComplain[i]);
+                                    if (counterComplain != 1) {
+                                      counterComplain -= 1;
+                                    }
+                                  });
+                                },
+                              )),
+                        )
+                            : const Positioned(
+                            right: 0,
+                            top: 0,
+                            child: SizedBox())
                       ],
                     ),
                     counterComplain != 1
@@ -714,8 +776,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ),
           SizedBox(height: size / 15),
           const Text("Complain Description",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: size / 30),
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: size/30),
           TextFormField(
             controller: complainController,
             keyboardType: TextInputType.multiline,
@@ -732,188 +795,110 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               }
             },
           ),
-          SizedBox(height: size / 5),
+          SizedBox(height: size/5),
           SizedBox(
               width: size,
-              height: size / 6,
+              height: size/6,
               child: ElevatedButton(
                 onPressed: () {
-                  uploadFile(
-                      listImagesComplain, order.id!, complainController.text);
+                  uploadFile(listImagesComplain, order.id!,
+                      complainController.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const NotifComplain()));
+                          builder: (context) =>
+                          const NotifComplain()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: hexStringToColor("4164DE"),
                   // padding: const EdgeInsets.only(right: 300, bottom: 40)
                 ),
-                child: const Text(
-                  "Complain Product",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                child: const Text("Complain Product",
+                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
               )),
         ],
       ),
     );
   }
 
-  Widget conditionCheckOwner() {
-    if (order.status == "WAITING" ||
-        order.status == "CONFIRM" ||
-        order.status == "ACCEPT") {
-      return const SizedBox();
-    }
-
-    Size _size = MediaQuery.of(context).size;
-
-    return TextButton(
-        style: TextButton.styleFrom(
-            side: BorderSide(width: 1, color: HexColor("888888"))),
-        onPressed: () {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //     builder: (context) =>
-          //         ConditionCheckBeforeUser(
-          //             transaction.id!,
-          //             transaction
-          //                 .image_before_user??"",
-          //             transaction
-          //                 .description_before_user??"")));
-        },
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: _size.height / 80, horizontal: _size.width / 70),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Pre-Condition",
-                    style: TextStyle(
-                        color: order.status == "WAITING"
-                            ? Colors.grey
-                            : order.status == "ACCEPT"
-                                ? Colors.grey
-                                : order.status == "CONFIRM"
-                                    ? Colors.grey
-                                    : Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                  SizedBox(height: _size.height / 80),
-                  const Text(
-                    "This check has been completed",
-                    style: TextStyle(color: Colors.black, fontSize: 13),
-                  )
-                ],
-              )),
-              const FaIcon(FontAwesomeIcons.chevronRight,
-                  color: Colors.black, size: 20)
-            ],
-          ),
-        ));
-
-    // Container(
-    //   margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-    //       SizedBox(
-    //         height: size / 15,
-    //       ),
-    //       heading("Condition check (Owner)"),
-    //       SizedBox(
-    //         height: size / 20,
-    //       ),
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //         children: [
-    //           order.beforeOwnerFile != null
-    //               ? Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8)),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: InkWell(
-    //                     onTap: () {
-    //                       Navigator.of(context).push(MaterialPageRoute(
-    //                           builder: (context) => FullScreen(
-    //                                 "firebaseImage",
-    //                                 firebaseImage: order.beforePhotoOwner,
-    //                                 filePath: "condition-check",
-    //                               )));
-    //                     },
-    //                     child: ClipRRect(
-    //                         borderRadius: BorderRadius.circular(8),
-    //                         child: Image.file(
-    //                           order.beforeOwnerFile!,
-    //                           fit: BoxFit.fill,
-    //                         )),
-    //                   ))
-    //               : Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                       color: HexColor("8DA6FE")),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: const Icon(IconlyBold.infoSquare)),
-    //           order.afterOwnerFile != null
-    //               ? Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8)),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: InkWell(
-    //                     onTap: () {
-    //                       Navigator.of(context).push(MaterialPageRoute(
-    //                           builder: (context) => FullScreen(
-    //                                 "firebaseImage",
-    //                                 firebaseImage: order.afterPhotoOwner,
-    //                                 filePath: "condition-check",
-    //                               )));
-    //                     },
-    //                     child: ClipRRect(
-    //                         borderRadius: BorderRadius.circular(8),
-    //                         child: Image.file(
-    //                           order.afterOwnerFile!,
-    //                           fit: BoxFit.fill,
-    //                         )),
-    //                   ))
-    //               : Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                       color: HexColor("8DA6FE")),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: const Icon(IconlyBold.infoSquare)),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    // );
-  }
-
-  Widget trackingCode() {
-    if (order.status == "WAITING" ||
-        order.status == "CONFIRM" ||
-        order.status == "ACCEPT") {
+  Widget conditionCheckOwner(){
+    if (order.status== "WAITING" || order.status == "CONFIRM" || order.status == "ACCEPT"){
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
+
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Condition check (Owner)"),
+          SizedBox(
+            height: size / 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              order.beforeOwnerFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "firebaseImage", firebaseImage: order.beforePhotoOwner, filePath: "condition-check",)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)),
+                  ))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+              order.afterOwnerFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "firebaseImage", firebaseImage: order.afterPhotoOwner, filePath: "condition-check",)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)),
+                  ))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget trackingCode(){
+    if (order.status== "WAITING" || order.status == "CONFIRM" || order.status == "ACCEPT"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -935,176 +920,96 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           //   readOnly: true,
           //   initialValue: order.trackingCode??"",
           // ),
-          TextButton(
-              onPressed: () async {
-                final uri = Uri.parse("${order.trackingCode}");
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri);
-                } else {
-                  throw 'Could not launch $uri';
-                }
-              },
-              child: Text(order.trackingCode ?? ""))
+          TextButton(onPressed: () async {
+            final uri = Uri.parse("${order.trackingCode}");
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri);
+            } else {
+              throw 'Could not launch $uri';
+            }
+          }, child: Text(order.trackingCode??""))
         ],
       ),
     );
   }
 
-  Widget conditionCheckUser() {
-    if (order.status == "WAITING" ||
-        order.status == "CONFIRM" ||
-        order.status == "DELIVER" ||
-        order.status == "ACCEPT" ||
-        order.status == "ACTIVE" ||
-        order.status == "COMPLAIN" ||
-        order.status == "RETURN") {
-      return const SizedBox();
-    }
-
-    Size size = MediaQuery.of(context).size;
-
-    return TextButton(
-        style: TextButton.styleFrom(
-            side: BorderSide(width: 1, color: HexColor("888888"))),
-        onPressed: () {
-          // Navigator.of(context).push(
-          //     MaterialPageRoute(
-          //         builder: (context) =>
-          //             ReturnProduct(
-          //                 transaction.id!,
-          //                 transaction
-          //                     .image_after_user??"",
-          //                 transaction.tracking_code_user??"",
-          //                 idOwner: "")));
-        },
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: size.height / 80, horizontal: size.width / 70),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Post-Condition",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                  SizedBox(height: size.height / 80),
-                  const Text(
-                    "This check has been completed",
-                    style: TextStyle(color: Colors.black, fontSize: 13),
-                  )
-                ],
-              )),
-              const FaIcon(FontAwesomeIcons.chevronRight,
-                  color: Colors.black, size: 20)
-            ],
-          ),
-        ));
-
-    // Container(
-    //   margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-    //       SizedBox(
-    //         height: size / 15,
-    //       ),
-    //       heading("Condition check (User)"),
-    //       SizedBox(
-    //         height: size / 20,
-    //       ),
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //         children: [
-    //           order.beforeUserFile != null
-    //               ? Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8)),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: InkWell(
-    //                     onTap: () {
-    //                       Navigator.of(context).push(MaterialPageRoute(
-    //                           builder: (context) => FullScreen(
-    //                                 "firebaseImage",
-    //                                 firebaseImage: order.beforePhotoUser,
-    //                                 filePath: "condition-check",
-    //                               )));
-    //                     },
-    //                     child: ClipRRect(
-    //                         borderRadius: BorderRadius.circular(8),
-    //                         child: Image.file(
-    //                           order.beforeUserFile!,
-    //                           fit: BoxFit.fill,
-    //                         )),
-    //                   ))
-    //               : Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                       color: HexColor("8DA6FE")),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: const Icon(IconlyBold.infoSquare)),
-    //           order.afterUserFile != null
-    //               ? Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8)),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: InkWell(
-    //                     onTap: () {
-    //                       Navigator.of(context).push(MaterialPageRoute(
-    //                           builder: (context) => FullScreen(
-    //                                 "firebaseImage",
-    //                                 firebaseImage: order.afterPhotoUser,
-    //                                 filePath: "condition-check",
-    //                               )));
-    //                     },
-    //                     child: ClipRRect(
-    //                         borderRadius: BorderRadius.circular(8),
-    //                         child: Image.file(
-    //                           order.afterUserFile!,
-    //                           fit: BoxFit.fill,
-    //                         )),
-    //                   ))
-    //               : Container(
-    //                   decoration: BoxDecoration(
-    //                       border:
-    //                           Border.all(width: 1, color: HexColor("E0E0E0")),
-    //                       borderRadius: BorderRadius.circular(8),
-    //                       color: HexColor("8DA6FE")),
-    //                   width: size / 6,
-    //                   height: size / 6,
-    //                   child: const Icon(IconlyBold.infoSquare)),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    // );
-  }
-
-  Widget returnTrackingCode() {
-    if (order.status == "WAITING" ||
-        order.status == "CONFIRM" ||
-        order.status == "DELIVER" ||
-        order.status == "ACCEPT") {
+  Widget conditionCheckUser(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"  || order.status == "ACCEPT"){
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Condition check (User)"),
+          SizedBox(
+            height: size / 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              order.beforeUserFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "firebaseImage", firebaseImage: order.beforePhotoUser,filePath: "condition-check",)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)),
+                  ))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+              order.afterUserFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "firebaseImage", firebaseImage:order.afterPhotoUser, filePath: "condition-check",)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)),
+                  ))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget returnTrackingCode(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER" || order.status == "ACCEPT"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1142,16 +1047,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           //
           //   )]
           // ))
-          TextButton(
-              onPressed: () async {
-                final uri = Uri.parse("${order.returnTrackingCode}");
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri);
-                } else {
-                  throw 'Could not launch $uri';
-                }
-              },
-              child: Text(order.returnTrackingCode ?? ""))
+          TextButton(onPressed: () async {
+            final uri = Uri.parse("${order.returnTrackingCode}");
+            if (await canLaunchUrl(uri)) {
+            await launchUrl(uri);
+            } else {
+            throw 'Could not launch $uri';
+            }
+          }, child: Text(order.returnTrackingCode??""))
         ],
       ),
     );
@@ -1176,7 +1079,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     final refcomplain = FirebaseFirestore.instance.collection('complain').doc();
     final List<String> _arrImageUrls = [];
     for (int i = 0; i < listImages.length; i++) {
-      if (listImages[i] == null) continue;
+      if (listImages[i]==null) continue;
       Reference reference = FirebaseStorage.instance
           .ref()
           .child('complain-images/${refcomplain.id + i.toString()}');
@@ -1186,32 +1089,29 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     }
 
     final complain = Complain(
-            status: "In Progress",
-            transaction:
-                FirebaseFirestore.instance.collection("transaction").doc(id))
+        status: "In Progress",
+        transaction:
+        FirebaseFirestore.instance.collection("transaction").doc(id))
         .toJSON();
 
-    await refcomplain
-        .set(complain)
-        .onError((error, stackTrace) => log("$error , $stackTrace"));
+    await refcomplain.set(complain).onError((error, stackTrace) => log("$error , $stackTrace"));
 
     final complainDetail = ComplainDetail(
-            date: DateTime.now(),
-            description: complainController,
-            image: _arrImageUrls,
-            complain: refcomplain)
+        date: DateTime.now(),
+        description: complainController,
+        image: _arrImageUrls,
+        complain: refcomplain)
         .toJSON();
 
     await FirebaseFirestore.instance
         .collection("complain_detail")
         .doc()
-        .set(complainDetail)
-        .onError((error, stackTrace) => log("$error , $stackTrace"));
+        .set(complainDetail).onError((error, stackTrace) => log("$error , $stackTrace"));
 
     FirebaseFirestore.instance
         .collection("transaction")
         .doc(id)
-        .update({"complain": refcomplain, "status": "COMPLAIN"}).onError(
-            (error, stackTrace) => log("$error , $stackTrace"));
+        .update({"complain": refcomplain, "status" : "COMPLAIN"}).onError((error, stackTrace) => log("$error , $stackTrace"));
   }
+
 }
