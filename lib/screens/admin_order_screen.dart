@@ -187,7 +187,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => FullScreen(
-                                "",order.ktpImage!,location: "ktp",)));
+                                "",firebaseImage: order.ktpImage!,filePath: "ktp",)));
                   },
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
@@ -213,7 +213,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => FullScreen(
-                                "", order.paymentImage, location: "payment",)));
+                                "", firebaseImage: order.paymentImage, filePath: "payment",)));
                   },
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),

@@ -427,7 +427,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => FullScreen("url",url:image),
+                                builder: (context) => FullScreen("url", url:image),
                               ),
                             );
                           },

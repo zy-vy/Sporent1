@@ -39,33 +39,22 @@ class CategoryScreen extends StatelessWidget {
                 if (snapshot.hasError) {
                   return Text('Error in receiving data: ${snapshot.error}');
                 }
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    return const Text('Not connected to the Stream or null');
 
-                  case ConnectionState.waiting:
-                    return const Text('Awaiting for interaction');
-
-                  case ConnectionState.active:
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.data!.docs.isEmpty) {
-                      return const Center(
-                        child: Text("This Category Don't Have Product"),
-                      );
-                    } else {
-                      List<QueryDocumentSnapshot<Map<String, dynamic>>>?
-                          listDocs = snapshot.data?.docs;
-                      int? productCount = listDocs?.length;
-                      return ProductGridview(
-                          productCount: productCount, listDocs: listDocs);
-                    }
-
-                  case ConnectionState.done:
-                    return const Text('Streaming is done');
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text("This Category Don't Have Product"),
+                  );
+                } else {
+                  List<QueryDocumentSnapshot<Map<String, dynamic>>>? listDocs =
+                      snapshot.data?.docs;
+                  int? productCount = listDocs?.length;
+                  return ProductGridview(
+                      productCount: productCount, listDocs: listDocs);
                 }
               }),
         ));

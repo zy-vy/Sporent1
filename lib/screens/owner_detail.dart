@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/model/user.dart';
 
+import '../component/image_full_screen.dart';
 import '../component/item_title.dart';
 import '../component/product_gridview.dart';
 
@@ -43,14 +45,23 @@ class OwnerDetail extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Container(
-                              height: _size.height / 13,
-                              width: _size.width / 6,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(user.owner_image!),
-                                      fit: BoxFit.fill),
-                                  borderRadius: BorderRadius.circular(100)),
+                            GestureDetector(
+                              child: ClipOval(
+                                  child: CachedNetworkImage(
+                                      height: _size.height / 13,
+                                      width: _size.width / 6,
+                                      imageUrl: user.owner_image!,
+                                      fit: BoxFit.fill,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator())),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => FullScreen("url",
+                                        url: user.owner_image),
+                                  ),
+                                );
+                              },
                             ),
                             SizedBox(width: _size.width / 20),
                             Column(

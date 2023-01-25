@@ -149,7 +149,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) => FullScreen(
-                                                "firebaseImage",filePath: "condition-check", firebaseImage: widget.imageCondition,)));
+                                                "firebaseImage", filePath: "condition-check", firebaseImage: widget.imageCondition,)));
                                   },
                                 ),
                           SizedBox(height: _size.height / 23),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -41,10 +42,11 @@ class FullScreen extends StatelessWidget {
                   child: SizedBox(
                       height: size.height / 1.5,
                       child: choice == "url"
-                          ? Image.network(url!)
+                          ? CachedNetworkImage(imageUrl: url!, placeholder: (context, url) => const CircularProgressIndicator())
                           : choice == "file"
                               ? Image.file(image!)
-                              : FirebaseImage(filePath: "$filePath/$firebaseImage"))),
+                              : FirebaseImage(
+                                  filePath: "$filePath/$firebaseImage"))),
             ),
           ],
         ));

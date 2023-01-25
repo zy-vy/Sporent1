@@ -853,7 +853,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => FullScreen(
-                                  "", order.beforePhotoOwner)));
+                                  "firebaseImage", firebaseImage: order.beforePhotoOwner, filePath: "condition-check",)));
                     },
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -875,7 +875,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => FullScreen(
-                                  "", order.afterPhotoOwner)));
+                                  "firebaseImage", firebaseImage: order.afterPhotoOwner, filePath: "condition-check",)));
                     },
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -964,7 +964,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => FullScreen(
-                                  "", order.beforePhotoUser)));
+                                  "firebaseImage", firebaseImage: order.beforePhotoUser,filePath: "condition-check",)));
                     },
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -986,7 +986,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => FullScreen(
-                                  "", order.afterPhotoUser)));
+                                  "firebaseImage", firebaseImage:order.afterPhotoUser, filePath: "condition-check",)));
                     },
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),

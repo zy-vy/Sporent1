@@ -44,7 +44,7 @@ class ProductCard extends StatelessWidget {
                 child: ClipRRect(
                       borderRadius: BorderRadius.circular(5) ,
                       child:
-                        CachedNetworkImage(imageUrl: '${_product.img}',),
+                        CachedNetworkImage(imageUrl: '${_product.img}', fit: BoxFit.fitHeight,),
                 ) ,
 
               ),
@@ -56,13 +56,13 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Text(
                         _product.name ?? "",
-                        style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),
+                        style: const TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis),
                       ),
                       SizedBox(height: _size.height/90),
                       ItemPrice(
                             price: _product.rent_price!,
                             trail: true,
-                            fontSize: 13,
+                            fontSize: 14,
                             color: "494949",
                       ),
                       SizedBox(height: _size.height/90),
@@ -70,9 +70,9 @@ class ProductCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          FaIcon(FontAwesomeIcons.locationDot, color: HexColor("494949"), size: 12,),
+                          FaIcon(FontAwesomeIcons.locationDot, color: HexColor("494949"), size: 14,),
                           SizedBox(width: _size.width/70),
-                          Text(_product.location ?? "",style: const TextStyle(fontSize: 12),)
+                          Text(_product.location ?? "",style: const TextStyle(fontSize: 14),)
                         ],
                       ),
                     ],

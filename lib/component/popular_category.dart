@@ -6,7 +6,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/model/category.dart';
 import 'package:sporent/repository/category_repository.dart';
 import 'package:sporent/screens/category_screen.dart';
-import 'package:sporent/screens/type_screen.dart';
+import 'package:sporent/screens/all_product_category.dart';
 
 class PopularCategory extends StatefulWidget {
   const PopularCategory({Key? key}) : super(key: key);

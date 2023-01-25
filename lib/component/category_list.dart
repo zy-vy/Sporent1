@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sporent/model/category.dart';
-import 'package:sporent/screens/type_screen.dart';
+import 'package:sporent/screens/all_product_category.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _CategoryListState extends State<CategoryList> {
                 return
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => TypeScreen(category: category),));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AllProductCategory(category: category),));
                     },
                     child: Center(
                       child: Column(
