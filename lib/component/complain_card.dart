@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -44,20 +45,27 @@ class ComplainCard extends StatelessWidget {
                 children: [
                   GestureDetector(
                     child: Container(
-                      width: _size.width / 5,
-                      height: _size.height / 10,
                       decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                               side: BorderSide(
-                                  width: 2, color: HexColor("4164DE"))),
-                          image: DecorationImage(
-                              image: NetworkImage(image[i]), fit: BoxFit.fill)),
+                                  width: 2, color: HexColor("4164DE")))),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: CachedNetworkImage(
+                            imageUrl: image[i],
+                            fit: BoxFit.fill,
+                            width: _size.width / 5,
+                            height: _size.height / 10,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                          )),
                     ),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => FullScreen("url",url: image[i]),
+                          builder: (context) =>
+                              FullScreen("url", url: image[i]),
                         ),
                       );
                     },

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,8 @@ class ManageComplain extends StatelessWidget {
           leading: IconButton(
             icon: const FaIcon(FontAwesomeIcons.arrowLeft),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const AdminProfile()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AdminProfile()));
             },
           ),
           centerTitle: false,
@@ -55,7 +56,8 @@ class ManageComplain extends StatelessWidget {
                       bool haveLine = false;
                       Complain complain = Complain.fromDocument(
                           snapshot.data!.docs[index].id,
-                          snapshot.data!.docs[index].data(), false);
+                          snapshot.data!.docs[index].data(),
+                          false);
                       if (index != 0) {
                         haveLine = true;
                       }
@@ -100,31 +102,41 @@ class ManageComplain extends StatelessWidget {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailComplain(
-                                                              complain.id!,
-                                                              product.name!,
-                                                              product.img!,
-                                                              transaction.total!, "admin", idUser: transaction.user!.id, idOwner: transaction.owner!.id,idTransaction: transaction.id,)));
+                                                            complain.id!,
+                                                            product.name!,
+                                                            product.img!,
+                                                            transaction.total!,
+                                                            "admin",
+                                                            idUser: transaction
+                                                                .user!.id,
+                                                            idOwner: transaction
+                                                                .owner!.id,
+                                                            idTransaction:
+                                                                transaction.id,
+                                                          )));
                                             },
                                             child: Row(
                                               children: [
-                                                SizedBox(
+                                                CachedNetworkImage(
+                                                  imageUrl:
+                                                      snapshot.data!.get("img"),
                                                   width: _size.width / 3,
                                                   height: _size.height / 5.8,
-                                                  child: FirebaseImage(
-                                                      filePath:
-                                                          "product-images/${snapshot.data!.get('img')}"),
                                                 ),
                                                 SizedBox(
                                                     width: _size.width / 30),
-                                                Column(
+                                                Flexible(
+                                                    child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                        snapshot
-                                                            .data!
+                                                        snapshot.data!
                                                             .get("name"),
                                                         style: const TextStyle(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight.bold,
@@ -142,7 +154,7 @@ class ManageComplain extends StatelessWidget {
                                                             color: HexColor(
                                                                 "416DDE"))),
                                                   ],
-                                                )
+                                                ))
                                               ],
                                             ));
                                       }

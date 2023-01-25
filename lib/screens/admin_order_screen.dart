@@ -64,7 +64,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Detail Transaction"),
+            child: const Text("Detail Payment"),
           ),
           backgroundColor: HexColor("4164DE"),
         ),
@@ -187,7 +187,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => FullScreen(
-                                "",firebaseImage: order.ktpImage!,filePath: "ktp",)));
+                                "firebaseIMage",firebaseImage: order.ktpImage!,filePath: "ktp",)));
                   },
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
@@ -213,7 +213,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => FullScreen(
-                                "", firebaseImage: order.paymentImage, filePath: "payment",)));
+                                "firebaseImage", firebaseImage: order.paymentImage, filePath: "payment",)));
                   },
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),

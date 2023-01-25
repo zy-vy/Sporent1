@@ -10,6 +10,7 @@ import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/loading.dart';
 import 'package:sporent/screens/give_review.dart';
+import 'package:sporent/screens/notif_transaction.dart';
 import 'package:sporent/utils/colors.dart';
 
 class ConditionCheck extends StatefulWidget {
@@ -261,7 +262,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                             
                                             });
 
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => GiveReview(widget.product_name!, widget.product_image!, widget.total!, widget.idProduct!, widget.idUser!),));
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotifTransaction(widget.product_name!, widget.product_image!, widget.total!, widget.idProduct!, widget.idUser!),));
                                           
                                           } else {
                                             final ref = FirebaseStorage.instance

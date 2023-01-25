@@ -29,7 +29,6 @@ class DetailComplain extends StatefulWidget {
 }
 
 class _DetailComplainState extends State<DetailComplain> {
-
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
@@ -172,24 +171,26 @@ class _DetailComplainState extends State<DetailComplain> {
                                 )),
                         SizedBox(height: _size.height / 30),
                         widget.role == "admin"
-                            ? Center(
-                                child: TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FinishComplain(
-                                                      widget.idTransaction!,
-                                                      widget.id)));
-                                    },
-                                    child: Text(
-                                      "Finish Complain",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: HexColor("4164DE"),
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                              )
+                            ? complain.status != "In Progress"
+                                ? SizedBox()
+                                : Center(
+                                    child: TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      FinishComplain(
+                                                          widget.idTransaction!,
+                                                          widget.id)));
+                                        },
+                                        child: Text(
+                                          "Finish Complain",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: HexColor("4164DE"),
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                  )
                             : const SizedBox(),
                       ],
                     );

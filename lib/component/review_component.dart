@@ -43,6 +43,8 @@ class _ReviewComponentState extends State<ReviewComponent> {
             var image = snapshot.data!.get("image");
 
             return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widget.haveLine == true
                     ? Padding(
@@ -99,11 +101,7 @@ class _ReviewComponentState extends State<ReviewComponent> {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: size.width / 35),
-                  child: ItemTitle(
-                      text: widget.review.detail.toString(),
-                      fontSize: 16,
-                      fontweight: FontWeight.normal,
-                      maxLines: 5),
+                  child: Text(widget.review.detail.toString(), textAlign: TextAlign.justify ,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal), maxLines: 5)
                 ),
                 Row(
                   children: [
