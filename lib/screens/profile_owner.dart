@@ -139,7 +139,7 @@ class _TopProfileState extends State<TopProfile> {
         ClipOval(
             child: widget.image.toString() != "" ? CachedNetworkImage(
               imageUrl: widget.image.toString(),
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               width: _size.width/2,
               height: _size.height/4,
               placeholder: (context, url) => const CircularProgressIndicator())

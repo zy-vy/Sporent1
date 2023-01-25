@@ -239,7 +239,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                                 .ref()
                                                 .child("condition-check")
                                                 .child(
-                                                    "${widget.idTransaction}_user_after.jpg");
+                                                    "${widget.idTransaction}_user_after");
                                             await ref.putFile(image!);
 
                                             FirebaseFirestore.instance
@@ -249,15 +249,16 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                               "tracking_code_user":
                                                   controller.text,
                                               "image_after_user":
-                                                  "${widget.idTransaction}_user_after.jpg",
+                                                  "${widget.idTransaction}_user_after",
                                               "status": "RETURN"
                                             });
+
                                           } else {
                                             final ref = FirebaseStorage.instance
                                                 .ref()
                                                 .child("condition-check")
                                                 .child(
-                                                    "${widget.idTransaction}_user_before.jpg");
+                                                    "${widget.idTransaction}_user_before");
                                             await ref.putFile(image!);
 
                                             FirebaseFirestore.instance
@@ -265,14 +266,15 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                                 .doc(widget.idTransaction)
                                                 .update({
                                               "image_before_user":
-                                                  "${widget.idTransaction}_user_before.jpg",
+                                                  "${widget.idTransaction}_user_before",
                                               "description_before_user":
                                                   controller.text,
                                               "status": "ACTIVE"
                                             });
 
-                                            Navigator.of(context).pop();
                                           }
+                                          Navigator.of(context).pop();
+
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(

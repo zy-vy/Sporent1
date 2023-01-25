@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -72,11 +73,16 @@ class ManageOrderScreen extends StatelessWidget {
                                   horizontal: size/ 20),
                               child: Row(
                                 children: [
+                                  // SizedBox(
+                                  //   width: size/ 3,
+                                  //   height: size / 3,
+                                  //   child: FirebaseImage(
+                                  //       filePath: "product-images/${order?.product?.img}"),
+                                  // ),
                                   SizedBox(
                                     width: size/ 3,
                                     height: size / 3,
-                                    child: FirebaseImage(
-                                        filePath: "product-images/${order?.product?.img}"),
+                                    child: CachedNetworkImage(imageUrl: "${order?.product?.img}",progressIndicatorBuilder: (context, url, progress) => SizedBox(width: size/10 ,child: const CircularProgressIndicator(),),),
                                   ),
                                   SizedBox(width:size / 25),
                                   Expanded(

@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +18,8 @@ import 'package:sporent/component/item_price.dart';
 import 'package:sporent/model/order.dart';
 // import 'package:sporent/screens/complainproduct.dart';
 import 'package:sporent/viewmodel/order_viewmodel.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../model/complain.dart';
 import '../model/complain_detail.dart';
@@ -124,8 +129,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   aspectRatio: 1,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.file(order.product!.imageFile!)),
-                  // child: Icon(Icons.access_time)),
+                    child: CachedNetworkImage(imageUrl: "${order.product?.img}",progressIndicatorBuilder: (context, url, progress) => SizedBox(width: size/10 ,child: const CircularProgressIndicator(),),),
+                    // child: Icon(Icons.access_time)),
+                  )
                 ),
               ),
               SizedBox(
@@ -219,7 +225,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     return  Column(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(size/15,0,size/15,size/10),
+          margin: EdgeInsets.fromLTRB(size/15,0,size/15,0),
           height: size/10,
           decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
           child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
@@ -235,21 +241,43 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
+            height: size/6,
             child: ElevatedButton(
+
                 onPressed: () {
-                  setState(() {
-                    currentState = "submitOrder";
-                  });
+                  CoolAlert.show(context: context, type: CoolAlertType.confirm, onConfirmBtnTap: () {
+                    orderViewModel.acceptOrder(order);
+                    Navigator.pop(context);
+                    setState(() {
+                      currentState = "submitOrder";
+                    });
+                  },);
+
                 },
-                child: const Text("Accept Order"))),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("Accept Order", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)))),
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            child: ElevatedButton(
+            height: size/6,
+            child: TextButton(
                 onPressed: () {
-                  orderViewModel.declineOrder(order);
-                  CoolAlert.show(context: context, type: CoolAlertType.success);
-                  Navigator.pop(context);
-                }, child: const Text("Decline Order")))
+                  // CoolAlert.show(context: context, type: CoolAlertType.success);
+                  CoolAlert.show(context: context, type: CoolAlertType.confirm, onConfirmBtnTap: () {
+                    orderViewModel.declineOrder(order);
+                    // Fluttertoast.showToast(msg: "decline");
+                    Navigator.pop(context);
+                  },).then((value) {                  Navigator.pop(context);
+                  });
+
+                },
+
+                child: Text("Decline Order", style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,color: HexColor("4164DE")))))
       ],
     );
   }
@@ -260,13 +288,19 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   setState(() {
                     currentState = "submitOrder";
                   });
                 },
-                child: const Text("Submit Order Tracking"))),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("Submit Order Tracking", style: TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18)))),
       ],
     );
   }
@@ -277,13 +311,19 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   setState(() {
                     currentState = "completeOrder";
                   });
                 },
-                child: const Text("Finish Order"))),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("Finish Order", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)))),
         complainButton()
       ],
     );
@@ -294,14 +334,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15),
+            margin: EdgeInsets.symmetric(horizontal: size / 15,vertical: size/15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => ComplainProduct(FirebaseAuth.instance.currentUser!.uid, order.id!),));
                   setState(() {
                     currentState = "complainOrder";
                   });
-                }, child: const Text("Complain Order"))),
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("Complain Order", style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18)))),
       ],
     );
   }
@@ -312,6 +359,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   // setState(() {
@@ -328,7 +376,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 order.total!, "owner")),
                   );
                 },
-                child: const Text("complain detail"))),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("complain detail", style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18)))),
       ],
     );
   }
@@ -354,32 +407,46 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   Row(
                     children: [
                       beforeImage != null
-                          ? SizedBox(
+                          ? Container(
                               width: size / 6,
                               height: size / 6,
+                          decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(10),
+                                  side: BorderSide(
+                                      width: 2,
+                                      color: HexColor("868686")))),
                               child: TextButton(
-                                style: TextButton.styleFrom(
-                                    side: BorderSide(
-                                        width: 2, color: HexColor("8DA6FE"))),
+                                // style: TextButton.styleFrom(
+                                //     side: BorderSide(
+                                //         width: 2, color: HexColor("FFFFFF"))),
                                 onPressed: (() async {
                                   beforeImage = await openGallery();
                                   setState(() {});
                                 }),
                                 child: Image.file(beforeImage!),
                               ))
-                          : SizedBox(
+                          : Container(
                               width: size / 6,
                               height: size / 6,
+                        decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10),
+                                side: BorderSide(
+                                    width: 2,
+                                    color: HexColor("868686")))),
                               child: TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: HexColor("8DA6FE")),
+                                // style: TextButton.styleFrom(
+                                //     backgroundColor: HexColor("8DA6FE")),
                                 onPressed: (() async {
                                   beforeImage = await openGallery();
                                   setState(() {});
                                 }),
-                                child: const Center(
+                                child: Center(
                                     child: FaIcon(FontAwesomeIcons.plus,
-                                        color: Colors.white, size: 30)),
+                                        color: HexColor("4164DE"), size: 30)),
                               ),
                             )
                     ],
@@ -430,33 +497,40 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   SizedBox(
                     height: size / 5,
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (beforeImage == null ||
-                            trackingLink == null ||
-                            trackingLink!.isEmpty) {
-                          CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.error,
-                              text:
-                                  "Please input before photo and correct tracking link");
-                          return;
-                        }
-                        orderViewModel
-                            .submitOrder(order, beforeImage, trackingLink!)
-                            .then((value) => value != false
-                                ? CoolAlert.show(
-                                    context: context,
-                                    type: CoolAlertType.success).then((value) => setState(() {
-                          beforeImage = null;
-                          currentState = "detailOrder";
-                        }))
-                                : CoolAlert.show(
-                                    context: context,
-                                    type: CoolAlertType.error));
+                  SizedBox(
+                    height: size/6,
+                    child: ElevatedButton(
 
-                      },
-                      child: const Text("Submit"))
+                        onPressed: () {
+                          if (beforeImage == null ||
+                              trackingLink == null ||
+                              trackingLink!.isEmpty) {
+                            CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                text:
+                                    "Please input before photo and correct tracking link");
+                            return;
+                          }
+                          orderViewModel
+                              .submitOrder(order, beforeImage, trackingLink!)
+                              .then((value) => value != false
+                                  ? CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success).then((value) => setState(() {
+                            beforeImage = null;
+                            currentState = "detailOrder";
+                          }))
+                                  : CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.error));
+
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor : HexColor("4164DE"),
+                        ),
+                        child: const Text("Submit", style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),
+                  )
                 ],
               )),
         ],
@@ -485,32 +559,46 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   Row(
                     children: [
                       afterImage != null
-                          ? SizedBox(
+                          ? Container(
                               width: size / 6,
                               height: size / 6,
+                              decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          width: 2,
+                                          color: HexColor("868686")))),
                               child: TextButton(
-                                style: TextButton.styleFrom(
-                                    side: BorderSide(
-                                        width: 2, color: HexColor("8DA6FE"))),
+                                // style: TextButton.styleFrom(
+                                //     side: BorderSide(
+                                //         width: 2, color: HexColor("8DA6FE"))),
                                 onPressed: (() async {
                                   afterImage = await openGallery();
                                   setState(() {});
                                 }),
                                 child: Image.file(afterImage!),
                               ))
-                          : SizedBox(
+                          : Container(
                               width: size / 6,
                               height: size / 6,
+                              decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          width: 2,
+                                          color: HexColor("868686")))),
                               child: TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: HexColor("8DA6FE")),
+                                // style: TextButton.styleFrom(
+                                //     backgroundColor: HexColor("8DA6FE")),
                                 onPressed: (() async {
                                   afterImage = await openGallery();
                                   setState(() {});
                                 }),
-                                child: const Center(
+                                child: Center(
                                     child: FaIcon(FontAwesomeIcons.plus,
-                                        color: Colors.white, size: 30)),
+                                        color: HexColor("4164DE"), size: 30)),
                               ),
                             )
                     ],
@@ -533,209 +621,41 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   SizedBox(
                     height: size / 5,
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (afterImage == null || description == null) {
-                          CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.error,
-                              text:
-                                  "please upload correct image and description");
-                          return;
-                        }
-                        orderViewModel
-                            .finishOrder(order, afterImage!, description!)
-                            .then((value) => value != false
-                                ? CoolAlert.show(
-                                    context: context,
-                                    type: CoolAlertType.success)
-                                : CoolAlert.show(
-                                    context: context,
-                                    type: CoolAlertType.error));
+                  SizedBox(
+                    height: size/6,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (afterImage == null || description == null) {
+                            CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                text:
+                                    "please upload correct image and description");
+                            return;
+                          }
+                          orderViewModel
+                              .finishOrder(order, afterImage!, description!)
+                              .then((value) => value != false
+                                  ? CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success)
+                                  : CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.error));
 
-                        setState(() {
-                          afterImage = null;
-                          currentState = "detailOrder";
-                        });
-                      },
-                      child: const Text("Submit"))
+                          setState(() {
+                            afterImage = null;
+                            currentState = "detailOrder";
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor : HexColor("4164DE"),
+                        ),
+                        child: const Text("Submit", style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),
+
+                  )
                 ],
               )),
-        ],
-      ),
-    );
-  }
-
-  Widget conditionCheckOwner(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"){
-      return const SizedBox();
-    }
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-
-          SizedBox(
-            height: size / 15,
-          ),
-          heading("Condition check (Owner)"),
-          SizedBox(
-            height: size / 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              order.beforeOwnerFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
-              ,
-              order.afterOwnerFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
-              ,
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget trackingCode(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"){
-      return const SizedBox();
-    }
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-          SizedBox(
-            height: size / 15,
-          ),
-          heading("Live tracking code"),
-          SizedBox(
-            height: size / 20,
-          ),
-
-          TextFormField(
-
-            decoration:  const InputDecoration(
-                border: OutlineInputBorder(),
-
-            ),
-            readOnly: true,
-            initialValue: order.trackingCode??"",
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget conditionCheckUser(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
-      return const SizedBox();
-    }
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-          SizedBox(
-            height: size / 15,
-          ),
-          heading("Condition check (User)"),
-          SizedBox(
-            height: size / 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              order.beforeUserFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
-              ,
-              order.afterUserFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
-              ,
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget returnTrackingCode(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"){
-      return const SizedBox();
-    }
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(color: HexColor("E0E0E0"), thickness: 2),
-          SizedBox(
-            height: size / 15,
-          ),
-          heading("Return tracking code"),
-          SizedBox(
-            height: size / 20,
-          ),
-
-          TextFormField(
-
-            decoration:  const InputDecoration(
-              border: OutlineInputBorder(),
-
-            ),
-            readOnly: true,
-            initialValue: order.returnTrackingCode??"",
-          ),
         ],
       ),
     );
@@ -772,7 +692,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                   borderRadius:
                                   BorderRadius.circular(8),
                                   side: BorderSide(
-                                      width: 1,
+                                      width: 2,
                                       color: hexStringToColor(
                                           "868686")))),
                           child: TextButton(
@@ -873,7 +793,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               }
             },
           ),
-          SizedBox(height: size/30),
+          SizedBox(height: size/5),
           SizedBox(
               width: size,
               height: size/6,
@@ -892,8 +812,215 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   // padding: const EdgeInsets.only(right: 300, bottom: 40)
                 ),
                 child: const Text("Complain Product",
-                    textAlign: TextAlign.center),
+                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
               )),
+        ],
+      ),
+    );
+  }
+
+  Widget conditionCheckOwner(){
+    if (order.status== "WAITING" || order.status == "CONFIRM" || order.status == "ACCEPT"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
+
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Condition check (Owner)"),
+          SizedBox(
+            height: size / 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              order.beforeOwnerFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+              order.afterOwnerFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget trackingCode(){
+    if (order.status== "WAITING" || order.status == "CONFIRM" || order.status == "ACCEPT"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Live tracking code"),
+          SizedBox(
+            height: size / 20,
+          ),
+
+          // TextFormField(
+          //
+          //   decoration:  const InputDecoration(
+          //       border: OutlineInputBorder(),
+          //
+          //   ),
+          //   readOnly: true,
+          //   initialValue: order.trackingCode??"",
+          // ),
+          TextButton(onPressed: () async {
+            final uri = Uri.parse("${order.trackingCode}");
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri);
+            } else {
+              throw 'Could not launch $uri';
+            }
+          }, child: Text(order.trackingCode??""))
+        ],
+      ),
+    );
+  }
+
+  Widget conditionCheckUser(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"  || order.status == "ACCEPT"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Condition check (User)"),
+          SizedBox(
+            height: size / 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              order.beforeUserFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+              order.afterUserFile != null
+                  ? Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                  width: size / 6,
+                  height: size / 6,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)))
+                  : Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
+                  width: size / 6,
+                  height: size / 6,
+                  child: const Icon(IconlyBold.infoSquare))
+              ,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget returnTrackingCode(){
+    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER" || order.status == "ACCEPT"){
+      return const SizedBox();
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(color: HexColor("E0E0E0"), thickness: 2),
+          SizedBox(
+            height: size / 15,
+          ),
+          heading("Return tracking code"),
+          SizedBox(
+            height: size / 20,
+          ),
+
+          // TextFormField(
+          //
+          //   decoration:  const InputDecoration(
+          //     border: OutlineInputBorder(),
+          //
+          //   ),
+          //   readOnly: true,
+          //   initialValue: order.returnTrackingCode??"",
+          // ),
+          // RichText(text: TextSpan(
+          //   children: [TextSpan(
+          //     style: const TextStyle(color: Colors.blueAccent),
+          //       text: order.returnTrackingCode??"asdf",
+          //       recognizer: TapGestureRecognizer()
+          //         ..onTap = () async {
+          //          final uri = Uri.parse(order.returnTrackingCode??"");
+          //                     if (await canLaunchUrl(uri)) {
+          //                       await launchUrl(uri,mode:  LaunchMode.inAppWebView);
+          //                     } else {
+          //                       throw 'Could not launch $uri';
+          //                     }
+          //         }
+          //
+          //   )]
+          // ))
+          TextButton(onPressed: () async {
+            final uri = Uri.parse("${order.returnTrackingCode}");
+            if (await canLaunchUrl(uri)) {
+            await launchUrl(uri);
+            } else {
+            throw 'Could not launch $uri';
+            }
+          }, child: Text(order.returnTrackingCode??""))
         ],
       ),
     );
