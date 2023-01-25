@@ -42,8 +42,31 @@ class _AddProductState extends State<AddProduct> {
   bool haveData = false;
   bool haveImage = false;
   List<File?> listImages = [];
+  List<DropdownMenuItem> locationItem = const [
+    DropdownMenuItem(
+      value: "South Jakarta",
+      child: Text("South Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "West Jakarta",
+      child: Text("West Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "East Jakarta",
+      child: Text("East Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "North Jakarta",
+      child: Text("North Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "Central Jakarta",
+      child: Text("Central Jakarta"),
+    ),
+  ];
   DocumentReference<Map<String, dynamic>>? referenceCategory;
   final _formKey = GlobalKey<FormState>();
+  String? productLocation;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -259,8 +282,20 @@ class _AddProductState extends State<AddProduct> {
                         },
                       ),
                       SizedBox(height: _size.height / 23),
-                      fieldText("Location", "Enter product location", _size,
-                          locationController),
+                      DropdownButtonFormField(
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Select location'),
+                          items: locationItem,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Location must not be empty";
+                            }
+                          },
+                          onChanged: (value) => setState(() {
+                                productLocation = value!;
+                                haveData = true;
+                              })),
                       fieldText(
                           "Product Description",
                           "Enter product description",
@@ -285,7 +320,7 @@ class _AddProductState extends State<AddProduct> {
                                     name: nameController.text,
                                     price: price,
                                     deposit: deposit,
-                                    location: locationController.text,
+                                    location: productLocation,
                                     owner: widget.id,
                                     category: productCategory,
                                     subcategory: productSubcategory,
@@ -339,8 +374,10 @@ Future addProduct(
       .child("${docProduct.id}.jpg");
   await ref.putFile(image!);
 
+  final String link = await ref.getDownloadURL();
+
   var productRenter = Product(
-          img: "${docProduct.id}.jpg",
+          img: link,
           name: name,
           rent_price: price,
           deposit_price: deposit,
@@ -376,6 +413,11 @@ Column fieldText(String title, String desc, Size _size,
             }
             if (value.length < 5) {
               return "$title must more than 5 characters";
+            }
+            if (title == "Owner Name") {
+              if (value.length > 10) {
+                return "$title must less than 10 charactes";
+              }
             }
           },
         ),

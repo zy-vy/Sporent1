@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/homepage.dart';
 import 'package:sporent/screens/signup_final.dart';
 import 'package:sporent/screens/signup_screen.dart';
@@ -116,7 +117,7 @@ class _OTP extends State<OTP> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                                  builder: (context) => const BottomBarScreen(indexPage: "0",)));
                         } catch (e) {
                           print("wrong otp");
                         }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ import '../model/subcategory.dart';
 class EditProduct extends StatefulWidget {
   const EditProduct(this.productId, {super.key});
 
-    final String productId;
+  final String productId;
 
   @override
   State<EditProduct> createState() => _EditProductState();
@@ -78,10 +79,12 @@ class _EditProductState extends State<EditProduct> {
                 var docProduct = snapshot.data;
                 if (temp == 0) {
                   nameController.text = docProduct!.get('name');
-                  priceController.text = docProduct.get('rent_price').toString();
+                  priceController.text =
+                      docProduct.get('rent_price').toString();
                   descriptionController.text = docProduct.get('description');
                   locationController.text = docProduct.get('location');
-                  depositController.text = docProduct['deposit_price'].toString();
+                  depositController.text =
+                      docProduct['deposit_price'].toString();
                   DocumentReference categoryReference =
                       firestore.doc(docProduct.get('category').toString());
                   var currentCategory =
@@ -343,6 +346,8 @@ SizedBox confirmButton(
                   .child(id);
               await ref.putFile(image);
 
+              final String link = await ref.getDownloadURL();
+
               if (productCategory != null && productSubcategory != null) {
                 FirebaseFirestore.instance
                     .collection("product")
@@ -355,7 +360,7 @@ SizedBox confirmButton(
                   "location": location.text,
                   "category": categoryReference,
                   "subcategory": subcategoryReference,
-                  "img": id
+                  "img": link
                 });
               }
               if (productCategory == null && productSubcategory != null) {
@@ -369,7 +374,7 @@ SizedBox confirmButton(
                   "description": description.text,
                   "location": location.text,
                   "subcategory": subcategoryReference,
-                  "img": id
+                  "img": link
                 });
               }
 
@@ -384,7 +389,7 @@ SizedBox confirmButton(
                   "description": description.text,
                   "location": location.text,
                   "category": categoryReference,
-                  "img": id
+                  "img": link
                 });
               }
 
@@ -398,7 +403,7 @@ SizedBox confirmButton(
                   "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
-                  "image": id
+                  "img": link
                 });
               }
             } else {
@@ -482,8 +487,10 @@ Column photo(Size _size, File? image,
                     side: BorderSide(width: 2, color: HexColor("868686")))),
             child: image != null
                 ? Image.file(image)
-                : FirebaseImage(
-                    filePath: "product-images/${docProduct!.get('id')}")),
+                : CachedNetworkImage(
+                    imageUrl: docProduct!.get("id"),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator())),
         SizedBox(height: _size.height / 23),
       ],
     );
