@@ -283,6 +283,10 @@ class _AddProductState extends State<AddProduct> {
                         },
                       ),
                       SizedBox(height: _size.height / 23),
+                      const Text("Product Location",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500)),
+                      SizedBox(height: _size.height / 50),
                       DropdownButtonFormField(
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(),
@@ -297,6 +301,7 @@ class _AddProductState extends State<AddProduct> {
                                 productLocation = value!;
                                 haveData = true;
                               })),
+                      SizedBox(height: _size.height / 23),
                       fieldText(
                           "Product Description",
                           "Enter product description",

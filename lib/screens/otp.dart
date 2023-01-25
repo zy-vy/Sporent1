@@ -100,6 +100,7 @@ class _OTP extends State<OTP> {
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(90)),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                       onPressed: () async {
                         String FinalOTP = _OTPController1.text.toString() +
                             _OTPController2.text.toString() +

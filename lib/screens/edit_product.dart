@@ -453,7 +453,7 @@ SizedBox confirmButton(
             CoolAlert.show(
                     context: context,
                     type: CoolAlertType.success,
-                    text: "Success edit product...")
+                    text: "Success edit product....")
                 .then((value) => Navigator.pop(context));
           },
           style: ElevatedButton.styleFrom(
@@ -477,7 +477,7 @@ Column photo(Size _size, File? image,
             child: image != null
                 ? Image.file(image)
                 : CachedNetworkImage(
-                    imageUrl: docProduct!.get("id"),
+                    imageUrl: docProduct!.get("img"),
                     placeholder: (context, url) =>
                         const CircularProgressIndicator())),
         SizedBox(height: _size.height / 23),
