@@ -319,14 +319,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         );
                       }
                       if (snapshot.data!.docs.isEmpty) {
-                        return Text("Has been rented 0",
+                        return Text("Rented 0 times",
                             style: TextStyle(
                                 color: HexColor("585858"),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13));
                       } else {
                         var total = snapshot.data!.docs.length;
-                        return Text("Has been rented $total",
+                        return Text("Rented $total times",
                             style: TextStyle(
                                 color: HexColor("585858"),
                                 fontWeight: FontWeight.w600,

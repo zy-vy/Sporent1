@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -39,17 +40,17 @@ class DetailInformation extends StatelessWidget {
               const Text("Bank Information",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
               SizedBox(height: _size.height / 30),
-              FieldRow("Bank Name", request.bank_name!, true, 14, FontWeight.normal,
-                  FontWeight.w600),
+              FieldRow("Bank Name", request.bank_name!, true, 14,
+                  FontWeight.normal, FontWeight.w600),
               SizedBox(height: _size.height / 30),
-              FieldRow("Account Number", request.account_number!, true, 14, FontWeight.normal,
-                  FontWeight.w600),
+              FieldRow("Account Number", request.account_number!, true, 14,
+                  FontWeight.normal, FontWeight.w600),
               SizedBox(height: _size.height / 30),
-              FieldRow("Account Name", request.account_name!, true, 14, FontWeight.normal,
-                  FontWeight.w600),
+              FieldRow("Account Name", request.account_name!, true, 14,
+                  FontWeight.normal, FontWeight.w600),
               SizedBox(height: _size.height / 30),
-              FieldRow("Amount",currencyFormatter.format(request.amount), true, 14, FontWeight.normal,
-                  FontWeight.w600),
+              FieldRow("Amount", currencyFormatter.format(request.amount), true,
+                  14, FontWeight.normal, FontWeight.w600),
               SizedBox(height: _size.height / 30),
               SizedBox(
                   width: _size.width,
@@ -61,14 +62,15 @@ class DetailInformation extends StatelessWidget {
                           .doc(request.id)
                           .update({"status": "Finished"});
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          snackbar(_size, "Sucess Return Balance!"));
-
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const ManageBalance(),
-                        ),
-                      );
+                      CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.success,
+                              text: "Success return balance...")
+                          .then((value) => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const ManageBalance(),
+                                ),
+                              ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: HexColor("4164DE"),

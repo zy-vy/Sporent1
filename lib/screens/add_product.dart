@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -326,10 +327,13 @@ class _AddProductState extends State<AddProduct> {
                                     subcategory: productSubcategory,
                                     description: descriptionController.text);
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    snackbar(_size, "Sucess Add Product!"));
+                                CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text:
+                                          "Success add product...")
+                                .then((value) => Navigator.pop(context));
 
-                                Navigator.pop(context);
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -450,17 +454,4 @@ Column fieldPrice(String title, String desc, Size _size,
         ),
         SizedBox(height: _size.height / 23),
       ],
-    );
-
-SnackBar snackbar(Size _size, String text) => SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.symmetric(
-          vertical: _size.height / 40, horizontal: _size.width / 40),
-      content: SizedBox(
-          height: _size.height / 20,
-          child: Padding(
-            padding: EdgeInsets.only(top: _size.height / 80),
-            child: Text(text, style: const TextStyle(fontSize: 20)),
-          )),
-      duration: const Duration(seconds: 5),
     );

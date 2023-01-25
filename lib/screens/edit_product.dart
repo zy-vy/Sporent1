@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -295,20 +296,6 @@ Column fieldPrice(String title, String desc, Size _size,
       ],
     );
 
-SnackBar snackbar(Size _size) => SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.symmetric(
-          vertical: _size.height / 40, horizontal: _size.width / 40),
-      content: SizedBox(
-          height: _size.height / 20,
-          child: Padding(
-            padding: EdgeInsets.only(top: _size.height / 80),
-            child: const Text('Sucess Update Product!',
-                style: TextStyle(fontSize: 20)),
-          )),
-      duration: const Duration(seconds: 5),
-    );
-
 SizedBox confirmButton(
         Size _size,
         String id,
@@ -463,9 +450,11 @@ SizedBox confirmButton(
               }
             }
 
-            ScaffoldMessenger.of(context).showSnackBar(snackbar(_size));
-
-            Navigator.pop(context);
+            CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.success,
+                    text: "Success edit product...")
+                .then((value) => Navigator.pop(context));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: HexColor("4164DE"),

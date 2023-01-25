@@ -1,5 +1,6 @@
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -116,7 +117,6 @@ class _BecomeOwnerState extends State<BecomeOwner> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  
                                   await FirebaseFirestore.instance
                                       .collection("user")
                                       .doc(widget.id)
@@ -125,24 +125,33 @@ class _BecomeOwnerState extends State<BecomeOwner> {
                                     "owner_name": controllerOwnerName.text,
                                     "owner_municipality":
                                         controllerOwnerMunicipality.text,
-                                    "owner_address": controllerOwnerAddress.text,
+                                    "owner_address":
+                                        controllerOwnerAddress.text,
                                     "owner_description":
                                         controllerOwnerDescription.text,
-                                    "owner_image" : "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6",
-                                    "owner_balance" : 0
+                                    "owner_image":
+                                        "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6",
+                                    "owner_balance": 0
                                   });
 
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => OwnerProfile(widget.id),
-                                    ),
-                                  );
+                                  CoolAlert.show(
+                                          context: context,
+                                          type: CoolAlertType.success,
+                                          text: "Success become owner...")
+                                      .then(
+                                          (value) => Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      OwnerProfile(widget.id),
+                                                ),
+                                              ));
                                 }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: HexColor("4164DE"),
                               ),
-                              child: const Text("Confirm",style: TextStyle(fontWeight: FontWeight.bold),
+                              child: const Text("Confirm",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.center),
                             ))
                       ],

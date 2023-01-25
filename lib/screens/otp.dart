@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
@@ -114,10 +115,19 @@ class _OTP extends State<OTP> {
                                   smsCode: FinalOTP);
                           await auth.signInWithCredential(credential);
                           // ignore: use_build_context_synchronously
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BottomBarScreen(indexPage: "0",)));
+
+                          CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.success,
+                                  text: "Success created account...")
+                              .then((value) => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BottomBarScreen(
+                                        indexPage: "0",
+                                      ),
+                                    ),
+                                  ));
                         } catch (e) {
                           print("wrong otp");
                         }
