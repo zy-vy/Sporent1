@@ -53,14 +53,13 @@ class _ReviewComponentState extends State<ReviewComponent> {
                 Row(
                   children: [
                     GestureDetector(
-                      child: Container(
+                      child: ClipOval(
+                          child: CachedNetworkImage(
                         height: size.height / 22,
                         width: size.width / 10,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(image), fit: BoxFit.fill),
-                            borderRadius: BorderRadius.circular(100)),
-                      ),
+                        imageUrl: image,
+                        fit: BoxFit.fill,
+                      )),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -114,8 +113,7 @@ class _ReviewComponentState extends State<ReviewComponent> {
                               child: Container(
                                 decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                              BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
                                             width: 2,
                                             color: HexColor("4164DE")))),
@@ -133,19 +131,17 @@ class _ReviewComponentState extends State<ReviewComponent> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        FullScreen("url",url: widget.review.photo![i])
-                                  ),
+                                      builder: (context) => FullScreen("url",
+                                          url: widget.review.photo![i])),
                                 );
                               },
                             )
                           : GestureDetector(
                               child: Container(
-                                margin: EdgeInsets.only(left: size.width/20),
+                                margin: EdgeInsets.only(left: size.width / 20),
                                 decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                              BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                         side: BorderSide(
                                             width: 2,
                                             color: HexColor("4164DE")))),
@@ -163,8 +159,10 @@ class _ReviewComponentState extends State<ReviewComponent> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        FullScreen("url",url: widget.review.photo![i],),
+                                    builder: (context) => FullScreen(
+                                      "url",
+                                      url: widget.review.photo![i],
+                                    ),
                                   ),
                                 );
                               },

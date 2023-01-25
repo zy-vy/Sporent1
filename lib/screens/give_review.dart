@@ -414,23 +414,25 @@ class _GiveReviewState extends State<GiveReview> {
                                       .ref()
                                       .child('review-images/')
                                       .child(
-                                          "${reviewRef}_$counterTempImage.jpg");
+                                          "${reviewRef.id}_$counterTempImage.jpg");
 
                                   await ref.putFile(listImages[i]!);
 
                                   String imageName = await ref.getDownloadURL();
                                   listNameImage.add(imageName);
                                 }
+
                                 var review = Review(
-                                    detail: controller.text,
-                                    star: counter,
-                                    photo: listNameImage,
-                                    product: firestore
-                                        .collection("product")
-                                        .doc(widget.idProduct),
-                                    user: firestore
-                                        .collection("user")
-                                        .doc(widget.idUser)).toJson();
+                                        detail: controller.text,
+                                        star: counter,
+                                        photo: listNameImage,
+                                        product: firestore
+                                            .collection("product")
+                                            .doc(widget.idProduct),
+                                        user: firestore
+                                            .collection("user")
+                                            .doc(widget.idUser))
+                                    .toJson();
 
                                 await reviewRef.set(review);
 

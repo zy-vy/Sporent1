@@ -243,11 +243,9 @@ class _DetailTransaction extends State<DetailTransaction> {
                                               builder: (context) => ReturnProduct(
                                                   transaction.id!,
                                                   transaction
-                                                          .image_after_user ??
-                                                      "",
+                                                          .image_after_user ,
                                                   transaction
-                                                          .tracking_code_user ??
-                                                      "",
+                                                          .tracking_code_user,
                                                   idOwner: "")));
                                         },
                               child: Padding(
@@ -291,81 +289,122 @@ class _DetailTransaction extends State<DetailTransaction> {
                           : const SizedBox(),
                       transaction.image_after_user != null
                           ? const SizedBox()
-                          : SizedBox(
-                              width: _size.width,
-                              height: _size.height / 12,
-                              child: ElevatedButton(
-                                onPressed: dateFormat
-                                            .format(transaction.end_date!) !=
-                                        dateFormat.format(DateTime.now())
-                                    ? null
-                                    : transaction.status != "ACTIVE"
-                                        ? null
-                                        : () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReturnProduct(
-                                                          idOwner: transaction
-                                                              .owner!.id,
-                                                          transaction.id!,
-                                                          "",
-                                                          "")),
-                                            );
-                                          },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: HexColor("4164DE"),
-                                ),
-                                child: const Text("Return Product",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                    textAlign: TextAlign.center),
-                              )),
+                          : transaction.status == "RETURN"
+                              ? const SizedBox()
+                              : transaction.status == "DONE"
+                                  ? const SizedBox()
+                                  : SizedBox(
+                                      width: _size.width,
+                                      height: _size.height / 12,
+                                      child: ElevatedButton(
+                                        onPressed: dateFormat.format(
+                                                    transaction.end_date!) !=
+                                                dateFormat
+                                                    .format(DateTime.now())
+                                            ? null
+                                            : transaction.status == "COMPLAIN"
+                                                ? null
+                                                : transaction.status != "ACTIVE"
+                                                    ? null
+                                                    : () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ReturnProduct(
+                                                                          idOwner: transaction.owner!.id,
+                                                                          transaction.id!,
+                                                                          "",
+                                                                          "",
+                                                                          idProduct:
+                                                                              widget.idProduct,
+                                                                          idUser: widget.idUser,
+                                                                          product_image: widget.product_image,
+                                                                          product_name: widget.product_name,
+                                                                          total: transaction.total,
+                                                                        )));
+                                                      },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: HexColor("4164DE"),
+                                        ),
+                                        child: const Text("Return Product",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                            textAlign: TextAlign.center),
+                                      )),
                       SizedBox(height: _size.height / 40),
                       transaction.image_after_user != null
                           ? const SizedBox()
-                          : Center(
-                              child: TextButton(
-                                  onPressed: transaction.status == "WAITING"
-                                      ? null
-                                      : transaction.status == "ACCEPT" ? null : transaction.status == "DELIVER" ? null : () {
-                                          if (snapshot.data!
-                                              .data()!
-                                              .containsKey("complain")) {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DetailComplain(
-                                                          transaction
-                                                              .complain!.id,
-                                                          widget.product_name,
-                                                          widget.product_image,
-                                                          transaction.total!,
-                                                          "user")),
-                                            );
-                                          } else {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ComplainProduct(
-                                                          transaction.owner!.id,
-                                                          widget
-                                                              .idTransaction)),
-                                            );
-                                          }
-                                        },
-                                  child: Text(
-                                    haveComplain ? "Complain Detail" : "Complain Product",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color:  transaction.status == "WAITING"
-                                      ? Colors.grey
-                                      : transaction.status == "ACCEPT" ? Colors.grey : transaction.status == "DELIVER" ? Colors.grey :
-                                            HexColor("4164DE"),
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                            ),
+                          : transaction.status == "RETURN"
+                              ? const SizedBox()
+                              : transaction.status == "DONE"
+                                  ? const SizedBox()
+                                  : Center(
+                                      child: TextButton(
+                                          onPressed: transaction.status ==
+                                                  "WAITING"
+                                              ? null
+                                              : transaction.status == "ACCEPT"
+                                                  ? null
+                                                  : transaction.status ==
+                                                          "DELIVER"
+                                                      ? null
+                                                      : () {
+                                                          if (snapshot.data!
+                                                              .data()!
+                                                              .containsKey(
+                                                                  "complain")) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => DetailComplain(
+                                                                      transaction
+                                                                          .complain!
+                                                                          .id,
+                                                                      widget
+                                                                          .product_name,
+                                                                      widget
+                                                                          .product_image,
+                                                                      transaction
+                                                                          .total!,
+                                                                      "user")),
+                                                            );
+                                                          } else {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => ComplainProduct(
+                                                                      transaction
+                                                                          .owner!
+                                                                          .id,
+                                                                      widget
+                                                                          .idTransaction)),
+                                                            );
+                                                          }
+                                                        },
+                                          child: Text(
+                                            haveComplain
+                                                ? "Complain Detail"
+                                                : "Complain Product",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: transaction.status ==
+                                                        "WAITING"
+                                                    ? Colors.grey
+                                                    : transaction.status ==
+                                                            "ACCEPT"
+                                                        ? Colors.grey
+                                                        : transaction.status ==
+                                                                "DELIVER"
+                                                            ? Colors.grey
+                                                            : HexColor(
+                                                                "4164DE"),
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                    ),
                     ],
                   );
                 }
