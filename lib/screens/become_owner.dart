@@ -127,7 +127,9 @@ class _BecomeOwnerState extends State<BecomeOwner> {
                                         controllerOwnerMunicipality.text,
                                     "owner_address": controllerOwnerAddress.text,
                                     "owner_description":
-                                        controllerOwnerDescription.text
+                                        controllerOwnerDescription.text,
+                                    "owner_image" : "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/user-images%2Ftemp.jpg?alt=media&token=e56c043d-8297-445d-8631-553d5cfbb0a6",
+                                    "owner_balance" : 0
                                   });
 
                                   Navigator.of(context).push(
