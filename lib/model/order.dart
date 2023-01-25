@@ -123,7 +123,7 @@ class Order {
       if (beforePhotoOwner!=null) "image_before_owner" : beforePhotoOwner,
       if (afterPhotoOwner!=null) "image_after_owner" : afterPhotoOwner,
       if (beforePhotoUser!=null) "image_before_user" : beforePhotoUser,
-      if (afterPhotoUser!=null) "image_after_user" : afterPhotoOwner,
+      if (afterPhotoUser!=null) "image_after_user" : afterPhotoUser,
       if (deliveryLocation!=null) "delivery_location" : deliveryLocation,
       if (deliveryMethod!=null) "delivery_method" : deliveryMethod,
       if (ktpImage!=null) "ktp_image" : ktpImage,

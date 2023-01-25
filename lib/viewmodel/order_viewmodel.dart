@@ -69,12 +69,12 @@ class OrderViewModel with ChangeNotifier {
     order.user = await UserRepository().getUserByRef(order.userRef!.path);
     order.product =
         await ProductRepository().getProductByRef(order.productRef!.path);
-    order.product?.imageFile = await imageRepository
-        .getImageFile("${Product.imagePath}/${order.product!.img}");
+    // order.product?.imageFile = await imageRepository
+    //     .getImageFile("${Product.imagePath}/${order.product!.img}");
     order.beforePhotoOwner != null? order.beforeOwnerFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.beforePhotoOwner}"):null;
     order.afterPhotoOwner != null? order.afterOwnerFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoOwner}"):null;
     order.beforePhotoUser != null? order.beforeUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.beforePhotoUser}"):null;
-    order.afterPhotoOwner != null? order.afterUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoUser}"):null;
+    order.afterPhotoUser != null? order.afterUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoUser}"):null;
     return order;
   }
 
