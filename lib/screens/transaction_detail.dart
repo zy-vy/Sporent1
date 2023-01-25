@@ -31,6 +31,7 @@ class DetailTransaction extends StatefulWidget {
 
 class _DetailTransaction extends State<DetailTransaction> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool haveComplain = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,11 @@ class _DetailTransaction extends State<DetailTransaction> {
                 } else {
                   TransactionModel transaction = TransactionModel.fromDocument(
                       snapshot.data!.id, snapshot.data!.data()!);
-                  final Uri _url = Uri.parse(transaction.tracking_code_owner??"");
+                  final Uri _url =
+                      Uri.parse(transaction.tracking_code_owner ?? "");
+                  if (snapshot.data!.data()!.containsKey("complain") == true) {
+                    haveComplain = true;
+                  }
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +125,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                       transaction.tracking_code_owner == null
                           ? const Text("Owner has not input the live tracking")
                           : InkWell(
-                              child: Text(transaction.tracking_code_owner??"",
+                              child: Text(transaction.tracking_code_owner ?? "",
                                   style: const TextStyle(
                                       color: Colors.blueAccent)),
                               onTap: () async => await launchUrl(_url),
@@ -140,17 +145,20 @@ class _DetailTransaction extends State<DetailTransaction> {
                               ? null
                               : transaction.status == "CONFIRM"
                                   ? null
-                                  : transaction.status == "ACCEPT" ? null
-                                  : () {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              ConditionCheckBeforeUser(
-                                                  transaction.id!,
-                                                  transaction
-                                                      .image_before_user??"",
-                                                  transaction
-                                                      .description_before_user??"")));
-                                    },
+                                  : transaction.status == "ACCEPT"
+                                      ? null
+                                      : () {
+                                          Navigator.of(context).push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ConditionCheckBeforeUser(
+                                                      transaction.id!,
+                                                      transaction
+                                                              .image_before_user ??
+                                                          "",
+                                                      transaction
+                                                              .description_before_user ??
+                                                          "")));
+                                        },
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: _size.height / 80,
@@ -166,10 +174,13 @@ class _DetailTransaction extends State<DetailTransaction> {
                                       "Pre-Condition",
                                       style: TextStyle(
                                           color: transaction.status == "WAITING"
-                                              ? Colors.grey 
-                                              : transaction.status == "ACCEPT" ? Colors.grey : transaction.status == "CONFIRM"
+                                              ? Colors.grey
+                                              : transaction.status == "ACCEPT"
                                                   ? Colors.grey
-                                                  : Colors.black,
+                                                  : transaction.status ==
+                                                          "CONFIRM"
+                                                      ? Colors.grey
+                                                      : Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
                                     ),
@@ -188,30 +199,36 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                     color: Colors.black,
                                                     fontSize: 13),
                                               )
-                                            : transaction.status == "RETURN" ? const Text(
-                                                "This check has been completed",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 13),
-                                              ) : const Text(
-                                                "This check is not ready at this time",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 13),
-                                              )
+                                            : transaction.status == "RETURN"
+                                                ? const Text(
+                                                    "This check has been completed",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 13),
+                                                  )
+                                                : const Text(
+                                                    "This check is not ready at this time",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 13),
+                                                  )
                                   ],
                                 )),
                                 FaIcon(FontAwesomeIcons.chevronRight,
                                     color: transaction.status == "WAITING"
-                                              ? Colors.grey 
-                                              : transaction.status == "ACCEPT" ? Colors.grey : transaction.status == "CONFIRM"
-                                                  ? Colors.grey
-                                                  : Colors.black,
+                                        ? Colors.grey
+                                        : transaction.status == "ACCEPT"
+                                            ? Colors.grey
+                                            : transaction.status == "CONFIRM"
+                                                ? Colors.grey
+                                                : Colors.black,
                                     size: 20)
                               ],
                             ),
                           )),
-                      transaction.image_after_user != null ? SizedBox(height: _size.height / 30) : SizedBox(height: _size.height / 20),
+                      transaction.image_after_user != null
+                          ? SizedBox(height: _size.height / 30)
+                          : SizedBox(height: _size.height / 20),
                       transaction.image_after_user != null
                           ? TextButton(
                               style: TextButton.styleFrom(
@@ -222,15 +239,16 @@ class _DetailTransaction extends State<DetailTransaction> {
                                   : transaction.status == "CONFIRM"
                                       ? null
                                       : () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReturnProduct(
-                                                          transaction.id!,
-                                                          transaction
-                                                              .image_after_user??"",
-                                                          transaction.tracking_code_user??"",
-                                                          idOwner: "")));
+                                          Navigator.of(context).push(MaterialPageRoute(
+                                              builder: (context) => ReturnProduct(
+                                                  transaction.id!,
+                                                  transaction
+                                                          .image_after_user ??
+                                                      "",
+                                                  transaction
+                                                          .tracking_code_user ??
+                                                      "",
+                                                  idOwner: "")));
                                         },
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
@@ -277,20 +295,19 @@ class _DetailTransaction extends State<DetailTransaction> {
                               width: _size.width,
                               height: _size.height / 12,
                               child: ElevatedButton(
-                                onPressed:
-                                dateFormat
+                                onPressed: dateFormat
                                             .format(transaction.end_date!) !=
                                         dateFormat.format(DateTime.now())
                                     ? null
-                                    :
-                                transaction.status != "ACTIVE"
+                                    : transaction.status != "ACTIVE"
                                         ? null
                                         : () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       ReturnProduct(
-                                                          idOwner: transaction.owner!.id,
+                                                          idOwner: transaction
+                                                              .owner!.id,
                                                           transaction.id!,
                                                           "",
                                                           "")),
@@ -310,9 +327,9 @@ class _DetailTransaction extends State<DetailTransaction> {
                           ? const SizedBox()
                           : Center(
                               child: TextButton(
-                                  onPressed: transaction.status != "ACTIVE"
+                                  onPressed: transaction.status == "WAITING"
                                       ? null
-                                      : () {
+                                      : transaction.status == "ACCEPT" ? null : transaction.status == "DELIVER" ? null : () {
                                           if (snapshot.data!
                                               .data()!
                                               .containsKey("complain")) {
@@ -324,7 +341,8 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                               .complain!.id,
                                                           widget.product_name,
                                                           widget.product_image,
-                                                          transaction.total!, "user")),
+                                                          transaction.total!,
+                                                          "user")),
                                             );
                                           } else {
                                             Navigator.of(context).push(
@@ -338,7 +356,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                           }
                                         },
                                   child: Text(
-                                    "Complain Product",
+                                    haveComplain ? "Complain Detail" : "Complain Product",
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: transaction.status == "ACTIVE"
