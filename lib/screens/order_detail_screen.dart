@@ -204,7 +204,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       returnTrackingCode(),
       // Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
       SizedBox(
-        height: size / 10,
+        height: size / 15,
+      ),
+      Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(size/15),
+            height: size/10,
+            decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
+            child: Center(child: Text("status: ${order.status}",style: const TextStyle(color: Colors.white),),),
+          ),
+        ],
       ),
       orderDetailButton()
     ]);
@@ -215,24 +225,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       return acceptDeclineButton();
     } else if (order.status == "ACCEPT") {
       return submitOrderButton();
-    }  else if (order.status == "ACTIVE") {
+    } else if (order.status == "DELIVER") {
+      return complainButton();
+    } else if (order.status == "ACTIVE") {
       return complainButton();
     } else if (order.status == "RETURN") {
       return finishComplainButton();
     } else if (order.status == "COMPLAIN") {
       return complainDetailButton();
     }
-    return  Column(
-      children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(size/15,0,size/15,0),
-          height: size/10,
-          decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
-          child: Center(child: Text(order.status??"",style: const TextStyle(color: Colors.white),),),
-        ),
-        if (order.status != "DONE") complainButton()
-      ],
-    );
+    return  const SizedBox();
   }
 
   Widget acceptDeclineButton() {

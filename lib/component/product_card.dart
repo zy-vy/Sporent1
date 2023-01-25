@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,8 +43,10 @@ class ProductCard extends StatelessWidget {
                 aspectRatio: 1 ,
                 child: ClipRRect(
                       borderRadius: BorderRadius.circular(5) ,
-                      child: FirebaseImage(
-                          filePath: "${Product.imagePath}/${_product.img}")) ,
+                      child:
+                        CachedNetworkImage(imageUrl: '${_product.img}',),
+                ) ,
+
               ),
               Padding(
                 padding: EdgeInsets.only(left: _size.width/30, top: _size.height/50),

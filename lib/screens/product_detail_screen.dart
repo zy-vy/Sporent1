@@ -400,9 +400,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  var id = snapshot.data!.id;
-                  var image = snapshot.data!.get("owner_image");
-                  var name = snapshot.data!.get("owner_name");
+                  String id="", name="", image="";
+                  try {
+                    id = snapshot.data!.id;
+                    image = snapshot.data!.get("owner_image");
+                    name = snapshot.data!.get("owner_name");
+                  }
+                  catch (e){
+                    return const SizedBox();
+                  }
                   var location = snapshot.data!.get("owner_municipality");
                   return Container(
                     padding: EdgeInsets.symmetric(
