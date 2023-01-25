@@ -237,9 +237,9 @@ class OwnerButton extends StatelessWidget {
             }
           },
           style: ElevatedButton.styleFrom(backgroundColor: HexColor("4164DE")),
-          child: const Text(
-            "Become Owner",
-            style: TextStyle(fontSize: 18),
+          child: Text(
+            is_owner == true ? "Visit Owner Page" : "Become Owner",
+            style: const TextStyle(fontSize: 18),
           ),
         ),
       ),
