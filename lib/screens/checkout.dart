@@ -114,8 +114,9 @@ class _CheckoutPage extends State<CheckoutPage> {
                                         .doc(cartDetail.productRef!.path)
                                         .get(),
                                     builder: (context, snapshot) {
-                                      if (!snapshot.hasData)
+                                      if (!snapshot.hasData) {
                                         return const Center();
+                                      }
                                       var product = snapshot.data!;
                                       if (!isRebuild) {
                                         totalDeposit.price +=

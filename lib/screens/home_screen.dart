@@ -61,7 +61,7 @@ class HeadingRecommend extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("Today's Recommendation",
+          const Text("Product Recommendation",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           Align(
             alignment: Alignment.bottomRight,

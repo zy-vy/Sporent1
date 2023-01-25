@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class FirebaseImage extends StatefulWidget {
   const FirebaseImage({Key? key,required String filePath}) : _filePath = filePath, super(key: key);
@@ -67,7 +68,11 @@ class _FirebaseImageState extends State<FirebaseImage> {
   Widget build(BuildContext context) {
     // log("+++ file"+_file.toString());
     if(_file==null){
-      return const Icon(Icons.error_outline);
+      return Center(
+        child: JumpingDotsProgressIndicator(
+          fontSize: 20.0,
+        ),
+      );
     }
 
     return Image.file(_file!, fit: BoxFit.cover);
