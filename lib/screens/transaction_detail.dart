@@ -359,9 +359,10 @@ class _DetailTransaction extends State<DetailTransaction> {
                                     haveComplain ? "Complain Detail" : "Complain Product",
                                     style: TextStyle(
                                         fontSize: 18,
-                                        color: transaction.status == "ACTIVE"
-                                            ? HexColor("4164DE")
-                                            : Colors.grey,
+                                        color:  transaction.status == "WAITING"
+                                      ? Colors.grey
+                                      : transaction.status == "ACCEPT" ? Colors.grey : transaction.status == "DELIVER" ? Colors.grey :
+                                            HexColor("4164DE"),
                                         fontWeight: FontWeight.bold),
                                   )),
                             ),
