@@ -34,10 +34,9 @@ class ProductCardRenter extends StatelessWidget {
                       height: _size.height / 8,
                       width: _size.width / 5,
                       imageUrl: product.img!,
-                      fit: BoxFit.fill,
                       placeholder: (context, url) =>
                           const CircularProgressIndicator()),
-                  SizedBox(width: _size.width / 60),
+                  SizedBox(width: _size.width / 40),
                   Expanded(
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
