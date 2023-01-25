@@ -112,7 +112,7 @@ showDeleteButton(BuildContext context, String id) {
     child: ElevatedButton(
       onPressed: () {
         final product = FirebaseFirestore.instance
-            .collection('product-images')
+            .collection('product')
             .doc(id)
             .delete();
 
