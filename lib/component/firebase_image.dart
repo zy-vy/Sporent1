@@ -70,6 +70,6 @@ class _FirebaseImageState extends State<FirebaseImage> {
       return const Icon(Icons.error_outline);
     }
 
-    return Image.file(_file!, fit: BoxFit.scaleDown);
+    return Image.file(_file!, fit: BoxFit.cover);
   }
 }

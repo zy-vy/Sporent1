@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/component/firebase_image.dart';
 
+import '../component/image_full_screen.dart';
 import '../component/item_price.dart';
 import '../model/order.dart';
 import '../viewmodel/order_viewmodel.dart';
@@ -103,7 +105,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
             children: [
               SizedBox(
                 width: size / 3,
-                child: FirebaseImage(filePath: "product-images/${order.product!.img}",)
+                child: CachedNetworkImage(imageUrl: "${order.product!.img}",)
               ),
               SizedBox(
                 width: size / 20,
@@ -134,8 +136,6 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
         ]),
       ),
       Divider(color: HexColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
-
-
       Container(
         margin:
         EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 15),
@@ -170,15 +170,73 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
           ],
         ),
       ),
-      conditionCheckOwner(),
-      trackingCode(),
-      conditionCheckUser(),
-      returnTrackingCode(),
+      Divider(color: HexColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+      Container(
+        margin: EdgeInsets.all(size/15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            heading("KTP"),
+            SizedBox(height: size/20,),
+            order.ktpImage!= null ? Container(
+                decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                width: size / 6,
+                height: size / 6,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => FullScreen(
+                                "",order.ktpImage!,location: "ktp",)));
+                  },
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: FirebaseImage(filePath: "ktp/${order.ktpImage!}",)),
+                )):const Text("Ktp image not found !"),
+          ],
+        ),
+      ),
+      Divider(color: HexColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+      Container(
+        margin: EdgeInsets.all(size/15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            heading("Payment"),
+            SizedBox(height: size/20,),
+            order.paymentImage != null ? Container(
+                decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
+                width: size / 6,
+                height: size / 6,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => FullScreen(
+                                "", order.paymentImage, location: "payment",)));
+                  },
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: FirebaseImage(filePath: "payment/${order.paymentImage!}",)),
+                )):const Text("Ktp image not found !"),
+
+          ],
+        ),
+      ),
+      Divider(color: HexColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+
+      // conditionCheckOwner(),
+      // trackingCode(),
+      // conditionCheckUser(),
+      // returnTrackingCode(),
       // Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
       SizedBox(
         height: size / 10,
       ),
-      orderDetailButton()
+      orderDetailButton(),
+      SizedBox(
+        height: size/15,
+      ),
     ]);
   }
 
@@ -442,6 +500,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   CoolAlert.show(context: context, type: CoolAlertType.confirm,onConfirmBtnTap: () {
@@ -455,9 +514,14 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
                   },);
 
                 },
-                child: const Text("Accept Payment"))),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("Accept Payment",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),))),
+        SizedBox(height: size/15,),
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
+            height: size/6,
             child: ElevatedButton(
                 onPressed: () {
                   CoolAlert.show(context: context, type: CoolAlertType.confirm,onConfirmBtnTap: () {
@@ -472,7 +536,11 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
 
 
                   // Navigator.pop(context);
-                }, child: const Text("Reject Payment")))
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("4164DE"),
+                ),
+                child: const Text("Reject Payment",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)))
       ],
     );
   }
