@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -130,9 +131,9 @@ class _CheckoutPage extends State<CheckoutPage> {
                                               height: size.height / 5.8,
                                               child: FittedBox(
                                                   fit: BoxFit.fill,
-                                                  child: FirebaseImage(
-                                                      filePath:
-                                                          "product-images/${product.get("img")}"))),
+                                                  child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          "${product.get("img")}"))),
                                           SizedBox(width: size.width / 15),
                                           Expanded(
                                               child: Column(

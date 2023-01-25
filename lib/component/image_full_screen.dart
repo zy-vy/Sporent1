@@ -7,10 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sporent/component/firebase_image.dart';
 
 class FullScreen extends StatelessWidget {
-  const FullScreen(this.url, this.image, {super.key});
+  const FullScreen(this.url, this.image, {super.key,this.location});
 
   final String? url;
   final String? image;
+  final String? location;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class FullScreen extends StatelessWidget {
               child: Hero(
                   tag: 'imageHero',
                   child: SizedBox(
-                      height: size.height / 1.5, child: url != "" ? Image.network(url!) : FirebaseImage(filePath: "condition-check/$image"))),
+                      height: size.height / 1.5, child: url != "" ? Image.network(url!) : location !=null ? FirebaseImage(filePath: "$location/$image") :FirebaseImage(filePath: "condition-check/$image"))),
             ),
           ],
         ));

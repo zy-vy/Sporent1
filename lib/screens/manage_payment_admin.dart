@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -71,8 +72,8 @@ class ManagePaymentAdmin extends StatelessWidget {
                                     SizedBox(
                                       width: size/ 3,
                                       height: size / 3,
-                                      child: FirebaseImage(
-                                          filePath: "product-images/${order.product?.img}"),
+                                      child: CachedNetworkImage(
+                                          imageUrl: "${order.product?.img}"),
                                     ),
                                     SizedBox(width:size / 25),
                                     Expanded(

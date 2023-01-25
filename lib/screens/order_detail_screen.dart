@@ -21,6 +21,7 @@ import 'package:sporent/viewmodel/order_viewmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../component/image_full_screen.dart';
 import '../model/complain.dart';
 import '../model/complain_detail.dart';
 import '../utils/colors.dart';
@@ -847,9 +848,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)))
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "", order.beforePhotoOwner)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)),
+                  ))
                   : Container(
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
@@ -861,9 +870,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)))
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "", order.afterPhotoOwner)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)),
+                  ))
                   : Container(
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
@@ -942,9 +959,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)))
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "", order.beforePhotoUser)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)),
+                  ))
                   : Container(
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
@@ -956,9 +981,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
                   width: size / 6,
                   height: size / 6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)))
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => FullScreen(
+                                  "", order.afterPhotoUser)));
+                    },
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)),
+                  ))
                   : Container(
                   decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
                   width: size / 6,
