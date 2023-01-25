@@ -176,7 +176,7 @@ class _AddProductState extends State<AddProduct> {
                       SizedBox(height: _size.height / 23),
                       fieldText("Product Name", "Enter product name", _size,
                           nameController),
-                      fieldPrice("Product Price", "Enter product price", _size,
+                      fieldPrice("Rent Price", "Enter rent price", _size,
                           priceController),
                       fieldPrice("Deposit Price", "Enter deposit price", _size,
                           depositController),
