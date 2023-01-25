@@ -50,7 +50,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     double total = 0;
     NumberFormat currencyFormatter =
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
-
+    File? temp;
     Size size = MediaQuery.of(context).size;
     DateTime? startDate =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -400,13 +400,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  String id="", name="", image="";
+                  String id = "", name = "", image = "";
                   try {
                     id = snapshot.data!.id;
                     image = snapshot.data!.get("owner_image");
                     name = snapshot.data!.get("owner_name");
-                  }
-                  catch (e){
+                  } catch (e) {
                     return const SizedBox();
                   }
                   var location = snapshot.data!.get("owner_municipality");
@@ -428,7 +427,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => FullScreen(image, ""),
+                                builder: (context) => FullScreen("url",url:image),
                               ),
                             );
                           },

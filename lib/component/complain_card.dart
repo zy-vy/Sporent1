@@ -17,6 +17,7 @@ class ComplainCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    File? temp;
     Size _size = MediaQuery.of(context).size;
 
     return Column(
@@ -56,7 +57,7 @@ class ComplainCard extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => FullScreen(image[i],""),
+                          builder: (context) => FullScreen("url",url: image[i]),
                         ),
                       );
                     },

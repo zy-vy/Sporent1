@@ -64,7 +64,7 @@ class _ReviewComponentState extends State<ReviewComponent> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => FullScreen(image, ""),
+                            builder: (context) => FullScreen("url", url: image),
                           ),
                         );
                       },
@@ -134,7 +134,7 @@ class _ReviewComponentState extends State<ReviewComponent> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        FullScreen(widget.review.photo![i], ""),
+                                        FullScreen("url",url: widget.review.photo![i])
                                   ),
                                 );
                               },
@@ -164,7 +164,7 @@ class _ReviewComponentState extends State<ReviewComponent> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        FullScreen(widget.review.photo![i], ""),
+                                        FullScreen("url",url: widget.review.photo![i],),
                                   ),
                                 );
                               },

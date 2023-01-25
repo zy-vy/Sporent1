@@ -35,6 +35,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  File? temp;
   File? image;
   bool loading = false;
 
@@ -148,7 +149,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) => FullScreen(
-                                                "", widget.imageCondition)));
+                                                "firebaseImage",filePath: "condition-check", firebaseImage: widget.imageCondition,)));
                                   },
                                 ),
                           SizedBox(height: _size.height / 23),
@@ -252,7 +253,6 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                                   "${widget.idTransaction}_user_after",
                                               "status": "RETURN"
                                             });
-
                                           } else {
                                             final ref = FirebaseStorage.instance
                                                 .ref()
@@ -271,10 +271,8 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                                   controller.text,
                                               "status": "ACTIVE"
                                             });
-
                                           }
                                           Navigator.of(context).pop();
-
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
