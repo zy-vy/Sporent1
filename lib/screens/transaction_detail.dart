@@ -168,6 +168,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                       style: TextStyle(
                                           color: transaction.status == "WAITING"
                                               ? null
+                                              : transaction.status == "ACCEPT" ? null
                                               : transaction.status == "CONFIRM"
                                                   ? Colors.grey
                                                   : Colors.black,

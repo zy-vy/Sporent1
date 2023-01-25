@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,13 @@ class ProductCardRenter extends StatelessWidget {
                   vertical: _size.width / 20, horizontal: _size.height / 50),
               child: Row(
                 children: [
-                  SizedBox(
-                      width: _size.width / 5,
+                  CachedNetworkImage(
                       height: _size.height / 8,
-                      child: FirebaseImage(
-                          filePath: "product-images/${product.img}")),
+                      width: _size.width / 5,
+                      imageUrl: product.img!,
+                      fit: BoxFit.fill,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator()),
                   SizedBox(width: _size.width / 60),
                   Expanded(
                       child: Column(
@@ -45,7 +48,8 @@ class ProductCardRenter extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.normal)),
                       SizedBox(height: _size.height / 70),
-                      Text("${currencyFormatter.format(product.rent_price)}/Day",
+                      Text(
+                          "${currencyFormatter.format(product.rent_price)}/Day",
                           style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -110,12 +114,14 @@ showDeleteButton(BuildContext context, String id) {
       onPressed: () {
         final product = FirebaseFirestore.instance
             .collection('product-renter')
-            .doc(id).delete();
+            .doc(id)
+            .delete();
 
         final ref = FirebaseStorage.instance
             .ref()
             .child('product-images/')
-            .child(id).delete();
+            .child(id)
+            .delete();
 
         Navigator.of(context).pop();
       },

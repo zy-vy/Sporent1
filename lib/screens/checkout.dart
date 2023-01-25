@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _CheckoutPage extends State<CheckoutPage> {
   String? _deliveryType = "Go-send instant";
   late int totalAmount;
   var index = 0;
+  int counter = 0;
   // late int price =0 , totalDeposit=0;
   var isRebuild = false;
   var totalDeposit = TotalDeposit();
@@ -74,12 +76,21 @@ class _CheckoutPage extends State<CheckoutPage> {
   }
 
   Widget checkout(BuildContext context, Size size, List<Cart> cartList) {
+    var dateFormat = DateFormat('d MMMM ' 'yyyy');
+
     return SingleChildScrollView(
       child: Padding(
           padding: EdgeInsets.symmetric(
               vertical: size.height / 30, horizontal: size.width / 13),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              "Detail Product",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
             ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -115,24 +126,23 @@ class _CheckoutPage extends State<CheckoutPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        "Product",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
                                       SizedBox(height: size.height / 50),
                                       Row(
                                         children: [
-                                          SizedBox(
-                                              width: size.width / 2.5,
-                                              height: size.height / 5.8,
-                                              child: FittedBox(
-                                                  fit: BoxFit.fill,
-                                                  child: FirebaseImage(
-                                                      filePath:
-                                                          "product-images/${product.get("img")}"))),
+                                          Container(
+                                            decoration: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),side: BorderSide(width: 2, color: HexColor("8DA6FE")))),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(5),
+                                              child:
+                                            CachedNetworkImage(
+                                              imageUrl: product.get("img"),
+                                              fit: BoxFit.fill,
+                                              width: size.width / 4,
+                                              height: size.height / 10,
+                                              placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(),
+                                            )),
+                                          ),
                                           SizedBox(width: size.width / 15),
                                           Expanded(
                                               child: Column(
@@ -143,7 +153,7 @@ class _CheckoutPage extends State<CheckoutPage> {
                                                 product.get("name"),
                                                 maxLines: 2,
                                                 style: const TextStyle(
-                                                    fontSize: 16,
+                                                    fontSize: 14,
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.black),
                                               ),
@@ -152,17 +162,20 @@ class _CheckoutPage extends State<CheckoutPage> {
                                               Text(
                                                 "${currencyFormatter.format(product.get("rent_price"))}/Day",
                                                 style: const TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 15,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.black),
                                               ),
+                                              SizedBox(
+                                                  height: size.height / 80),
                                               Text(
-                                                cartDetail.startDate.toString(),
+                                                "Duration: ${cartDetail.quantity} Day",
                                                 style: const TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.normal,
                                                     color: Colors.black),
-                                              )
+                                              ),
                                             ],
                                           ))
                                         ],
@@ -185,25 +198,39 @@ class _CheckoutPage extends State<CheckoutPage> {
             SizedBox(
               height: size.width / 30,
             ),
-            TextFormField(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          width: size.width / 6,
+                          height: size.width / 6,
+                          color: HexColor("8DA6FE"),
+                          child: const Center(
+                              child: FaIcon(FontAwesomeIcons.locationDot,
+                                  color: Colors.white, size: 25)),
+                        )),
+                        
+                         SizedBox(
+                          width: size.width/60,
+                           child: TextFormField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
                   filled: true,
-                  icon: Icon(
-                    Icons.location_on_rounded,
-                    size: 30,
-                  ),
-                  // hintText: "Input your delivery address",
                   labelText: "Input your delivery address"),
               onChanged: (String? value) {
                 _deliveryLocation = value;
               },
             ),
+                         ),
+              ],
+            ),
             SizedBox(
               height: size.width / 20,
             ),
             const Text(
-              "Courier",
+              "Type of Delivery",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -212,20 +239,21 @@ class _CheckoutPage extends State<CheckoutPage> {
             SizedBox(
               height: size.width / 30,
             ),
-            TextFormField(
-              decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  filled: false,
-                  icon: const Icon(
-                    Icons.fire_truck_rounded,
-                    size: 30,
-                  ),
-                  // hintText: "Input your delivery address",
-                  labelText: _deliveryType),
-              enabled: false,
-              onSaved: (String? value) {
-                _deliveryType = value;
-              },
+            Row(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Container(
+                      width: size.width / 6,
+                      height: size.width / 6,
+                      color: HexColor("8DA6FE"),
+                      child: const Center(
+                          child: FaIcon(FontAwesomeIcons.truck,
+                              color: Colors.white, size: 25)),
+                    )),
+                SizedBox(width: size.width/20),
+                const Text("Go-Send Instant", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15))
+              ],
             ),
             SizedBox(
               height: size.width / 20,
@@ -242,13 +270,18 @@ class _CheckoutPage extends State<CheckoutPage> {
             ),
             Row(
               children: [
-                Icon(
-                  Icons.account_balance,
-                  size: 30,
-                  color: HexColor("999999"),
-                ),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Container(
+                      width: size.width / 6,
+                      height: size.width / 6,
+                      color: HexColor("8DA6FE"),
+                      child: const Center(
+                          child: FaIcon(FontAwesomeIcons.buildingColumns,
+                              color: Colors.white, size: 25)),
+                    )),
                 SizedBox(
-                  width: size.width / 18,
+                  width: size.width / 20,
                 ),
                 StreamBuilder(
                     stream: FirebaseFirestore.instance
@@ -266,7 +299,7 @@ class _CheckoutPage extends State<CheckoutPage> {
                       var bank = snapshot.data!.get("bank");
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text(bank.toString()), Text("$number")],
+                        children: [Text(bank.toString(), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),), Text("$number", style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15))],
                       );
                     })
               ],
@@ -396,7 +429,7 @@ class _CheckoutPage extends State<CheckoutPage> {
                 ),
                 Text(
                     style: TextStyle(fontSize: 14, color: Colors.redAccent),
-                    "Shipping fee has not included! "),
+                    "Shipping fee has not included!"),
               ],
             ),
             SizedBox(height: size.width / 20),
