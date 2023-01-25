@@ -9,12 +9,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/loading.dart';
+import 'package:sporent/screens/give_review.dart';
 import 'package:sporent/utils/colors.dart';
 
 class ConditionCheck extends StatefulWidget {
   const ConditionCheck(this.idTransaction, this.title, this.description,
       this.type, this.title_page, this.imageCondition, this.textController,
-      {super.key, this.idOwner});
+      {super.key, this.idOwner, this.product_name, this.product_image, this.total, this.idUser, this.idProduct});
 
   final String? idOwner;
   final String? idTransaction;
@@ -24,6 +25,11 @@ class ConditionCheck extends StatefulWidget {
   final String? title_page;
   final String? imageCondition;
   final String? textController;
+  final String? product_name;
+  final String? product_image;
+  final int? total;
+  final String? idUser;
+  final String? idProduct;
 
   @override
   State<ConditionCheck> createState() => _ConditionCheckState();
@@ -252,7 +258,11 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                               "image_after_user":
                                                   "${widget.idTransaction}_user_after",
                                               "status": "RETURN"
+                                            
                                             });
+
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => GiveReview(widget.product_name!, widget.product_image!, widget.total!, widget.idProduct!, widget.idUser!),));
+                                          
                                           } else {
                                             final ref = FirebaseStorage.instance
                                                 .ref()
@@ -271,8 +281,9 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                                   controller.text,
                                               "status": "ACTIVE"
                                             });
+
+                                            Navigator.of(context).pop();
                                           }
-                                          Navigator.of(context).pop();
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(

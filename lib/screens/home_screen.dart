@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _size.width / 25, _size.height / 20, _size.width / 25, _size.height / 20),
         child: Column(
           children: [
-            const SearchBarProduct(),
             HeadingCategory(size: _size),
             const PopularCategory(),
             HeadingRecommend(size: _size),

@@ -45,7 +45,7 @@ class ManageOrderScreen extends StatelessWidget {
           else if (snapshot.data!.isEmpty){
             return const Center(child: Text("No Active Order"));
           }
-
+          
           // var orderList = snapshot.data;
           var orderList = orderViewModel.orderList;
 
@@ -82,7 +82,7 @@ class ManageOrderScreen extends StatelessWidget {
                                   SizedBox(
                                     width: size/ 3,
                                     height: size / 3,
-                                    child: CachedNetworkImage(imageUrl: "${order?.product?.img}",progressIndicatorBuilder: (context, url, progress) => SizedBox(width: size/10 ,child: const CircularProgressIndicator(),),),
+                                    child: CachedNetworkImage(imageUrl: "${order?.product?.img}", placeholder: (context, url) => const CircularProgressIndicator()),
                                   ),
                                   SizedBox(width:size / 25),
                                   Expanded(

@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:sporent/screens/complain_detail.dart';
 import 'package:sporent/screens/complain_product.dart';
 import 'package:sporent/screens/condition_check_before_user.dart';
-import 'package:sporent/screens/give_review.dart';
-import 'package:sporent/screens/notif_review.dart';
 import 'package:sporent/screens/return_product.dart';
 import 'package:sporent/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,7 +115,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                       SizedBox(height: _size.height / 40),
                       const Text("Live Tracking Gojek",
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500)),
+                              fontSize: 18, fontWeight: FontWeight.bold)),
                       SizedBox(height: _size.height / 40),
                       transaction.tracking_code_owner == null
                           ? const Text("Owner has not input the live tracking")
@@ -142,6 +140,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                               ? null
                               : transaction.status == "CONFIRM"
                                   ? null
+                                  : transaction.status == "ACCEPT" ? null
                                   : () {
                                       Navigator.of(context).push(MaterialPageRoute(
                                           builder: (context) =>
@@ -167,9 +166,8 @@ class _DetailTransaction extends State<DetailTransaction> {
                                       "Pre-Condition",
                                       style: TextStyle(
                                           color: transaction.status == "WAITING"
-                                              ? null
-                                              : transaction.status == "ACCEPT" ? null
-                                              : transaction.status == "CONFIRM"
+                                              ? Colors.grey 
+                                              : transaction.status == "ACCEPT" ? Colors.grey : transaction.status == "CONFIRM"
                                                   ? Colors.grey
                                                   : Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -205,10 +203,10 @@ class _DetailTransaction extends State<DetailTransaction> {
                                 )),
                                 FaIcon(FontAwesomeIcons.chevronRight,
                                     color: transaction.status == "WAITING"
-                                        ? null
-                                        : transaction.status == "CONFIRM"
-                                            ? Colors.grey
-                                            : Colors.black,
+                                              ? Colors.grey 
+                                              : transaction.status == "ACCEPT" ? Colors.grey : transaction.status == "CONFIRM"
+                                                  ? Colors.grey
+                                                  : Colors.black,
                                     size: 20)
                               ],
                             ),
@@ -280,11 +278,11 @@ class _DetailTransaction extends State<DetailTransaction> {
                               height: _size.height / 12,
                               child: ElevatedButton(
                                 onPressed:
-                                // dateFormat
-                                //             .format(transaction.end_date!) !=
-                                //         dateFormat.format(DateTime.now())
-                                //     ? null
-                                //     :
+                                dateFormat
+                                            .format(transaction.end_date!) !=
+                                        dateFormat.format(DateTime.now())
+                                    ? null
+                                    :
                                 transaction.status != "ACTIVE"
                                         ? null
                                         : () {

@@ -126,7 +126,7 @@ class _EditProductState extends State<EditProduct> {
                           photo(_size, image, docProduct),
                           fieldText("Product Name", "Enter product name", _size,
                               nameController),
-                          fieldPrice("Product Price", "Enter product price",
+                          fieldPrice("Rent Price", "Enter rent price",
                               _size, priceController),
                           fieldPrice("Deposit Price", "Enter deposit price",
                               _size, depositController),

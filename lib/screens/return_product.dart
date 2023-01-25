@@ -9,6 +9,11 @@ class ReturnProduct extends StatelessWidget {
   final String? idTransaction;
   final String? imageCondition;
   final String? textController;
+  // final String? product_name;
+  // final String? product_image;
+  // final int? total;
+  // final String? idUser;
+  // final String? idProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +28,11 @@ class ReturnProduct extends StatelessWidget {
       imageCondition,
       textController,
       idOwner: idOwner,
+      // product_name: product_name,
+      // product_image: product_image,
+      // total: total,
+      // idUser: idUser,
+      // idProduct: idProduct,
     );
   }
 }
