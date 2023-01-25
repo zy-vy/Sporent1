@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -61,7 +62,6 @@ class _ReviewComponentState extends State<ReviewComponent> {
                             borderRadius: BorderRadius.circular(100)),
                       ),
                       onTap: () {
-
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => FullScreen(image, ""),
@@ -112,18 +112,23 @@ class _ReviewComponentState extends State<ReviewComponent> {
                       i == 0
                           ? GestureDetector(
                               child: Container(
-                                width: size.width / 5,
-                                height: size.height / 10,
                                 decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                              BorderRadius.circular(10),
                                         side: BorderSide(
                                             width: 2,
-                                            color: HexColor("4164DE"))),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            widget.review.photo![i]),
-                                        fit: BoxFit.fill)),
+                                            color: HexColor("4164DE")))),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.review.photo![i],
+                                      fit: BoxFit.fill,
+                                      width: size.width / 5,
+                                      height: size.height / 10,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                    )),
                               ),
                               onTap: () {
                                 Navigator.of(context).push(
@@ -136,19 +141,24 @@ class _ReviewComponentState extends State<ReviewComponent> {
                             )
                           : GestureDetector(
                               child: Container(
-                                margin: EdgeInsets.only(left: size.width / 20),
-                                width: size.width / 5,
-                                height: size.height / 10,
+                                margin: EdgeInsets.only(left: size.width/20),
                                 decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                              BorderRadius.circular(10),
                                         side: BorderSide(
                                             width: 2,
-                                            color: HexColor("4164DE"))),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            widget.review.photo![i]),
-                                        fit: BoxFit.fill)),
+                                            color: HexColor("4164DE")))),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.review.photo![i],
+                                      fit: BoxFit.fill,
+                                      width: size.width / 5,
+                                      height: size.height / 10,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                    )),
                               ),
                               onTap: () {
                                 Navigator.of(context).push(
