@@ -497,7 +497,7 @@ class _CheckoutPage extends State<CheckoutPage> {
           ),
           SizedBox(height: size.height / 50),
           const Text(
-            "Harap melakukan pembayaran ke no rekening berikut ini untuk dapat memproses pesananmu",
+            "Please make a payment to the following account number to be able to process your order",
             textAlign: TextAlign.justify,
             style: TextStyle(
                 fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
@@ -540,7 +540,7 @@ class _CheckoutPage extends State<CheckoutPage> {
           ),
           SizedBox(height: size.height / 50),
           const Text(
-            "Mohon upload bukti pembayaran kamu agar pesananmu bisa diproses",
+            "Please upload proof of your payment, so your order can be processed",
             textAlign: TextAlign.justify,
             style: TextStyle(
                 fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
@@ -640,8 +640,8 @@ class _CheckoutPage extends State<CheckoutPage> {
                         userRef: cart.userRef,
                         ktpFile: ktpImage,
                         paymentFile: transferImage,
-                        totalPrice: product.get("rent_price") * cartDetail.quantity,
-                        totalDeposit: product.get("deposit_price")
+                        balance: product.get("rent_price") * cartDetail.quantity,
+                        deposit: product.get("deposit_price")
                       );
                       await TransactionViewModel()
                           .checkout(cartDetail, order, null)

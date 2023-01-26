@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../component/transaction_card_detail.dart';
 import '../component/field_row.dart';
 import '../model/transaction.dart';
+import 'give_review.dart';
 
 class DetailTransaction extends StatefulWidget {
   const DetailTransaction(this.idTransaction, this.product_image,

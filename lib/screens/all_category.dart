@@ -7,7 +7,9 @@ import 'package:sporent/repository/category_repository.dart';
 import 'package:sporent/screens/category_screen.dart';
 
 class AllCategory extends StatefulWidget {
-  const AllCategory({Key? key}) : super(key: key);
+  const AllCategory(this.isLogin, {Key? key}) : super(key: key);
+
+  final bool isLogin;
 
   @override
   State<AllCategory> createState() => _AllCategoryState();
@@ -27,7 +29,7 @@ class _AllCategoryState extends State<AllCategory> {
         title: const Text("Category"),
       ),
       body: Padding(
-        padding: EdgeInsets.only(top: _size.height/30),
+        padding: EdgeInsets.only(top: _size.height / 30),
         child: StreamBuilder(
           stream: categoryRepository.getCategoryList(),
           builder: (context, snapshot) {
@@ -37,11 +39,17 @@ class _AllCategoryState extends State<AllCategory> {
               );
             }
             List<Category> listCategory = snapshot.data!;
-            List<IconData> icon = [FontAwesomeIcons.basketball, FontAwesomeIcons.volleyball, FontAwesomeIcons.personBiking, FontAwesomeIcons.dumbbell, FontAwesomeIcons.futbol, Icons.sports_tennis_outlined];
+            List<IconData> icon = [
+              FontAwesomeIcons.basketball,
+              FontAwesomeIcons.volleyball,
+              FontAwesomeIcons.personBiking,
+              FontAwesomeIcons.dumbbell,
+              FontAwesomeIcons.futbol,
+              Icons.sports_tennis_outlined
+            ];
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4
-              ),
+                  crossAxisCount: 4),
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -52,28 +60,31 @@ class _AllCategoryState extends State<AllCategory> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CategoryScreen(category),
+                            builder: (context) => CategoryScreen(category, widget.isLogin),
                           ));
                     },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: _size.width/7,
-                              height: _size.height/15,
-                              decoration:
-                                  BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: HexColor("828282")),
-                                    color: Colors.white),
-                              child:  Center(child: FaIcon(icon[index], color: HexColor("646262"),))
-                              ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: _size.height/85),
-                              child: Center(child: Text("${category.olahraga}")),
-                            ),
-                          ],
-                      ));
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                            width: _size.width / 7,
+                            height: _size.height / 15,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: HexColor("828282")),
+                                color: Colors.white),
+                            child: Center(
+                                child: FaIcon(
+                              icon[index],
+                              color: HexColor("646262"),
+                            ))),
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: _size.height / 85),
+                          child: Center(child: Text("${category.olahraga}")),
+                        ),
+                      ],
+                    ));
               },
             );
           },

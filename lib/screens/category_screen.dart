@@ -7,9 +7,10 @@ import '../component/product_gridview.dart';
 import '../model/category.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen(this.category, {Key? key}) : super(key: key);
+  const CategoryScreen(this.category, this.isLogin, {Key? key}) : super(key: key);
 
   final Category category;
+  final bool isLogin;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,10 @@ class CategoryScreen extends StatelessWidget {
                       snapshot.data?.docs;
                   int? productCount = listDocs?.length;
                   return ProductGridview(
-                      productCount: productCount, listDocs: listDocs);
+                    productCount: productCount,
+                    listDocs: listDocs,
+                    isLogin: isLogin,
+                  );
                 }
               }),
         ));

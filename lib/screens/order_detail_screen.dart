@@ -424,7 +424,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 //     side: BorderSide(
                                 //         width: 2, color: HexColor("FFFFFF"))),
                                 onPressed: (() async {
-                                  beforeImage = await openGallery();
+                                  beforeImage = await openCamera();
                                   setState(() {});
                                 }),
                                 child: Image.file(beforeImage!),
@@ -443,7 +443,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 // style: TextButton.styleFrom(
                                 //     backgroundColor: HexColor("8DA6FE")),
                                 onPressed: (() async {
-                                  beforeImage = await openGallery();
+                                  beforeImage = await openCamera();
                                   setState(() {});
                                 }),
                                 child: Center(
@@ -576,7 +576,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 //     side: BorderSide(
                                 //         width: 2, color: HexColor("8DA6FE"))),
                                 onPressed: (() async {
-                                  afterImage = await openGallery();
+                                  afterImage = await openCamera();
                                   setState(() {});
                                 }),
                                 child: Image.file(afterImage!),
@@ -595,7 +595,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 // style: TextButton.styleFrom(
                                 //     backgroundColor: HexColor("8DA6FE")),
                                 onPressed: (() async {
-                                  afterImage = await openGallery();
+                                  afterImage = await openCamera();
                                   setState(() {});
                                 }),
                                 child: Center(
@@ -699,7 +699,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                           "868686")))),
                           child: TextButton(
                               onPressed: () async {
-                                imageComplain = await openGallery();
+                                imageComplain = await openCamera();
                                 setState(() {
                                   if (counterComplain >= 2) {
                                     listImagesComplain.remove(imageTempComplain);
@@ -1067,10 +1067,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         ),
       );
 
-  Future<File?> openGallery() async {
+  Future<File?> openCamera() async {
     final ImagePicker picker = ImagePicker();
     final XFile? imagePicked =
-        await picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.camera);
     return File(imagePicked!.path);
   }
 

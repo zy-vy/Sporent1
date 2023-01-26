@@ -31,8 +31,8 @@ class Order {
   String? returnTrackingCode;
   String? description;
   int? total;
-  int? totalPrice;
-  int? totalDeposit;
+  int? balance;
+  int? deposit;
 
   UserLocal? user;
   UserLocal? owner;
@@ -79,8 +79,8 @@ class Order {
       this.returnTrackingCode,
       this.description,
       this.complainRef,
-      this.totalPrice,
-      this.totalDeposit
+      this.balance,
+      this.deposit
   });
 
   factory Order.fromDocument(String id, Map<String,dynamic> data){
@@ -108,8 +108,8 @@ class Order {
       returnTrackingCode: data["tracking_code_user"],
       description: data["description"],
       complainRef: data["complain"],
-      totalPrice: data ["total_price"],
-      totalDeposit: data["total_deposit"]
+      balance: data ["balance"],
+      deposit: data["deposit"]
     );
   }
 
@@ -141,8 +141,8 @@ class Order {
       if(returnTrackingCode!=null) "tracking_code_user" : returnTrackingCode,
       if(description!= null) "description" :description,
       if(complainRef!= null) "complain" :complainRef,
-      if(totalPrice!= null) "total_price" : totalPrice,
-      if(totalDeposit!= null) "total_deposit" : totalDeposit,
+      if(balance!= null) "balance" : balance,
+      if(deposit!= null) "deposit" : deposit,
     };
   }
 
