@@ -12,7 +12,7 @@ class ImageRepository {
     fileRef
         .putFile(file)
         .then((p0) =>
-        // log("Success upload $name")
+        log("Success upload $name")
     )
         .onError((error, stackTrace) => log("$error |\n $stackTrace"));
   }

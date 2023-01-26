@@ -63,14 +63,14 @@ class _NotifReview extends State<NotifReview> {
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,
-                          height: 2,
+                          height: 2.2,
                         ),
                       ),
                       TextSpan(
                         text:
                             "Your review can be seen in the product that you given your review",
                         style: TextStyle(
-                            fontSize: 12, color: Colors.grey, height: 1.5),
+                            fontSize: 12, color: Colors.grey, height: 1.8),
                       )
                     ])),
              SizedBox(height: _size.height / 30),

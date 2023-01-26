@@ -10,6 +10,8 @@ import 'package:sporent/repository/image_repository.dart';
 import 'package:sporent/repository/order_repository.dart';
 import 'package:sporent/repository/user_repository.dart';
 
+import '../model/balance.dart';
+import '../model/deposit.dart';
 import '../repository/product_repository.dart';
 
 class OrderViewModel with ChangeNotifier {
@@ -125,6 +127,34 @@ class OrderViewModel with ChangeNotifier {
     await FirebaseFirestore.instance.doc(userRef!.path).update({"deposit" : FieldValue.increment(order.product!.deposit_price!)}).onError((error, stackTrace) => log("error deposit"));
     await FirebaseFirestore.instance.doc(ownerRef!.path).update({"owner_balance" : FieldValue.increment(order.product!.rent_price! * order.quantity!)}).onError((error, stackTrace) => log("error price"));
 
+    // var deposit = Deposit(
+    //         amount: order.deposit,
+    //         date: DateTime.now(),
+    //         detail_id: FirebaseFirestore.instance
+    //             .collection("transaction")
+    //             .doc(order.id),
+    //         user: FirebaseFirestore.instance
+    //             .collection("user")
+    //             .doc(order.user!.id),
+    //         status: "plus")
+    //     .toJson();
+
+    // await FirebaseFirestore.instance.collection("deposit").doc().set(deposit);
+
+    // var balance = Balance(
+    //         amount: order.balance,
+    //         date: DateTime.now(),
+    //         detail_id: FirebaseFirestore.instance
+    //             .collection("transaction")
+    //             .doc(order.id),
+    //         owner: FirebaseFirestore.instance
+    //             .collection("user")
+    //             .doc(order.owner!.id),
+    //         status: "plus")
+    //     .toJson();
+
+    // await FirebaseFirestore.instance.collection("balance").doc().set(balance);
+    
     var task1 = imageRepository.uploadFile(
         Order.conditionCheckPath, name, afterPhoto);
     var task2 = orderRepository.updateOrder(order);

@@ -148,10 +148,12 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                               side: BorderSide(
                                                   width: 2,
                                                   color: HexColor("868686")))),
-                                      child: FirebaseImage(
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: FirebaseImage(
                                         filePath:
                                             "condition-check/${widget.imageCondition}",
-                                      )),
+                                      ))),
                                   onTap: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
