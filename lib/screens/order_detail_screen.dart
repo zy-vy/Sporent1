@@ -40,7 +40,7 @@ class OrderDetailScreen extends StatefulWidget {
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final orderViewModel = OrderViewModel();
 
-  var dateFormat = DateFormat('dd-MM-yyyy');
+  var dateFormat = DateFormat('d MMMM ' 'yyyy');
 
   late double size;
 
@@ -72,6 +72,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size.width;
+    Size _size = MediaQuery.of(context).size;
 
     Map<String, Widget> listWidget = {
       "detailOrder": orderDetail(),
@@ -89,7 +90,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
-        body: SingleChildScrollView(child: listWidget[currentState]!));
+        body: Padding(
+          padding: EdgeInsets.only(top: _size.height/40, bottom: _size.height/30),
+          child: SingleChildScrollView(child: listWidget[currentState]!),
+        ));
   }
 
   Widget orderDetail() {
@@ -97,17 +101,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
       Container(
           margin:
-              EdgeInsets.symmetric( vertical: size / 25),
+              EdgeInsets.symmetric( vertical: size / 25, horizontal: size / 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               heading("Booking period"),
               SizedBox(height: size/25,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(dateFormat.format(order.startDate!)),
+                  SizedBox(width: size/ 10),
                   const FaIcon(FontAwesomeIcons.arrowRight),
+                  SizedBox(width: size/ 10),
                   Text(dateFormat.format(order.endDate!))
                 ],
               )
@@ -120,6 +127,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           heading("Detail product"),
+          SizedBox(height: size/25,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -145,11 +153,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis),
+                    SizedBox(height: size/35,),
                     Text("${order.quantity} day"),
+                    SizedBox(height: size/35,),
                     const Text(
                       "total payment",
                       style: TextStyle(color: Colors.black54),
                     ),
+                    SizedBox(height: size/45,),
                     ItemPrice(
                       price: order.total!,
                       trail: false,
@@ -181,6 +192,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 Expanded(child: Text("${order.deliveryMethod}"))
               ],
             ),
+            SizedBox(height: size/35),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -188,6 +200,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 Expanded(child: Text(order.user?.name ?? ""))
               ],
             ),
+            SizedBox(height: size/35),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -554,7 +567,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  heading("Please take a picture before sending item"),
+                  heading("Please take a picture of product"),
                   SizedBox(
                     height: size / 20,
                   ),
@@ -880,11 +893,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)),
                   ))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
+                  : const SizedBox()
               ,
             ],
           ),
@@ -969,11 +978,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)),
                   ))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
+                  : const SizedBox()
               ,
               order.afterUserFile != null
                   ? Container(
@@ -991,11 +996,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)),
                   ))
-                  : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
+                  : const SizedBox()
               ,
             ],
           ),

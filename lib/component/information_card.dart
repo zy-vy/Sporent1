@@ -47,14 +47,16 @@ class _InformationCardState extends State<InformationCard> {
         stream: widget.type == "request"
             ? firestore
                 .collection(widget.type)
+                .orderBy('date')
                 .where(name_field,
                     isEqualTo: firestore.collection("user").doc(widget.id))
                 .where("type", isEqualTo: widget.field)
                 .snapshots()
             : widget.type == "admin"
-                ? firestore.collection("request").snapshots()
+                ? firestore.collection("request").orderBy('date').snapshots()
                 : firestore
                     .collection(widget.type)
+                    .orderBy('date')
                     .where(name_field,
                         isEqualTo: firestore.collection("user").doc(widget.id))
                     .snapshots(),

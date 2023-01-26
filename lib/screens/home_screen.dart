@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/popular_category.dart';
 import 'package:sporent/component/product_card.dart';
 import 'package:sporent/component/product_recommend.dart';
@@ -64,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _size.width / 25, _size.height / 20),
               child: Column(
                 children: [
+                  SearchBarProduct(isLoggedIn),
                   HeadingCategory(size: _size, isLogin: isLoggedIn),
                   PopularCategory(isLoggedIn),
                   HeadingRecommend(size: _size, isLogin: isLoggedIn),

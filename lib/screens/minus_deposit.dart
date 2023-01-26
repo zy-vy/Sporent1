@@ -79,10 +79,12 @@ class _MinusDepositState extends State<MinusDeposit> {
                                         snapshot.data!.get("deposit") -
                                             int.parse(controller.text);
 
+                                    int dataPlus = snapshot.data!.get("balance") + int.parse(controller.text);
+
                                     FirebaseFirestore.instance
                                         .collection("transaction")
                                         .doc(widget.id)
-                                        .update({"deposit": dataMinus, "status" : "ACTIVE"});
+                                        .update({"deposit": dataMinus, "balance" : dataPlus, "status" : "RETURN"});
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(

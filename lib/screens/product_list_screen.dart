@@ -27,7 +27,7 @@ class ProductListScreen extends StatelessWidget {
           margin: EdgeInsets.symmetric(
               horizontal: _size.width / 30, vertical: _size.height / 60),
           child: StreamBuilder(
-              stream: firestore.collection('product').snapshots().take(10),
+              stream: firestore.collection('product').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error in receiving data: ${snapshot.error}');
@@ -40,7 +40,6 @@ class ProductListScreen extends StatelessWidget {
                     return const Text('Awaiting for interaction');
 
                   case ConnectionState.active:
-                    log("Stream has started but not finished");
                     if (!snapshot.hasData) {
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -48,7 +47,6 @@ class ProductListScreen extends StatelessWidget {
                     } else {
                       List<QueryDocumentSnapshot<Map<String, dynamic>>>?
                           listDocs = snapshot.data?.docs;
-                      inspect(listDocs);
                       int? productCount = listDocs?.length;
                       return ProductGridview(
                           productCount: productCount, listDocs: listDocs, isLogin: isLogin,);

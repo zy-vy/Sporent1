@@ -139,7 +139,7 @@ class OrderViewModel with ChangeNotifier {
     await FirebaseFirestore.instance.doc(ownerRef!.path).update({
       "owner_balance":
           FieldValue.increment(order.balance!)
-    }).onError((error, stackTrace) => log("error price"));
+    }).onError((error, stackTrace) => log("error balance"));
 
     var deposit = Deposit(
             amount: order.deposit,

@@ -142,11 +142,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                           style: TextButton.styleFrom(
                               side: BorderSide(
                                   width: 1, color: HexColor("888888"))),
-                          onPressed: transaction.status == "WAITING"
-                              ? null
-                              : transaction.status == "CONFIRM"
-                                  ? null
-                                  : transaction.status == "ACCEPT"
+                          onPressed: transaction.status == "WAITING" || transaction.status == "CONFIRM" || transaction.status == "ACCEPT" || transaction.status == "DECLINE" || transaction.status == "REJECT"
                                       ? null
                                       : () {
                                           Navigator.of(context).push(MaterialPageRoute(
@@ -174,14 +170,10 @@ class _DetailTransaction extends State<DetailTransaction> {
                                     Text(
                                       "Pre-Condition",
                                       style: TextStyle(
-                                          color: transaction.status == "WAITING"
-                                              ? Colors.grey
-                                              : transaction.status == "ACCEPT"
-                                                  ? Colors.grey
-                                                  : transaction.status ==
-                                                          "CONFIRM"
-                                                      ? Colors.grey
-                                                      : Colors.black,
+                                          color: transaction.status == "WAITING" || transaction.status == "ACCEPT" || transaction.status ==
+                                                          "CONFIRM" || transaction.status ==
+                                                          "DECLINE" || transaction.status == "REJECT"
+                                                      ? Colors.grey : Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
                                     ),
@@ -216,13 +208,10 @@ class _DetailTransaction extends State<DetailTransaction> {
                                   ],
                                 )),
                                 FaIcon(FontAwesomeIcons.chevronRight,
-                                    color: transaction.status == "WAITING"
-                                        ? Colors.grey
-                                        : transaction.status == "ACCEPT"
-                                            ? Colors.grey
-                                            : transaction.status == "CONFIRM"
-                                                ? Colors.grey
-                                                : Colors.black,
+                                    color: transaction.status == "WAITING" || transaction.status == "ACCEPT" || transaction.status ==
+                                                          "CONFIRM" || transaction.status ==
+                                                          "DECLINE" || transaction.status == "REJECT"
+                                                      ? Colors.grey : Colors.black,
                                     size: 20)
                               ],
                             ),
@@ -298,16 +287,10 @@ class _DetailTransaction extends State<DetailTransaction> {
                                       width: _size.width,
                                       height: _size.height / 12,
                                       child: ElevatedButton(
-                                        onPressed: dateFormat.format(
-                                                    transaction.end_date!) !=
+                                        onPressed: transaction.status == "ACTIVE" && dateFormat.format(
+                                                    transaction.end_date!) ==
                                                 dateFormat
-                                                    .format(DateTime.now())
-                                            ? null
-                                            : transaction.status == "COMPLAIN"
-                                                ? null
-                                                : transaction.status != "ACTIVE"
-                                                    ? null
-                                                    : () {
+                                                    .format(DateTime.now()) ? () {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
                                                                 builder:
@@ -324,7 +307,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                                           product_name: widget.product_name,
                                                                           total: transaction.total,
                                                                         )));
-                                                      },
+                                                      } : null,
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: HexColor("4164DE"),
                                         ),
@@ -343,15 +326,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                   ? const SizedBox()
                                   : Center(
                                       child: TextButton(
-                                          onPressed: transaction.status ==
-                                                  "WAITING"
-                                              ? null
-                                              : transaction.status == "ACCEPT"
-                                                  ? null
-                                                  : transaction.status ==
-                                                          "DELIVER"
-                                                      ? null
-                                                      : () {
+                                          onPressed: transaction.status == "ACTIVE" || transaction.status == "COMPLAIN" ? () {
                                                           if (snapshot.data!
                                                               .data()!
                                                               .containsKey(
@@ -385,24 +360,15 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                                           .idTransaction)),
                                                             );
                                                           }
-                                                        },
+                                                        } : null,
                                           child: Text(
                                             haveComplain
                                                 ? "Complain Detail"
                                                 : "Complain Product",
                                             style: TextStyle(
                                                 fontSize: 18,
-                                                color: transaction.status ==
-                                                        "WAITING"
-                                                    ? Colors.grey
-                                                    : transaction.status ==
-                                                            "ACCEPT"
-                                                        ? Colors.grey
-                                                        : transaction.status ==
-                                                                "DELIVER"
-                                                            ? Colors.grey
-                                                            : HexColor(
-                                                                "4164DE"),
+                                                color: transaction.status == "ACTIVE" || transaction.status == "COMPLAIN" ? HexColor(
+                                                                "4164DE") : Colors.grey,
                                                 fontWeight: FontWeight.bold),
                                           )),
                                     ),

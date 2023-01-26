@@ -81,7 +81,7 @@ class _TransactionScreen extends State<TransactionScreen> {
                             .collection("transaction")
                             .where("user",
                                 isEqualTo:
-                                    firestore.collection("user").doc(user!.id))
+                                    firestore.collection("user").doc(user!.id)).orderBy('issue_date')
                             .snapshots(),
                         builder: ((context, snapshot) {
                           if (!snapshot.hasData) {
