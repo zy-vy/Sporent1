@@ -85,7 +85,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: const Text("Detail Transaction"),
+            child: const Text("Detail Order"),
           ),
           backgroundColor: hexStringToColor("4164DE"),
         ),
