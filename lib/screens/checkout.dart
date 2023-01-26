@@ -625,6 +625,9 @@ class _CheckoutPage extends State<CheckoutPage> {
                   for (var cart in cartList) {
                     var cartDetailList = cart.listCartDetail;
                     for (var cartDetail in cartDetailList!) {
+                      var product = await FirebaseFirestore.instance
+                          .doc(cartDetail.productRef!.path)
+                          .get();
                       Order order = Order(
                         total: cartDetail.total,
                         quantity: cartDetail.quantity,
@@ -637,6 +640,8 @@ class _CheckoutPage extends State<CheckoutPage> {
                         userRef: cart.userRef,
                         ktpFile: ktpImage,
                         paymentFile: transferImage,
+                        totalPrice: product.get("rent_price") * cartDetail.quantity,
+                        totalDeposit: product.get("deposit_price")
                       );
                       await TransactionViewModel()
                           .checkout(cartDetail, order, null)
