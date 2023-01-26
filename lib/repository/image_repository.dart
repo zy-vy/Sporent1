@@ -11,9 +11,7 @@ class ImageRepository {
     var fileRef = storage.child("$path/").child(name);
     fileRef
         .putFile(file)
-        .then((p0) =>
-        // log("Success upload $name")
-    )
+
         .onError((error, stackTrace) => log("$error |\n $stackTrace"));
   }
 
