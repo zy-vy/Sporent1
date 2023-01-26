@@ -165,6 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                           builder: (context) =>
                                               const BottomBarScreen(indexPage: "0",)));
                                 }).onError((error, stackTrace) {
+                                  Navigator.pop(context);
                                   CoolAlert.show(context: context, type: CoolAlertType.error, text: "Email or password not match.");
                                 });
                               }
