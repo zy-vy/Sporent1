@@ -122,8 +122,8 @@ class OrderViewModel with ChangeNotifier {
     var userRef = order.userRef;
     var ownerRef = order.ownerRef;
     
-    FirebaseFirestore.instance.doc(userRef!.path).update({"deposit" : FieldValue.increment(order.product!.deposit_price!)});
-    FirebaseFirestore.instance.doc(ownerRef!.path).update({"owner_balance" : FieldValue.increment(order.product!.rent_price! * order.quantity!)});
+    await FirebaseFirestore.instance.doc(userRef!.path).update({"deposit" : FieldValue.increment(order.product!.deposit_price!)}).onError((error, stackTrace) => log("error deposit"));
+    await FirebaseFirestore.instance.doc(ownerRef!.path).update({"owner_balance" : FieldValue.increment(order.product!.rent_price! * order.quantity!)}).onError((error, stackTrace) => log("error price"));
 
     var task1 = imageRepository.uploadFile(
         Order.conditionCheckPath, name, afterPhoto);
