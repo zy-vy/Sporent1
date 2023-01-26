@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:sporent/model/order.dart';
@@ -115,9 +116,14 @@ class OrderViewModel with ChangeNotifier {
     var name = "${order.id}_owner_after";
 
     order.status = "DONE";
-    order.afterPhotoOwner = "name";
     order.afterOwnerFile = afterPhoto;
     order.description = description;
+
+    var userRef = order.userRef;
+    var ownerRef = order.ownerRef;
+    
+    FirebaseFirestore.instance.doc(userRef!.path).update({"deposit" : FieldValue.increment(order.product!.deposit_price!)});
+    FirebaseFirestore.instance.doc(ownerRef!.path).update({"owner_balance" : FieldValue.increment(order.product!.rent_price! * order.quantity!)});
 
     var task1 = imageRepository.uploadFile(
         Order.conditionCheckPath, name, afterPhoto);

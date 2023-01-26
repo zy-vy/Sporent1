@@ -206,7 +206,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                       context: context,
                                                       type: CoolAlertType.error,
                                                       text:
-                                                          "Sorry, something went wrong..."));
+                                                          "Sorry, something went wrong...\nPlease Sign in..."));
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(

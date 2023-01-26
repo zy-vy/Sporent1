@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -150,18 +151,21 @@ class _SignInScreenState extends State<SignInScreen> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => AdminProfile()));
                               } else {
+                                showLoaderDialog(context);
+                                // CoolAlert.show(context: context, type: CoolAlertType.loading);
                                 FirebaseAuth.instance
                                     .signInWithEmailAndPassword(
                                         email: _emailTextController.text,
                                         password: _passwordTextController.text)
                                     .then((value) {
-                                  // Provider.of<UserViewModel>(context,listen: false).signIn();
+                                      Navigator.pop(context);
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const BottomBarScreen(indexPage: "0",)));
                                 }).onError((error, stackTrace) {
+                                  CoolAlert.show(context: context, type: CoolAlertType.error, text: "Email or password not match.");
                                 });
                               }
                             }
@@ -223,5 +227,21 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       )
     ]);
+  }
+
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(margin: const EdgeInsets.only(left: 7),child:const Text("Sign in..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
   }
 }
