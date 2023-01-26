@@ -5,16 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/product_gridview.dart';
 
-class ResultSearchProduct extends StatelessWidget {
+class ResultSearchProduct extends StatefulWidget {
   const ResultSearchProduct(this.search_keyword, this.isLogin, {super.key});
 
   final String search_keyword;
   final bool isLogin;
 
   @override
+  State<ResultSearchProduct> createState() => _ResultSearchProductState();
+}
+
+class _ResultSearchProductState extends State<ResultSearchProduct> {
+  List dataProduct = [];
+
+  void fetchAllProduct(List dataProduct) async {
+    var snapshot = FirebaseFirestore.instance.collection("product").get();
+    snapshot.then((value) => value.docs.forEach((element) {
+          String name = element.get("name");
+          if (name
+              .toLowerCase()
+              .contains(widget.search_keyword.toLowerCase())) {
+            dataProduct.add(name);
+          }
+        }));
+  }
+
+  @override
   Widget build(BuildContext context) {
     var firestore = FirebaseFirestore.instance;
     var _size = MediaQuery.of(context).size;
+    fetchAllProduct(dataProduct);
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -30,8 +51,8 @@ class ResultSearchProduct extends StatelessWidget {
           child: StreamBuilder(
               stream: firestore
                   .collection('product')
-                  .where('name', arrayContains: search_keyword)
-                  .snapshots(),
+                  .where('name', whereIn: dataProduct)
+                  .snapshots().take(10),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error in receiving data: ${snapshot.error}');
@@ -47,7 +68,7 @@ class ResultSearchProduct extends StatelessWidget {
                   return ProductGridview(
                     productCount: productCount,
                     listDocs: listDocs,
-                    isLogin: isLogin,
+                    isLogin: widget.isLogin,
                   );
                 }
               }),
