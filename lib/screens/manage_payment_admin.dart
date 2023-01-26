@@ -31,7 +31,7 @@ class ManagePaymentAdmin extends StatelessWidget {
         body: StreamBuilder(
             stream: firestore
                 .collection("transaction")
-                .where("status", isEqualTo: "WAITING")
+                .where("status", isEqualTo: "WAITING").orderBy('issue_date', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {

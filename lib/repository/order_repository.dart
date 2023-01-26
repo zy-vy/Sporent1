@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sporent/model/order.dart';
-import 'package:sporent/repository/user_repository.dart';
 
 class OrderRepository {
   final firestore = FirebaseFirestore.instance.collection(Order.path);

@@ -60,7 +60,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   File? imageTempComplain;
   final complainController = TextEditingController();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -78,7 +77,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       "detailOrder": orderDetail(),
       "submitOrder": submitOrder(),
       "completeOrder": completeOrder(),
-      "complainOrder" : complainOrder(),
+      "complainOrder": complainOrder(),
       // "complainDetailOrder": complainDetailOrder()
     };
     return Scaffold(
@@ -91,56 +90,71 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           backgroundColor: hexStringToColor("4164DE"),
         ),
         body: Padding(
-          padding: EdgeInsets.only(top: _size.height/40, bottom: _size.height/30),
+          padding: EdgeInsets.only(
+              top: _size.height / 40, bottom: _size.height / 30),
           child: SingleChildScrollView(child: listWidget[currentState]!),
         ));
   }
 
   Widget orderDetail() {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-
       Container(
           margin:
-              EdgeInsets.symmetric( vertical: size / 25, horizontal: size / 15),
+              EdgeInsets.symmetric(vertical: size / 25, horizontal: size / 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               heading("Booking period"),
-              SizedBox(height: size/25,),
+              SizedBox(
+                height: size / 25,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(dateFormat.format(order.startDate!)),
-                  SizedBox(width: size/ 10),
+                  SizedBox(width: size / 10),
                   const FaIcon(FontAwesomeIcons.arrowRight),
-                  SizedBox(width: size/ 10),
+                  SizedBox(width: size / 10),
                   Text(dateFormat.format(order.endDate!))
                 ],
               )
             ],
           )),
-      Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+      Divider(
+        color: hexStringToColor("E0E0E0"),
+        thickness: 2,
+        indent: size / 15,
+        endIndent: 15,
+      ),
 
       Container(
         margin:
             EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           heading("Detail product"),
-          SizedBox(height: size/25,),
+          SizedBox(
+            height: size / 25,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
                 width: size / 3,
                 child: AspectRatio(
-                  aspectRatio: 1,
-                  child: ClipRRect(
+                    aspectRatio: 1,
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(imageUrl: "${order.product?.img}",progressIndicatorBuilder: (context, url, progress) => SizedBox(width: size/10 ,child: const CircularProgressIndicator(),),),
-                    // child: Icon(Icons.access_time)),
-                  )
-                ),
+                      child: CachedNetworkImage(
+                        imageUrl: "${order.product?.img}",
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            SizedBox(
+                          width: size / 10,
+                          child: const CircularProgressIndicator(),
+                        ),
+                      ),
+                      // child: Icon(Icons.access_time)),
+                    )),
               ),
               SizedBox(
                 width: size / 20,
@@ -153,14 +167,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis),
-                    SizedBox(height: size/35,),
+                    SizedBox(
+                      height: size / 35,
+                    ),
                     Text("${order.quantity} day"),
-                    SizedBox(height: size/35,),
+                    SizedBox(
+                      height: size / 35,
+                    ),
                     const Text(
                       "total payment",
                       style: TextStyle(color: Colors.black54),
                     ),
-                    SizedBox(height: size/45,),
+                    SizedBox(
+                      height: size / 45,
+                    ),
                     ItemPrice(
                       price: order.total!,
                       trail: false,
@@ -173,7 +193,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ),
         ]),
       ),
-      Divider(color: hexStringToColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
+      Divider(
+        color: hexStringToColor("E0E0E0"),
+        thickness: 2,
+        indent: size / 15,
+        endIndent: 15,
+      ),
 
       Container(
         margin:
@@ -192,7 +217,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 Expanded(child: Text("${order.deliveryMethod}"))
               ],
             ),
-            SizedBox(height: size/35),
+            SizedBox(height: size / 35),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -200,7 +225,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 Expanded(child: Text(order.user?.name ?? ""))
               ],
             ),
-            SizedBox(height: size/35),
+            SizedBox(height: size / 35),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -222,10 +247,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       Column(
         children: [
           Container(
-            margin: EdgeInsets.all(size/15),
-            height: size/10,
-            decoration: BoxDecoration(color: Colors.green,borderRadius: BorderRadius.circular(5)),
-            child: Center(child: Text("status: ${order.status}",style: const TextStyle(color: Colors.white),),),
+            margin: EdgeInsets.all(size / 15),
+            height: size / 10,
+            decoration: BoxDecoration(
+                color: Colors.green, borderRadius: BorderRadius.circular(5)),
+            child: Center(
+              child: Text(
+                "status: ${order.status}",
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
           ),
         ],
       ),
@@ -247,7 +278,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     } else if (order.status == "COMPLAIN") {
       return complainDetailButton();
     }
-    return  const SizedBox();
+    return const SizedBox();
   }
 
   Widget acceptDeclineButton() {
@@ -256,43 +287,50 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size/6,
+            height: size / 6,
             child: ElevatedButton(
-
                 onPressed: () {
-                  CoolAlert.show(context: context, type: CoolAlertType.confirm, onConfirmBtnTap: () {
-                    orderViewModel.acceptOrder(order);
-                    Navigator.pop(context);
-                    setState(() {
-                      currentState = "submitOrder";
-                    });
-                  },);
-
+                  CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.confirm,
+                    onConfirmBtnTap: () {
+                      orderViewModel.acceptOrder(order);
+                      Navigator.pop(context);
+                      setState(() {
+                        currentState = "submitOrder";
+                      });
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Accept Order", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)))),
+                child: const Text("Accept Order",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size/6,
+            height: size / 6,
             child: TextButton(
                 onPressed: () {
                   // CoolAlert.show(context: context, type: CoolAlertType.success);
-                  CoolAlert.show(context: context, type: CoolAlertType.confirm, onConfirmBtnTap: () {
-                    orderViewModel.declineOrder(order);
-                    // Fluttertoast.showToast(msg: "decline");
+                  CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.confirm,
+                    onConfirmBtnTap: () {
+                      orderViewModel.declineOrder(order);
+                      // Fluttertoast.showToast(msg: "decline");
+                      Navigator.pop(context);
+                    },
+                  ).then((value) {
                     Navigator.pop(context);
-                  },).then((value) {                  Navigator.pop(context);
                   });
-
                 },
-
-                child: Text("Decline Order", style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,color: HexColor("4164DE")))))
+                child: Text("Decline Order",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: HexColor("4164DE")))))
       ],
     );
   }
@@ -303,7 +341,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size/6,
+            height: size / 6,
             child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -313,9 +351,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Submit Order Tracking", style: TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 18)))),
+                child: const Text("Submit Order Tracking",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
       ],
     );
   }
@@ -326,7 +364,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size/6,
+            height: size / 6,
             child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -336,21 +374,22 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Finish Order", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)))),
+                child: const Text("Finish Order",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
         complainButton()
       ],
     );
   }
 
-  Widget complainButton(){
+  Widget complainButton() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-            margin: EdgeInsets.symmetric(horizontal: size / 15,vertical: size/15),
-            height: size/6,
+            margin: EdgeInsets.symmetric(
+                horizontal: size / 15, vertical: size / 15),
+            height: size / 6,
             child: ElevatedButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => ComplainProduct(FirebaseAuth.instance.currentUser!.uid, order.id!),));
@@ -361,20 +400,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("Complain Order", style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18)))),
+                child: const Text("Complain Order",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
       ],
     );
   }
 
-  Widget complainDetailButton () {
+  Widget complainDetailButton() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: size / 15),
-            height: size/6,
+            height: size / 6,
             child: ElevatedButton(
                 onPressed: () {
                   // setState(() {
@@ -382,21 +421,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   // });
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) =>
-                            DetailComplain(
-                                order
-                                    .complainRef!.id,
-                                order.product!.name!,
-                                order.product!.img!,
-                                order.total!, "owner")),
+                        builder: (context) => DetailComplain(
+                            order.complainRef!.id,
+                            order.product!.name!,
+                            order.product!.img!,
+                            order.total!,
+                            "owner")),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HexColor("4164DE"),
                 ),
-                child: const Text("complain detail", style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)))),
+                child: const Text("complain detail",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)))),
       ],
     );
   }
@@ -425,13 +463,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           ? Container(
                               width: size / 6,
                               height: size / 6,
-                          decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(10),
-                                  side: BorderSide(
-                                      width: 2,
-                                      color: HexColor("868686")))),
+                              decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          width: 2,
+                                          color: HexColor("868686")))),
                               child: TextButton(
                                 // style: TextButton.styleFrom(
                                 //     side: BorderSide(
@@ -445,13 +482,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           : Container(
                               width: size / 6,
                               height: size / 6,
-                        decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(10),
-                                side: BorderSide(
-                                    width: 2,
-                                    color: HexColor("868686")))),
+                              decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          width: 2,
+                                          color: HexColor("868686")))),
                               child: TextButton(
                                 // style: TextButton.styleFrom(
                                 //     backgroundColor: HexColor("8DA6FE")),
@@ -513,9 +549,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     height: size / 5,
                   ),
                   SizedBox(
-                    height: size/6,
+                    height: size / 6,
                     child: ElevatedButton(
-
                         onPressed: () {
                           if (beforeImage == null ||
                               trackingLink == null ||
@@ -531,20 +566,24 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               .submitOrder(order, beforeImage, trackingLink!)
                               .then((value) => value != false
                                   ? CoolAlert.show(
-                                      context: context,
-                                      type: CoolAlertType.success).then((value) => setState(() {
-                            beforeImage = null;
-                            currentState = "detailOrder";
-                          }))
+                                          context: context,
+                                          type: CoolAlertType.success)
+                                      .then((value) => setState(() {
+                                            beforeImage = null;
+                                            currentState = "detailOrder";
+                                          }))
                                   : CoolAlert.show(
                                       context: context,
                                       type: CoolAlertType.error));
-
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor : HexColor("4164DE"),
+                          backgroundColor: HexColor("4164DE"),
                         ),
-                        child: const Text("Submit", style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),
+                        child: const Text(
+                          "Submit",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        )),
                   )
                 ],
               )),
@@ -579,8 +618,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               height: size / 6,
                               decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
                                           width: 2,
                                           color: HexColor("868686")))),
@@ -599,8 +637,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               height: size / 6,
                               decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
                                           width: 2,
                                           color: HexColor("868686")))),
@@ -637,7 +674,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     height: size / 5,
                   ),
                   SizedBox(
-                    height: size/6,
+                    height: size / 6,
                     child: ElevatedButton(
                         onPressed: () {
                           if (afterImage == null || description == null) {
@@ -664,10 +701,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor : HexColor("4164DE"),
+                          backgroundColor: HexColor("4164DE"),
                         ),
-                        child: const Text("Submit", style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)),
-
+                        child: const Text(
+                          "Submit",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        )),
                   )
                 ],
               )),
@@ -676,22 +716,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget complainOrder(){
-
-
+  Widget complainOrder() {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: size/15,
-          horizontal: size/15),
+      padding: EdgeInsets.symmetric(vertical: size / 15, horizontal: size / 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             "Please take a picture of your product",
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
-          SizedBox(height: size/30),
+          SizedBox(height: size / 30),
           Row(
             children: [
               for (int i = 0; i < counterComplain; i++)
@@ -700,22 +735,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     Stack(
                       children: [
                         Container(
-                          width: size/6,
-                          height: size/6,
+                          width: size / 6,
+                          height: size / 6,
                           decoration: ShapeDecoration(
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8),
                                   side: BorderSide(
                                       width: 2,
-                                      color: hexStringToColor(
-                                          "868686")))),
+                                      color: hexStringToColor("868686")))),
                           child: TextButton(
                               onPressed: () async {
                                 imageComplain = await openCamera();
                                 setState(() {
                                   if (counterComplain >= 2) {
-                                    listImagesComplain.remove(imageTempComplain);
+                                    listImagesComplain
+                                        .remove(imageTempComplain);
                                   }
 
                                   listImagesComplain.add(imageComplain);
@@ -728,56 +762,48 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               },
                               child: listImagesComplain.isEmpty == true
                                   ? FaIcon(
-                                FontAwesomeIcons.plus,
-                                color: hexStringToColor(
-                                    "4164DE"),
-                                size: 35,
-                              )
+                                      FontAwesomeIcons.plus,
+                                      color: hexStringToColor("4164DE"),
+                                      size: 35,
+                                    )
                                   : listImagesComplain[i] != null
-                                  ? Image.file(listImagesComplain[i]!)
-                                  : FaIcon(
-                                FontAwesomeIcons.plus,
-                                color: hexStringToColor(
-                                    "4164DE"),
-                                size: 35,
-                              )),
+                                      ? Image.file(listImagesComplain[i]!)
+                                      : FaIcon(
+                                          FontAwesomeIcons.plus,
+                                          color: hexStringToColor("4164DE"),
+                                          size: 35,
+                                        )),
                         ),
                         listImagesComplain.isEmpty == true
                             ? const Positioned(
-                            right: 0, top: 0, child: SizedBox())
+                                right: 0, top: 0, child: SizedBox())
                             : listImagesComplain[i] != null
-                            ? Positioned(
-                          right: 0,
-                          child: Container(
-                              height: 25,
-                              width: 25,
-                              decoration:
-                              const BoxDecoration(
-                                  color: Colors
-                                      .blueAccent,
-                                  shape: BoxShape
-                                      .circle),
-                              child: IconButton(
-                                icon: const FaIcon(
-                                    FontAwesomeIcons
-                                        .xmark,
-                                    size: 10,
-                                    color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    listImagesComplain.remove(
-                                        listImagesComplain[i]);
-                                    if (counterComplain != 1) {
-                                      counterComplain -= 1;
-                                    }
-                                  });
-                                },
-                              )),
-                        )
-                            : const Positioned(
-                            right: 0,
-                            top: 0,
-                            child: SizedBox())
+                                ? Positioned(
+                                    right: 0,
+                                    child: Container(
+                                        height: 25,
+                                        width: 25,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.blueAccent,
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                          icon: const FaIcon(
+                                              FontAwesomeIcons.xmark,
+                                              size: 10,
+                                              color: Colors.white),
+                                          onPressed: () {
+                                            setState(() {
+                                              listImagesComplain.remove(
+                                                  listImagesComplain[i]);
+                                              if (counterComplain != 1) {
+                                                counterComplain -= 1;
+                                              }
+                                            });
+                                          },
+                                        )),
+                                  )
+                                : const Positioned(
+                                    right: 0, top: 0, child: SizedBox())
                       ],
                     ),
                     counterComplain != 1
@@ -789,9 +815,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           ),
           SizedBox(height: size / 15),
           const Text("Complain Description",
-              style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: size/30),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: size / 30),
           TextFormField(
             controller: complainController,
             keyboardType: TextInputType.multiline,
@@ -808,43 +833,45 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               }
             },
           ),
-          SizedBox(height: size/5),
+          SizedBox(height: size / 5),
           SizedBox(
               width: size,
-              height: size/6,
+              height: size / 6,
               child: ElevatedButton(
                 onPressed: () {
-                  uploadFile(listImagesComplain, order.id!,
-                      complainController.text);
+                  uploadFile(
+                      listImagesComplain, order.id!, complainController.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                          const NotifComplain()));
+                          builder: (context) => const NotifComplain()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: hexStringToColor("4164DE"),
                   // padding: const EdgeInsets.only(right: 300, bottom: 40)
                 ),
-                child: const Text("Complain Product",
-                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                child: const Text(
+                  "Complain Product",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               )),
         ],
       ),
     );
   }
 
-  Widget conditionCheckOwner(){
-    if (order.status== "WAITING" || order.status == "CONFIRM" || order.status == "ACCEPT"){
+  Widget conditionCheckOwner() {
+    if (order.status == "WAITING" ||
+        order.status == "CONFIRM" ||
+        order.status == "ACCEPT") {
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
-
           SizedBox(
             height: size / 15,
           ),
@@ -856,45 +883,75 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               order.beforeOwnerFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => FullScreen(
-                                  "firebaseImage", firebaseImage: order.beforePhotoOwner, filePath: "condition-check",)));
-                    },
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(order.beforeOwnerFile!,fit: BoxFit.fill,)),
-                  ))
+                  ? Column(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1, color: HexColor("E0E0E0")),
+                                borderRadius: BorderRadius.circular(8)),
+                            width: size / 6,
+                            height: size / 6,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FullScreen(
+                                          "firebaseImage",
+                                          firebaseImage: order.beforePhotoOwner,
+                                          filePath: "condition-check",
+                                        )));
+                              },
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    order.beforeOwnerFile!,
+                                    fit: BoxFit.fill,
+                                  )),
+                            )),
+                        SizedBox(height: size / 40),
+                        const Text("Before Owner")
+                      ],
+                    )
                   : Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8),color: HexColor("8DA6FE")),
-                  width: size / 6,
-                  height: size / 6,
-                  child: const Icon(IconlyBold.infoSquare))
-              ,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 1, color: HexColor("E0E0E0")),
+                          borderRadius: BorderRadius.circular(8),
+                          color: HexColor("8DA6FE")),
+                      width: size / 6,
+                      height: size / 6,
+                      child: const Icon(IconlyBold.infoSquare)),
               order.afterOwnerFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => FullScreen(
-                                  "firebaseImage", firebaseImage: order.afterPhotoOwner, filePath: "condition-check",)));
-                    },
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(order.afterOwnerFile!,fit: BoxFit.fill,)),
-                  ))
-                  : const SizedBox()
-              ,
+                  ? Column(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1, color: HexColor("E0E0E0")),
+                                borderRadius: BorderRadius.circular(8)),
+                            width: size / 6,
+                            height: size / 6,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FullScreen(
+                                          "firebaseImage",
+                                          firebaseImage: order.afterPhotoOwner,
+                                          filePath: "condition-check",
+                                        )));
+                              },
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    order.afterOwnerFile!,
+                                    fit: BoxFit.fill,
+                                  )),
+                            )),
+                        SizedBox(height: size / 40),
+                        const Text("After Owner")
+                      ],
+                    )
+                  : const SizedBox(),
             ],
           ),
         ],
@@ -902,12 +959,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget trackingCode(){
-    if (order.status== "WAITING" || order.status == "CONFIRM" || order.status == "ACCEPT"){
+  Widget trackingCode() {
+    if (order.status == "WAITING" ||
+        order.status == "CONFIRM" ||
+        order.status == "ACCEPT") {
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -929,25 +988,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           //   readOnly: true,
           //   initialValue: order.trackingCode??"",
           // ),
-          TextButton(onPressed: () async {
-            final uri = Uri.parse("${order.trackingCode}");
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(uri);
-            } else {
-              throw 'Could not launch $uri';
-            }
-          }, child: Text(order.trackingCode??""))
+          TextButton(
+              onPressed: () async {
+                final uri = Uri.parse("${order.trackingCode}");
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri);
+                } else {
+                  throw 'Could not launch $uri';
+                }
+              },
+              child: Text(order.trackingCode ?? ""))
         ],
       ),
     );
   }
 
-  Widget conditionCheckUser(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER"  || order.status == "ACCEPT"){
+  Widget conditionCheckUser() {
+    if (order.status == "WAITING" ||
+        order.status == "CONFIRM" ||
+        order.status == "DELIVER" ||
+        order.status == "ACCEPT") {
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -963,41 +1027,67 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               order.beforeUserFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => FullScreen(
-                                  "firebaseImage", firebaseImage: order.beforePhotoUser,filePath: "condition-check",)));
-                    },
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(order.beforeUserFile!,fit: BoxFit.fill,)),
-                  ))
-                  : const SizedBox()
-              ,
+                  ? Column(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1, color: HexColor("E0E0E0")),
+                                borderRadius: BorderRadius.circular(8)),
+                            width: size / 6,
+                            height: size / 6,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FullScreen(
+                                          "firebaseImage",
+                                          firebaseImage: order.beforePhotoUser,
+                                          filePath: "condition-check",
+                                        )));
+                              },
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    order.beforeUserFile!,
+                                    fit: BoxFit.fill,
+                                  )),
+                            )),
+                        SizedBox(height: size / 40),
+                        const Text("Before User")
+                      ],
+                    )
+                  : const SizedBox(),
               order.afterUserFile != null
-                  ? Container(
-                  decoration: BoxDecoration(border: Border.all(width: 1,color: HexColor("E0E0E0")),borderRadius: BorderRadius.circular(8)),
-                  width: size / 6,
-                  height: size / 6,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => FullScreen(
-                                  "firebaseImage", firebaseImage:order.afterPhotoUser, filePath: "condition-check",)));
-                    },
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(order.afterUserFile!,fit: BoxFit.fill,)),
-                  ))
-                  : const SizedBox()
-              ,
+                  ? Column(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1, color: HexColor("E0E0E0")),
+                                borderRadius: BorderRadius.circular(8)),
+                            width: size / 6,
+                            height: size / 6,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FullScreen(
+                                          "firebaseImage",
+                                          firebaseImage: order.afterPhotoUser,
+                                          filePath: "condition-check",
+                                        )));
+                              },
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    order.afterUserFile!,
+                                    fit: BoxFit.fill,
+                                  )),
+                            )),
+                        SizedBox(height: size / 40),
+                        const Text("After User")
+                      ],
+                    )
+                  : const SizedBox(),
             ],
           ),
         ],
@@ -1005,12 +1095,15 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget returnTrackingCode(){
-    if (order.status== "WAITING" || order.status == "CONFIRM"||order.status =="DELIVER" || order.status == "ACCEPT"){
+  Widget returnTrackingCode() {
+    if (order.status == "WAITING" ||
+        order.status == "CONFIRM" ||
+        order.status == "DELIVER" ||
+        order.status == "ACCEPT") {
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: size/15,vertical: size/20),
+      margin: EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1048,14 +1141,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           //
           //   )]
           // ))
-          TextButton(onPressed: () async {
-            final uri = Uri.parse("${order.returnTrackingCode}");
-            if (await canLaunchUrl(uri)) {
-            await launchUrl(uri);
-            } else {
-            throw 'Could not launch $uri';
-            }
-          }, child: Text(order.returnTrackingCode??""))
+          TextButton(
+              onPressed: () async {
+                final uri = Uri.parse("${order.returnTrackingCode}");
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri);
+                } else {
+                  throw 'Could not launch $uri';
+                }
+              },
+              child: Text(order.returnTrackingCode ?? ""))
         ],
       ),
     );
@@ -1080,7 +1175,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     final refcomplain = FirebaseFirestore.instance.collection('complain').doc();
     final List<String> _arrImageUrls = [];
     for (int i = 0; i < listImages.length; i++) {
-      if (listImages[i]==null) continue;
+      if (listImages[i] == null) continue;
       Reference reference = FirebaseStorage.instance
           .ref()
           .child('complain-images/${refcomplain.id + i.toString()}');
@@ -1090,29 +1185,32 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     }
 
     final complain = Complain(
-        status: "In Progress",
-        transaction:
-        FirebaseFirestore.instance.collection("transaction").doc(id))
+            status: "In Progress",
+            transaction:
+                FirebaseFirestore.instance.collection("transaction").doc(id))
         .toJSON();
 
-    await refcomplain.set(complain).onError((error, stackTrace) => log("$error , $stackTrace"));
+    await refcomplain
+        .set(complain)
+        .onError((error, stackTrace) => log("$error , $stackTrace"));
 
     final complainDetail = ComplainDetail(
-        date: DateTime.now(),
-        description: complainController,
-        image: _arrImageUrls,
-        complain: refcomplain)
+            date: DateTime.now(),
+            description: complainController,
+            image: _arrImageUrls,
+            complain: refcomplain)
         .toJSON();
 
     await FirebaseFirestore.instance
         .collection("complain_detail")
         .doc()
-        .set(complainDetail).onError((error, stackTrace) => log("$error , $stackTrace"));
+        .set(complainDetail)
+        .onError((error, stackTrace) => log("$error , $stackTrace"));
 
     FirebaseFirestore.instance
         .collection("transaction")
         .doc(id)
-        .update({"complain": refcomplain, "status" : "COMPLAIN"}).onError((error, stackTrace) => log("$error , $stackTrace"));
+        .update({"complain": refcomplain, "status": "COMPLAIN"}).onError(
+            (error, stackTrace) => log("$error , $stackTrace"));
   }
-
 }

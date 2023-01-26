@@ -89,8 +89,8 @@ class _DetailTransaction extends State<DetailTransaction> {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: _size.height / 40),
-                      bookingPeriod(dateFormat.format(transaction.start_date!),
-                          dateFormat.format(transaction.end_date!), _size),
+                      // bookingPeriod(dateFormat.format(transaction.start_date!),
+                      //     dateFormat.format(transaction.end_date!), _size),
                       SizedBox(height: _size.height / 70),
                       Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
                       DetailTransactionCard(

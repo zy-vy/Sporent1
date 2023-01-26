@@ -133,12 +133,12 @@ class OrderViewModel with ChangeNotifier {
     var userRef = order.userRef;
     var ownerRef = order.ownerRef;
 
-    await FirebaseFirestore.instance.doc(userRef!.path).update({
-      "deposit": FieldValue.increment(order.deposit!)
-    }).onError((error, stackTrace) => log("error deposit"));
+    await FirebaseFirestore.instance
+        .doc(userRef!.path)
+        .update({"deposit": FieldValue.increment(order.deposit!)}).onError(
+            (error, stackTrace) => log("error deposit"));
     await FirebaseFirestore.instance.doc(ownerRef!.path).update({
-      "owner_balance":
-          FieldValue.increment(order.balance!)
+      "owner_balance": FieldValue.increment(order.balance!)
     }).onError((error, stackTrace) => log("error balance"));
 
     var deposit = Deposit(
@@ -163,14 +163,12 @@ class OrderViewModel with ChangeNotifier {
             detail_id: FirebaseFirestore.instance
                 .collection("transaction")
                 .doc(order.id),
-            owner: FirebaseFirestore.instance
-                .collection("user")
-                .doc(order.owner!.id),
+            owner: order.product!.owner,
             status: "plus")
         .toJson();
 
     var balanceRef = FirebaseFirestore.instance.collection("balance").doc();
-    
+
     await balanceRef.set(balance);
 
     var task1 =
