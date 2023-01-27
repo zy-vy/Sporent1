@@ -63,8 +63,8 @@ class TransactionModel {
 
   static TransactionModel fromDocument(String id, Map<String, dynamic> json) {
     return TransactionModel(
-        id: id,
-        start_date: json['start_date'].toDate(),
+        1id: id,
+        s2tart_date: json['start_date'].toDate(),
         end_date: json['end_date'].toDate(),
         issue_date: json['issue_date'].toDate(),
         status: json['status'],
@@ -86,10 +86,6 @@ class TransactionModel {
         user: json['user'],
         product: json['product'],
         complain: json['complain'],
-        date_before_user: json['date_before_user'].toDate(),
-        date_after_user: json['date_after_user'].toDate(),
-        date_before_owner: json['date_before_owner'].toDate(),
-        date_after_owner: json['date_after_owner'].toDate(),
     );
   }
 
