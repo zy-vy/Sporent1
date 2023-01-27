@@ -118,10 +118,10 @@ class Order {
       complainRef: data["complain"],
       balance: data ["balance"],
       deposit: data["deposit"],
-      dateAfterOwner: data['dateAfterOwner'].toDate(),
-      dateAfterUser: data['dateAfterUser'].toDate(),
-      dateBeforeOwner: data['dateBeforeOwner'].toDate(),
-      dateBeforeUser: data['dateBeforeUser'].toDate(),
+      dateAfterOwner: data['date_after_owner'].toDate(),
+      dateAfterUser: data['date_after_user'].toDate(),
+      dateBeforeOwner: data['date_before_owner'].toDate(),
+      dateBeforeUser: data['date_before_user'].toDate(),
     );
   }
 
