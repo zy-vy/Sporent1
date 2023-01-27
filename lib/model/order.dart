@@ -118,12 +118,9 @@ class Order {
       complainRef: data["complain"],
       balance: data ["balance"],
       deposit: data["deposit"],
-      dateAfterOwner: data['date_after_owner'].toDate(),
-      dateAfterUser: data['date_after_user'].toDate(),
-      dateBeforeOwner: data['date_before_owner'].toDate(),
-      dateBeforeUser: data['date_before_user'].toDate(),
     );
   }
+  
 
   static List<Order> fromSnapshot(List<QueryDocumentSnapshot> snapshot){
     return snapshot.map((document) => Order.fromDocument(document.id,document.data() as Map<String,dynamic>)).toList();
