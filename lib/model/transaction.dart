@@ -20,6 +20,10 @@ class TransactionModel {
   String? image_after_user;
   String? image_before_owner;
   String? image_after_owner;
+  DateTime? date_before_user;
+  DateTime? date_after_user;
+  DateTime? date_before_owner;
+  DateTime? date_after_owner;
   String? description_before_user;
   String? description_after_owner;
   DocumentReference<Map<String, dynamic>>? owner;
@@ -50,7 +54,12 @@ class TransactionModel {
       this.owner,
       this.user,
       this.product,
-      this.complain});
+      this.complain,
+      this.date_before_user,
+      this.date_after_user,
+      this.date_before_owner,
+      this.date_after_owner,
+      });
 
   static TransactionModel fromDocument(String id, Map<String, dynamic> json) {
     return TransactionModel(
@@ -76,7 +85,12 @@ class TransactionModel {
         owner: json['owner'],
         user: json['user'],
         product: json['product'],
-        complain: json['complain']);
+        complain: json['complain'],
+        date_before_user: json['date_before_user'],
+        date_after_user: json['date_after_user'],
+        date_before_owner: json['date_before_owner'],
+        date_after_owner: json['date_after_owner'],
+    );
   }
 
   static List<TransactionModel> fromSnapshot(

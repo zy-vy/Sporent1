@@ -22,6 +22,10 @@ class Order {
   String? afterPhotoUser;
   String? beforePhotoOwner;
   String? afterPhotoOwner;
+  DateTime? dateBeforeUser;
+  DateTime? dateAfterUser;
+  DateTime? dateBeforeOwner;
+  DateTime? dateAfterOwner;
   String? deliveryLocation;
   String? deliveryMethod;
   String? ktpImage;
@@ -80,7 +84,11 @@ class Order {
       this.description,
       this.complainRef,
       this.totalPrice,
-      this.totalDeposit
+      this.totalDeposit,
+      this.dateAfterOwner,
+      this.dateAfterUser,
+      this.dateBeforeOwner,
+      this.dateBeforeUser
   });
 
   factory Order.fromDocument(String id, Map<String,dynamic> data){
@@ -109,7 +117,11 @@ class Order {
       description: data["description"],
       complainRef: data["complain"],
       totalPrice: data ["total_price"],
-      totalDeposit: data["total_deposit"]
+      totalDeposit: data["total_deposit"],
+      dateAfterOwner: data['dateAfterOwner'],
+      dateAfterUser: data['dateAfterUser'],
+      dateBeforeOwner: data['dateBeforeOwner'],
+      dateBeforeUser: data['dateBeforeUser'],
     );
   }
 
@@ -143,6 +155,10 @@ class Order {
       if(complainRef!= null) "complain" :complainRef,
       if(totalPrice!= null) "total_price" : totalPrice,
       if(totalDeposit!= null) "total_deposit" : totalDeposit,
+      if(dateBeforeUser!= null) "date_before_user" : dateBeforeUser,
+      if(dateAfterUser!= null) "date_after_user" : dateAfterUser,
+      if(dateBeforeOwner!= null) "date_before_owner": dateBeforeOwner,
+      if(dateAfterOwner!= null) "date_after_owner": dateAfterOwner
     };
   }
 
