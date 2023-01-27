@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:sporent/component/product_gridview.dart';
 
 class ProductRecommendation extends StatefulWidget {
-  const ProductRecommendation({Key? key}) : super(key: key);
+  const ProductRecommendation({Key? key, required this.isLogin}) : super(key: key);
+
+  final bool isLogin;
 
   @override
   State<ProductRecommendation> createState() => _ProductRecommendationState();
@@ -21,7 +23,7 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
     return Container(
         padding: EdgeInsets.only(left: _size.width / 50),
         child: StreamBuilder(
-            stream: firestore.collection('product').snapshots(),
+            stream: firestore.collection('product').snapshots().take(10),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text('Error in receiving data: ${snapshot.error}');
@@ -35,7 +37,7 @@ class _ProductRecommendationState extends State<ProductRecommendation> {
                     snapshot.data?.docs;
                 int? productCount = listDocs?.length;
                 return ProductGridview(
-                    productCount: productCount, listDocs: listDocs);
+                    productCount: productCount, listDocs: listDocs, isLogin: widget.isLogin,);
               }
             }));
   }

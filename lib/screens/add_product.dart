@@ -117,12 +117,9 @@ class _AddProductState extends State<AddProduct> {
                           decoration: ShapeDecoration(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  side: haveImage == true
-                                      ? const BorderSide(
-                                          width: 2, color: Colors.red)
-                                      : BorderSide(
+                                  side: BorderSide(
                                           width: 2,
-                                          color: HexColor("868686")))),
+                                          color: haveImage == true ? HexColor("C2413C") : HexColor("868686")))),
                           child: TextButton(
                             onPressed: () async {
                               await openGallery();
@@ -145,7 +142,7 @@ class _AddProductState extends State<AddProduct> {
                                     width: 25,
                                     decoration: BoxDecoration(
                                         color: haveImage == true
-                                            ? Colors.red
+                                            ? HexColor("C2413C")
                                             : Colors.blueAccent,
                                         shape: BoxShape.circle),
                                     child: IconButton(
@@ -165,10 +162,10 @@ class _AddProductState extends State<AddProduct> {
                           ? Column(
                               children: [
                                 SizedBox(height: _size.height / 80),
-                                const Text(
+                                Text(
                                   "Image must not be empty",
                                   style: TextStyle(
-                                      color: Colors.red, fontSize: 13),
+                                      color: HexColor("C2413C"), fontSize: 13),
                                 ),
                               ],
                             )

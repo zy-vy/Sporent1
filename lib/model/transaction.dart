@@ -7,6 +7,10 @@ class TransactionModel {
   DateTime? start_date;
   DateTime? end_date;
   DateTime? issue_date;
+  DateTime? date_before_user;
+  DateTime? date_after_user;
+  DateTime? date_before_owner;
+  DateTime? date_after_owner;
   String? status;
   int? total;
   int? quantity;
@@ -36,6 +40,10 @@ class TransactionModel {
       this.start_date,
       this.end_date,
       this.issue_date,
+      this.date_before_user,
+      this.date_after_user,
+      this.date_before_owner,
+      this.date_after_owner,
       this.status,
       this.total,
       this.quantity,
@@ -91,6 +99,37 @@ class TransactionModel {
         date_before_owner: json['date_before_owner'],
         date_after_owner: json['date_after_owner'],
     );
+  }
+
+  static TransactionModel fromDocumentAdminDate(String id, Map<String, dynamic> json) {
+    return TransactionModel(
+        id: id,
+        start_date: json['start_date'].toDate(),
+        end_date: json['end_date'].toDate(),
+        issue_date: json['issue_date'].toDate(),
+        date_before_user : json['date_before_user'].toDate(),
+        date_after_user : json['date_after_user'].toDate(),
+        date_before_owner : json['date_before_owner'].toDate(),
+        date_after_owner : json['date_after_owner'].toDate(),
+        status: json['status'],
+        total: json['total'],
+        quantity: json['quantity'],
+        ktp_image: json['ktp_image'],
+        payment_image: json['payment_image'],
+        delivery_location: json['delivery_location'],
+        delivery_method: json['delivery_method'],
+        tracking_code_user: json['tracking_code_user'],
+        tracking_code_owner: json['tracking_code_owner'],
+        image_before_user: json['image_before_user'],
+        image_after_user: json['image_after_user'],
+        image_before_owner: json['image_before_owner'],
+        image_after_owner: json['image_after_owner'],
+        description_before_user: json['description_before_user'],
+        description_after_owner: json['description_after_owner'],
+        owner: json['owner'],
+        user: json['user'],
+        product: json['product'],
+        complain: json['complain']);
   }
 
   static List<TransactionModel> fromSnapshot(

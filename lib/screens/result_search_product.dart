@@ -1,28 +1,47 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sporent/component/category_list.dart';
+import 'package:sporent/component/product_gridview.dart';
 
-import '../component/product_gridview.dart';
-import '../model/category.dart';
+class ResultSearchProduct extends StatefulWidget {
+  const ResultSearchProduct(this.search_keyword, this.isLogin, {super.key});
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen(this.category, this.isLogin, {Key? key}) : super(key: key);
-
-  final Category category;
+  final String search_keyword;
   final bool isLogin;
 
   @override
+  State<ResultSearchProduct> createState() => _ResultSearchProductState();
+}
+
+class _ResultSearchProductState extends State<ResultSearchProduct> {
+  List dataProduct = [];
+
+  void fetchAllProduct(List dataProduct) async {
+    var snapshot = FirebaseFirestore.instance.collection("product").get();
+    snapshot.then((value) => value.docs.forEach((element) {
+          String name = element.get("name");
+          if (name
+              .toLowerCase()
+              .contains(widget.search_keyword.toLowerCase())) {
+            dataProduct.add(name);
+          }
+        }));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    Size _size = MediaQuery.of(context).size;
+    var firestore = FirebaseFirestore.instance;
+    var _size = MediaQuery.of(context).size;
+    fetchAllProduct(dataProduct);
 
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
-            child: Text(category.olahraga.toString()),
+            child: const Text("Result Search Product"),
           ),
           backgroundColor: HexColor("4164DE"),
         ),
@@ -32,23 +51,15 @@ class CategoryScreen extends StatelessWidget {
           child: StreamBuilder(
               stream: firestore
                   .collection('product')
-                  .where("category",
-                      isEqualTo:
-                          firestore.collection("category").doc(category.id))
-                  .snapshots(),
+                  .where('name', whereIn: dataProduct)
+                  .snapshots().take(10),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error in receiving data: ${snapshot.error}');
                 }
-
                 if (!snapshot.hasData) {
                   return const Center(
                     child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text("This Category Don't Have Product"),
                   );
                 } else {
                   List<QueryDocumentSnapshot<Map<String, dynamic>>>? listDocs =
@@ -57,7 +68,7 @@ class CategoryScreen extends StatelessWidget {
                   return ProductGridview(
                     productCount: productCount,
                     listDocs: listDocs,
-                    isLogin: isLogin,
+                    isLogin: widget.isLogin,
                   );
                 }
               }),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/authentication/models/user_model.dart';
 import 'package:sporent/repository/user_repository.dart';
@@ -78,6 +79,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle:TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.person_outline,
                                 color: Colors.white70,
@@ -118,6 +120,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle:TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.calendar_month_outlined,
                                 color: Colors.white70,
@@ -174,6 +177,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle:TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.person_outline,
                                 color: Colors.white70,
@@ -219,6 +223,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle:TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.person_outline,
                                 color: Colors.white70,
@@ -264,6 +269,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle:TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.lock_outlined,
                                 color: Colors.white70,

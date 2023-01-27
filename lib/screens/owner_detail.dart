@@ -9,9 +9,10 @@ import '../component/item_title.dart';
 import '../component/product_gridview.dart';
 
 class OwnerDetail extends StatelessWidget {
-  const OwnerDetail(this.idOwner, {super.key});
+  const OwnerDetail(this.idOwner, this.isLogin, {super.key});
 
   final String idOwner;
+  final bool isLogin;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +109,7 @@ class OwnerDetail extends StatelessWidget {
                               int? productCount = listDocs?.length;
                               return ProductGridview(
                                   productCount: productCount,
-                                  listDocs: listDocs);
+                                  listDocs: listDocs, isLogin: isLogin,);
                             }
                           },
                         )

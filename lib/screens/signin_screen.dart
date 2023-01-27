@@ -4,6 +4,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
 import 'package:sporent/screens/admin_screen.dart';
@@ -55,6 +56,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         cursorColor: Colors.white,
                         style: TextStyle(color: Colors.white.withOpacity(0.9)),
                         decoration: InputDecoration(
+                          errorStyle: TextStyle(color: HexColor("FF6862")),
                           prefixIcon: const Icon(
                             Icons.person_outline,
                             color: Colors.white70,
@@ -94,6 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         cursorColor: Colors.white,
                         style: TextStyle(color: Colors.white.withOpacity(0.9)),
                         decoration: InputDecoration(
+                          errorStyle: TextStyle(color: HexColor("FF6862")),
                           suffixIcon: IconButton(
                               padding: const EdgeInsets.all(0),
                               onPressed: () {
@@ -146,27 +149,32 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              if (_emailTextController.text == "admin@gmail.com" &&
+                              if (_emailTextController.text ==
+                                      "admin@gmail.com" &&
                                   _passwordTextController.text == "admin123") {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => AdminProfile()));
                               } else {
-                                showLoaderDialog(context);
                                 // CoolAlert.show(context: context, type: CoolAlertType.loading);
                                 FirebaseAuth.instance
                                     .signInWithEmailAndPassword(
                                         email: _emailTextController.text,
                                         password: _passwordTextController.text)
                                     .then((value) {
-                                      Navigator.pop(context);
+                                  // Navigator.pop(context);
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const BottomBarScreen(indexPage: "0",)));
+                                              const BottomBarScreen(
+                                                indexPage: "0",
+                                              )));
                                 }).onError((error, stackTrace) {
-                                  Navigator.pop(context);
-                                  CoolAlert.show(context: context, type: CoolAlertType.error, text: "Email or password not match.");
+                                  // Navigator.pop(context);
+                                  CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.error,
+                                      text: "Email or password not match.");
                                 });
                               }
                             }
@@ -219,8 +227,10 @@ class _SignInScreenState extends State<SignInScreen> {
           style: TextStyle(color: Colors.white70)),
       GestureDetector(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SignUpScreenFinal()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const SignUpScreenFinal()));
         },
         child: const Text(
           " Register Here",
@@ -230,17 +240,21 @@ class _SignInScreenState extends State<SignInScreen> {
     ]);
   }
 
-  showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
       content: Row(
         children: [
           const CircularProgressIndicator(),
-          Container(margin: const EdgeInsets.only(left: 7),child:const Text("Sign in..." )),
-        ],),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("Sign in...")),
+        ],
+      ),
     );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
         return alert;
       },
     );

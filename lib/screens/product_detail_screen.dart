@@ -17,6 +17,7 @@ import 'package:sporent/component/review_component.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/owner_detail.dart';
+import 'package:sporent/screens/signin_screen.dart';
 import 'package:sporent/screens/user_review_product.dart';
 
 import '../component/loading.dart';
@@ -28,11 +29,13 @@ import '../model/review.dart';
 import '../model/user.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  ProductDetailScreen({Key? key, required Product product})
-      : _product = product,
+
+  ProductDetailScreen({Key? key, required Product product, bool? isLogin})
+      : _product = product, _isLogin = isLogin,
         super(key: key);
 
   final Product _product;
+  final bool? _isLogin;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -70,7 +73,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           padding: EdgeInsets.symmetric(
               horizontal: size.width / 15, vertical: size.width / 25),
           child: FloatingActionButton(
-              onPressed: () {
+              onPressed: widget._isLogin == true ? () {
                 showModalBottomSheet(
                     context: context,
                     builder: (context) => StatefulBuilder(builder:
@@ -217,6 +220,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                           );
                         }));
+              } : (){
+                CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                onConfirmBtnTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInScreen())),
+                                text:
+                                    "You must login first");
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -427,7 +437,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => FullScreen("url", url:image),
+                                builder: (context) =>
+                                    FullScreen("url", url: image),
                               ),
                             );
                           },
@@ -454,7 +465,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           child: ElevatedButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => OwnerDetail(id)));
+                                    builder: (context) => OwnerDetail(id, widget._isLogin!)));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: HexColor("4164DE"),

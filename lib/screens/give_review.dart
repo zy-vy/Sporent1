@@ -43,6 +43,7 @@ class _GiveReviewState extends State<GiveReview> {
   bool enabled = false;
   bool haveData = false;
   bool loading = false;
+  bool haveImage = false;
   File? image;
   File? imageTemp;
   List<File?> listImages = [];
@@ -246,45 +247,71 @@ class _GiveReviewState extends State<GiveReview> {
                       ),
                       SizedBox(height: _size.height / 30),
                       counterImage == 1
-                          ? TextButton(
-                              onPressed: () async {
-                                await openGallery();
-                                setState(() {
-                                  if (counterImage >= 2) {
-                                    listImages.remove(imageTemp);
-                                  }
+                          ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextButton(
+                                  onPressed: () async {
+                                    await openGallery();
+                                    setState(() {
+                                      if (counterImage >= 2) {
+                                        listImages.remove(imageTemp);
+                                      }
 
-                                  listImages.add(image);
+                                      listImages.add(image);
 
-                                  if (counterImage != 3) {
-                                    listImages.add(imageTemp);
-                                    counterImage += 1;
-                                  }
-                                });
-                              },
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: _size.height / 40,
-                                      horizontal: _size.width / 15),
-                                  side: BorderSide(
-                                      color: HexColor("868686"), width: 1)),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.camera,
-                                    color: HexColor("979797"),
-                                    size: 30,
-                                  ),
-                                  SizedBox(width: _size.width / 40),
-                                  Text(
-                                    "Add Photo",
-                                    style: TextStyle(
+                                      if (counterImage != 3) {
+                                        listImages.add(imageTemp);
+                                        counterImage += 1;
+                                      }
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: _size.height / 40,
+                                          horizontal: _size.width / 15),
+                                      side: BorderSide(
+                                          color: haveImage ? HexColor("C2413C") : HexColor("868686"), width: 1)),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      FaIcon(
+                                        FontAwesomeIcons.camera,
                                         color: HexColor("979797"),
-                                        fontSize: 14),
-                                  )
-                                ],
-                              ))
+                                        size: 30,
+                                      ),
+                                      SizedBox(width: _size.width / 40),
+                                      Text(
+                                        "Add Photo",
+                                        style: TextStyle(
+                                            color: HexColor("979797"),
+                                            fontSize: 14),
+                                      )
+                                    ],
+                                  )),
+                                  haveImage == true
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: _size.height / 80),
+                                
+                                Row(
+                                  children: [
+                                    SizedBox(width: _size.width / 15,),
+                                    Text(
+                                      "Image must not be empty",
+                                      style: TextStyle(
+                                          color: HexColor("C2413C"), fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                            ],
+                          )
                           : Row(
                               children: [
                                 for (int i = 0; i < counterImage; i++)
@@ -397,17 +424,22 @@ class _GiveReviewState extends State<GiveReview> {
                           height: _size.height / 12,
                           child: ElevatedButton(
                             onPressed: () async {
+                              if (image == null) {
+                                setState(() {
+                                  haveImage = true;
+                                });
+                              }
+
                               if (formKey.currentState!.validate()) {
                                 setState(() {
                                   loading = true;
                                 });
 
                                 List<String> listNameImage = [];
-
                                 var reviewRef =
                                     firestore.collection("review").doc();
 
-                                for (int i = 0; i < listImages.length; i++) {
+                                for (int i = 0; i < listImages.length-1; i++) {
                                   int counterTempImage = i + 1;
 
                                   final ref = FirebaseStorage.instance

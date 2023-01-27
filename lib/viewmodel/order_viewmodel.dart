@@ -10,6 +10,8 @@ import 'package:sporent/repository/image_repository.dart';
 import 'package:sporent/repository/order_repository.dart';
 import 'package:sporent/repository/user_repository.dart';
 
+import '../model/balance.dart';
+import '../model/deposit.dart';
 import '../repository/product_repository.dart';
 
 class OrderViewModel with ChangeNotifier {
@@ -35,7 +37,6 @@ class OrderViewModel with ChangeNotifier {
   static final OrderViewModel _instance = OrderViewModel._internal();
 
   factory OrderViewModel() {
-
     return _instance;
   }
 
@@ -45,7 +46,6 @@ class OrderViewModel with ChangeNotifier {
   }
 
   Stream<List<Order>?> getAllOrderByOwner(String ownerId) {
-
     return orderRepository.getAllOrderByOwner(ownerId).map((event) {
       orderList = arrangeData(event);
       return orderList;
@@ -72,10 +72,22 @@ class OrderViewModel with ChangeNotifier {
         await ProductRepository().getProductByRef(order.productRef!.path);
     // order.product?.imageFile = await imageRepository
     //     .getImageFile("${Product.imagePath}/${order.product!.img}");
-    order.beforePhotoOwner != null? order.beforeOwnerFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.beforePhotoOwner}"):null;
-    order.afterPhotoOwner != null? order.afterOwnerFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoOwner}"):null;
-    order.beforePhotoUser != null? order.beforeUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.beforePhotoUser}"):null;
-    order.afterPhotoUser != null? order.afterUserFile = await imageRepository.getImageFile("${Order.conditionCheckPath}/${order.afterPhotoUser}"):null;
+    order.beforePhotoOwner != null
+        ? order.beforeOwnerFile = await imageRepository.getImageFile(
+            "${Order.conditionCheckPath}/${order.beforePhotoOwner}")
+        : null;
+    order.afterPhotoOwner != null
+        ? order.afterOwnerFile = await imageRepository.getImageFile(
+            "${Order.conditionCheckPath}/${order.afterPhotoOwner}")
+        : null;
+    order.beforePhotoUser != null
+        ? order.beforeUserFile = await imageRepository.getImageFile(
+            "${Order.conditionCheckPath}/${order.beforePhotoUser}")
+        : null;
+    order.afterPhotoUser != null
+        ? order.afterUserFile = await imageRepository
+            .getImageFile("${Order.conditionCheckPath}/${order.afterPhotoUser}")
+        : null;
     return order;
   }
 
@@ -99,11 +111,9 @@ class OrderViewModel with ChangeNotifier {
     order.beforePhotoOwner = name;
     order.beforeOwnerFile = beforeImage;
 
-
     var task1 = imageRepository.uploadFile(
         Order.conditionCheckPath, name, beforeImage!);
     var task2 = orderRepository.updateOrder(order);
-
 
     return Future.wait([task1, task2])
         .then((value) => true)
@@ -113,7 +123,8 @@ class OrderViewModel with ChangeNotifier {
     });
   }
 
-  Future<bool> finishOrder(Order order,File afterPhoto, String description) async {
+  Future<bool> finishOrder(
+      Order order, File afterPhoto, String description) async {
     var name = "${order.id}_owner_after";
 
     order.status = "DONE";
@@ -123,12 +134,47 @@ class OrderViewModel with ChangeNotifier {
 
     var userRef = order.userRef;
     var ownerRef = order.ownerRef;
-    
-    await FirebaseFirestore.instance.doc(userRef!.path).update({"deposit" : FieldValue.increment(order.product!.deposit_price!)}).onError((error, stackTrace) => log("error deposit"));
-    await FirebaseFirestore.instance.doc(ownerRef!.path).update({"owner_balance" : FieldValue.increment(order.product!.rent_price! * order.quantity!)}).onError((error, stackTrace) => log("error price"));
 
-    var task1 = imageRepository.uploadFile(
-        Order.conditionCheckPath, name, afterPhoto);
+    await FirebaseFirestore.instance
+        .doc(userRef!.path)
+        .update({"deposit": FieldValue.increment(order.deposit!)}).onError(
+            (error, stackTrace) => log("error deposit"));
+    await FirebaseFirestore.instance.doc(ownerRef!.path).update({
+      "owner_balance": FieldValue.increment(order.balance!)
+    }).onError((error, stackTrace) => log("error balance"));
+
+    var deposit = Deposit(
+            amount: order.deposit,
+            date: DateTime.now(),
+            detail_id: FirebaseFirestore.instance
+                .collection("transaction")
+                .doc(order.id),
+            user: FirebaseFirestore.instance
+                .collection("user")
+                .doc(order.user!.id),
+            status: "plus")
+        .toJson();
+
+    var depositRef = FirebaseFirestore.instance.collection("deposit").doc();
+
+    await depositRef.set(deposit);
+
+    var balance = Balance(
+            amount: order.balance,
+            date: DateTime.now(),
+            detail_id: FirebaseFirestore.instance
+                .collection("transaction")
+                .doc(order.id),
+            owner: order.product!.owner,
+            status: "plus")
+        .toJson();
+
+    var balanceRef = FirebaseFirestore.instance.collection("balance").doc();
+
+    await balanceRef.set(balance);
+
+    var task1 =
+        imageRepository.uploadFile(Order.conditionCheckPath, name, afterPhoto);
     var task2 = orderRepository.updateOrder(order);
 
     return Future.wait([task1, task2])
@@ -140,7 +186,7 @@ class OrderViewModel with ChangeNotifier {
     return false;
   }
 
-  Future<bool> acceptPayment (Order order) async {
+  Future<bool> acceptPayment(Order order) async {
     order.status = "CONFIRM";
     return orderRepository.updateOrder(order);
   }
@@ -161,8 +207,7 @@ class OrderViewModel with ChangeNotifier {
         doneList = <Order>[],
         declineList = <Order>[],
         rejectList = <Order>[],
-        complainList = <Order>[]
-    ;
+        complainList = <Order>[];
     orderList?.forEach((order) {
       var status = order.status ?? "";
       switch (status) {
@@ -201,16 +246,14 @@ class OrderViewModel with ChangeNotifier {
     finalList =
         // waitingList +
         complainList +
-        confirmList +
-        acceptList +
-        deliverList +
-        activeList +
-        returnList +
-        declineList +
-        rejectList +
-        doneList
-
-    ;
+            confirmList +
+            acceptList +
+            deliverList +
+            activeList +
+            returnList +
+            declineList +
+            rejectList +
+            doneList;
     return finalList;
   }
 }
