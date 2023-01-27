@@ -21,6 +21,7 @@ class _ResultSearchProductState extends State<ResultSearchProduct> {
   void fetchAllProduct(List dataProduct) async {
     var snapshot = FirebaseFirestore.instance.collection("product").get();
     snapshot.then((value) => value.docs.forEach((element) {
+          if(dataProduct.length>9) return;
           String name = element.get("name");
           if (name
               .toLowerCase()
@@ -51,7 +52,7 @@ class _ResultSearchProductState extends State<ResultSearchProduct> {
           child: StreamBuilder(
               stream: firestore
                   .collection('product')
-                  .where('name', whereIn: dataProduct)
+                  .where('name', whereIn: dataProduct.isNotEmpty? dataProduct : ["biar gk error ygy"])
                   .snapshots().take(10),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
