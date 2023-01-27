@@ -261,7 +261,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                               "image_after_user":
                                                   "${widget.idTransaction}_user_after",
                                               "status": "RETURN",
-                                              "date_after_user" : DateTime.now()
+                                              "date_after_user": DateTime.now()
                                             
                                             });
 
@@ -284,7 +284,7 @@ class _ConditionCheckState extends State<ConditionCheck> {
                                               "description_before_user":
                                                   controller.text,
                                               "status": "ACTIVE",
-                                              "date_before_user" : DateTime.now()
+                                              "date_before_user": DateTime.now()
                                             });
 
                                             Navigator.of(context).pop();

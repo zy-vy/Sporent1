@@ -23,6 +23,7 @@ class _ResultSearchProductState extends State<ResultSearchProduct> {
   void fetchAllProduct(List dataProduct) async {
     var snapshot = FirebaseFirestore.instance.collection("product").get();
     snapshot.then((value) => value.docs.forEach((element) {
+          if(dataProduct.length>9) return;
           String name = element.get("name");
           if (name
               .toLowerCase()

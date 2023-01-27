@@ -58,7 +58,8 @@ class TransactionModel {
       this.owner,
       this.user,
       this.product,
-      this.complain});
+      this.complain,
+      });
 
   static TransactionModel fromDocument(String id, Map<String, dynamic> json) {
     return TransactionModel(
@@ -84,7 +85,12 @@ class TransactionModel {
         owner: json['owner'],
         user: json['user'],
         product: json['product'],
-        complain: json['complain']);
+        complain: json['complain'],
+        date_before_user: json['date_before_user'].toDate(),
+        date_after_user: json['date_after_user'].toDate(),
+        date_before_owner: json['date_before_owner'].toDate(),
+        date_after_owner: json['date_after_owner'].toDate(),
+    );
   }
 
   static TransactionModel fromDocumentAdminDate(String id, Map<String, dynamic> json) {

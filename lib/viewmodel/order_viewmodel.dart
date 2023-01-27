@@ -104,6 +104,7 @@ class OrderViewModel with ChangeNotifier {
   Future<bool> submitOrder(
       Order order, File? beforeImage, String trackingLink) async {
     order.status = "DELIVER";
+    order.dateBeforeOwner= DateTime.now();
     var name = "${order.id}_owner_before";
 
     order.trackingCode = trackingLink;
@@ -127,6 +128,7 @@ class OrderViewModel with ChangeNotifier {
     var name = "${order.id}_owner_after";
 
     order.status = "DONE";
+    order.dateAfterOwner = DateTime.now();
     order.afterOwnerFile = afterPhoto;
     order.description = description;
 

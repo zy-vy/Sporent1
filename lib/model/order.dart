@@ -22,6 +22,10 @@ class Order {
   String? afterPhotoUser;
   String? beforePhotoOwner;
   String? afterPhotoOwner;
+  DateTime? dateBeforeUser;
+  DateTime? dateAfterUser;
+  DateTime? dateBeforeOwner;
+  DateTime? dateAfterOwner;
   String? deliveryLocation;
   String? deliveryMethod;
   String? ktpImage;
@@ -79,6 +83,10 @@ class Order {
       this.returnTrackingCode,
       this.description,
       this.complainRef,
+      this.dateAfterOwner,
+      this.dateAfterUser,
+      this.dateBeforeOwner,
+      this.dateBeforeUser,
       this.balance,
       this.deposit
   });
@@ -109,7 +117,11 @@ class Order {
       description: data["description"],
       complainRef: data["complain"],
       balance: data ["balance"],
-      deposit: data["deposit"]
+      deposit: data["deposit"],
+      dateAfterOwner: data['dateAfterOwner'].toDate(),
+      dateAfterUser: data['dateAfterUser'].toDate(),
+      dateBeforeOwner: data['dateBeforeOwner'].toDate(),
+      dateBeforeUser: data['dateBeforeUser'].toDate(),
     );
   }
 
@@ -143,6 +155,10 @@ class Order {
       if(complainRef!= null) "complain" :complainRef,
       if(balance!= null) "balance" : balance,
       if(deposit!= null) "deposit" : deposit,
+      if(dateBeforeUser!= null) "date_before_user" : dateBeforeUser,
+      if(dateAfterUser!= null) "date_after_user" : dateAfterUser,
+      if(dateBeforeOwner!= null) "date_before_owner": dateBeforeOwner,
+      if(dateAfterOwner!= null) "date_after_owner": dateAfterOwner
     };
   }
 
