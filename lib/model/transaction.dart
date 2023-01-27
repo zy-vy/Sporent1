@@ -86,10 +86,10 @@ class TransactionModel {
         user: json['user'],
         product: json['product'],
         complain: json['complain'],
-        date_before_user: json['date_before_user'],
-        date_after_user: json['date_after_user'],
-        date_before_owner: json['date_before_owner'],
-        date_after_owner: json['date_after_owner'],
+        date_before_user: json['date_before_user'].toDate(),
+        date_after_user: json['date_after_user'].toDate(),
+        date_before_owner: json['date_before_owner'].toDate(),
+        date_after_owner: json['date_after_owner'].toDate(),
     );
   }
 
