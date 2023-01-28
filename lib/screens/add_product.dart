@@ -44,13 +44,9 @@ class _AddProductState extends State<AddProduct> {
   bool haveImage = false;
   List<File?> listImages = [];
   List<DropdownMenuItem> locationItem = const [
-    DropdownMenuItem(
-      value: "South Jakarta",
-      child: Text("South Jakarta"),
-    ),
-    DropdownMenuItem(
-      value: "West Jakarta",
-      child: Text("West Jakarta"),
+     DropdownMenuItem(
+      value: "Central Jakarta",
+      child: Text("Central Jakarta"),
     ),
     DropdownMenuItem(
       value: "East Jakarta",
@@ -61,8 +57,12 @@ class _AddProductState extends State<AddProduct> {
       child: Text("North Jakarta"),
     ),
     DropdownMenuItem(
-      value: "Central Jakarta",
-      child: Text("Central Jakarta"),
+      value: "South Jakarta",
+      child: Text("South Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "West Jakarta",
+      child: Text("West Jakarta"),
     ),
   ];
   DocumentReference<Map<String, dynamic>>? referenceCategory;

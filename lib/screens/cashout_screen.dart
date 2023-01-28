@@ -29,7 +29,6 @@ class CashoutScreen extends StatefulWidget {
 }
 
 class _CashoutScreenState extends State<CashoutScreen> {
-  final bankNameController = TextEditingController();
   final accountNameController = TextEditingController();
   final accountNumberController = TextEditingController();
   final amountController = TextEditingController();
@@ -38,6 +37,57 @@ class _CashoutScreenState extends State<CashoutScreen> {
   String field = "deposit";
   String field2 = "deposit";
   bool loading = false;
+  String? bankName;
+  List<DropdownMenuItem> bankItem = const [
+    DropdownMenuItem(
+      value: "Mandiri",
+      child: Text("Mandiri"),
+    ),
+    DropdownMenuItem(
+      value: "BRI",
+      child: Text("BRI"),
+    ),
+    DropdownMenuItem(
+      value: "BNI",
+      child: Text("BNI"),
+    ),
+    DropdownMenuItem(
+      value: "Panin Bank",
+      child: Text("Panin Bank"),
+    ),
+    DropdownMenuItem(
+      value: "BCA",
+      child: Text("BCA"),
+    ),
+    DropdownMenuItem(
+      value: "CIMB Niaga",
+      child: Text("CIMB Niaga"),
+    ),
+    DropdownMenuItem(
+      value: "Permata",
+      child: Text("Permata"),
+    ),
+    DropdownMenuItem(
+      value: "OCBC NISP",
+      child: Text("OCBC NISP"),
+    ),
+    DropdownMenuItem(
+      value: "BTPN",
+      child: Text("BTPN"),
+    ),
+    DropdownMenuItem(
+      value: "NOBU",
+      child: Text("NOBU"),
+    ),
+    DropdownMenuItem(
+      value: "DBS",
+      child: Text("DBS"),
+    ),
+    DropdownMenuItem(
+      value: "Mega",
+      child: Text("Mega"),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +114,26 @@ class _CashoutScreenState extends State<CashoutScreen> {
                         horizontal: _size.width / 18),
                     child: ListView(children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          fieldText("Bank Name", "Enter your bank name", _size,
-                              bankNameController),
+                          const Text("Bank Name",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                          SizedBox(height: _size.height / 50),
+                          DropdownButtonFormField(
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Enter your bank name'),
+                              items: bankItem,
+                              validator: (value) {
+                                if (value == null) {
+                                  return "Bank Name must not be empty";
+                                }
+                              },
+                              onChanged: (value) => setState(() {
+                                    bankName = value!;
+                                  })),
+                          SizedBox(height: _size.height / 23),
                           fieldText("Account Name", "Enter your account name",
                               _size, accountNameController),
                           fieldText(
@@ -135,8 +202,7 @@ class _CashoutScreenState extends State<CashoutScreen> {
                                                     accountNumberController
                                                         .text,
                                                 amount: amount,
-                                                bank_name:
-                                                    bankNameController.text,
+                                                bank_name: bankName,
                                                 date: DateTime.now(),
                                                 status: "In Progress",
                                                 type: field,

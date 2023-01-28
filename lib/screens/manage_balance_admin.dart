@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/information_card.dart';
+import 'package:sporent/screens/admin_screen.dart';
 
 import '../component/information_card_detail.dart';
 import '../model/request.dart';
@@ -17,6 +19,13 @@ class ManageBalance extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const AdminProfile()));
+            },
+          ),
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
@@ -58,7 +67,7 @@ class ManageBalance extends StatelessWidget {
                           TextButton.styleFrom(foregroundColor: Colors.black),
                       onPressed: request.status == "Finished" ? null : () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailInformation(request)));
+                            builder: (context) => DetailInformation(request, "admin","")));
                       },
                       child: DetailInformationCard(showLine, "admin",
                           request: request),

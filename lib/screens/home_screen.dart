@@ -35,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future fetchUser() async {
     await Future.delayed(const Duration(seconds: 1));
+    print("tes masuk");
     if (FirebaseAuth.instance.currentUser != null) {
+       print("tes masuk ke sini");
       user = await _userRepository
           .getUserById(FirebaseAuth.instance.currentUser!.uid);
       setState(() {
@@ -121,7 +123,7 @@ class HeadingCategory extends StatelessWidget {
   const HeadingCategory({
     Key? key,
     required Size size,
-    required this.isLogin, 
+    required this.isLogin,
   })  : _size = size,
         super(key: key);
 
@@ -140,8 +142,10 @@ class HeadingCategory extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AllCategory(isLogin)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AllCategory(isLogin)));
             },
             child: const Text(
               "See all",

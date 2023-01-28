@@ -46,9 +46,9 @@ class Request {
         "amount": amount,
         "status": status,
         "type": type,
-        "account_name" : account_name,
-        "account_number" : account_number,
-        "bank_name" : bank_name,
-        "name_request" : name_request
+        "account_name": account_name,
+        "account_number": account_number,
+        "bank_name": bank_name,
+        "name_request": name_request
       };
 }

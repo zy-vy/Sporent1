@@ -56,7 +56,7 @@ class _OTP extends State<OTP> {
                   ),
                   const Text(
                     "Enter the Verification Number",
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: Colors.white),
                   ),
                   const SizedBox(
                     height: 60,
@@ -108,13 +108,15 @@ class _OTP extends State<OTP> {
                             _OTPController4.text.toString() +
                             _OTPController5.text.toString() +
                             _OTPController6.text.toString();
-                        print(FinalOTP);
+
                         try {
                           PhoneAuthCredential credential =
                               PhoneAuthProvider.credential(
                                   verificationId: SignUpScreenFinal.verify,
                                   smsCode: FinalOTP);
                           await auth.signInWithCredential(credential);
+
+                          
                           // ignore: use_build_context_synchronously
 
                           CoolAlert.show(
@@ -172,13 +174,13 @@ class _OTP extends State<OTP> {
           keyboardType: TextInputType.number,
           maxLength: 1,
           decoration: InputDecoration(
-            counter: Offstage(),
+            counter: const Offstage(),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: Colors.black12),
+              borderSide: const BorderSide(width: 2, color: Colors.white),
               borderRadius: BorderRadius.circular(12),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: Colors.purple),
+              borderSide: const BorderSide(width: 2, color: Colors.purple),
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -190,14 +192,14 @@ class _OTP extends State<OTP> {
   Row ResendOption(String phoneNumber1) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text("Didn't receive the verification code ? ",
-          style: TextStyle(color: Colors.white70)),
+          style: TextStyle(color: Colors.white70,fontSize: 13)),
       GestureDetector(
         onTap: () {
           phoneAuthentication(phoneNumber1);
         },
         child: const Text(
           "Resend New Code",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
         ),
       )
     ]);

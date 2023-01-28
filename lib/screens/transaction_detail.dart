@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/complain_detail.dart';
 import 'package:sporent/screens/complain_product.dart';
 import 'package:sporent/screens/condition_check_before_user.dart';
@@ -10,6 +11,8 @@ import 'package:sporent/screens/return_product.dart';
 import 'package:sporent/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../component/firebase_image.dart';
+import '../component/image_full_screen.dart';
 import '../component/transaction_card_detail.dart';
 import '../component/field_row.dart';
 import '../model/transaction.dart';
@@ -38,11 +41,23 @@ class _DetailTransaction extends State<DetailTransaction> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     var dateFormat = DateFormat('d MMMM ' 'yyyy');
+    var dateFormatTime = DateFormat('d MMMM ' 'yyyy ' 'HH:mm:ss');
     NumberFormat currencyFormatter =
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const BottomBarScreen(
+                        indexPage: "1",
+                      )));
+            }
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => const BottomBarScreen(indexPage: "3")));
+            ),
         centerTitle: false,
         title: Transform(
           transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
@@ -134,103 +149,183 @@ class _DetailTransaction extends State<DetailTransaction> {
                       SizedBox(height: _size.height / 40),
                       Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
                       SizedBox(height: _size.height / 40),
-                      const Text("Condition Check",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500)),
-                      SizedBox(height: _size.height / 40),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              side: BorderSide(
-                                  width: 1, color: HexColor("888888"))),
-                          onPressed: transaction.status == "WAITING" || transaction.status == "CONFIRM" || transaction.status == "ACCEPT" || transaction.status == "DECLINE" || transaction.status == "REJECT"
-                                      ? null
-                                      : () {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ConditionCheckBeforeUser(
-                                                      transaction.id!,
-                                                      transaction
-                                                              .image_before_user ??
-                                                          "",
-                                                      transaction
-                                                              .description_before_user ??
-                                                          "")));
-                                        },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: _size.height / 80,
-                                horizontal: _size.width / 70),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                    child: Column(
+                      snapshot.data!
+                                  .data()!
+                                  .containsKey("image_before_owner") ==
+                              true
+                          ? snapshot.data!.get("image_before_owner") != null
+                              ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "Pre-Condition",
+                                    const Text(
+                                      "Condition Check (Owner)",
                                       style: TextStyle(
-                                          color: transaction.status == "WAITING" || transaction.status == "ACCEPT" || transaction.status ==
-                                                          "CONFIRM" || transaction.status ==
-                                                          "DECLINE" || transaction.status == "REJECT"
-                                                      ? Colors.grey : Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
                                     ),
-                                    SizedBox(height: _size.height / 80),
-                                    transaction.status == "DELIVER"
-                                        ? const Text(
-                                            "This check is ready",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 13),
-                                          )
-                                        : transaction.status == "ACTIVE" || transaction.status == "RETURN" || transaction.status == "DONE"
-                                            ? const Text(
-                                                "This check has been completed",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 13),
-                                              )
-                                                : const Text(
-                                                    "This check is not ready at this time",
-                                                    style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 13),
+                                    SizedBox(
+                                      height: _size.height / 30,
+                                    ),
+                                    Row(
+                                      children: [
+                                        snapshot.data!.data()!.containsKey(
+                                                    "image_before_owner") ==
+                                                true
+                                            ? snapshot.data!.get(
+                                                        "image_before_owner") !=
+                                                    null
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  width: 1,
+                                                                  color: HexColor(
+                                                                      "E0E0E0")),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          width:
+                                                              _size.width / 5,
+                                                          height:
+                                                              _size.height / 10,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          FullScreen(
+                                                                            "firebaseImage",
+                                                                            firebaseImage:
+                                                                                snapshot.data!.get("image_before_owner"),
+                                                                            filePath:
+                                                                                "condition-check",
+                                                                          )));
+                                                            },
+                                                            child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                                child: FittedBox(
+                                                                    fit: BoxFit.fill,
+                                                                    child: FirebaseImage(
+                                                                      filePath:
+                                                                          "condition-check/${snapshot.data!.get("image_before_owner")}",
+                                                                    ))),
+                                                          )),
+                                                      SizedBox(
+                                                          height: _size.height /
+                                                              60),
+                                                      const Text(
+                                                          "Before Owner"),
+                                                    ],
                                                   )
+                                                : const SizedBox()
+                                            : const SizedBox(),
+                                        SizedBox(width: _size.width / 5),
+                                        snapshot.data!.data()!.containsKey(
+                                                    "image_after_owner") ==
+                                                true
+                                            ? snapshot.data!.get(
+                                                        "image_after_owner") !=
+                                                    null
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  width: 1,
+                                                                  color: HexColor(
+                                                                      "E0E0E0")),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          width:
+                                                              _size.width / 5,
+                                                          height:
+                                                              _size.height / 10,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          FullScreen(
+                                                                            "firebaseImage",
+                                                                            firebaseImage:
+                                                                                snapshot.data!.get("image_after_owner"),
+                                                                            filePath:
+                                                                                "condition-check",
+                                                                          )));
+                                                            },
+                                                            child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                                child: FittedBox(
+                                                                    fit: BoxFit.fill,
+                                                                    child: FirebaseImage(
+                                                                      filePath:
+                                                                          "condition-check/${snapshot.data!.get("image_after_owner")}",
+                                                                    ))),
+                                                          )),
+                                                      SizedBox(
+                                                          height: _size.height /
+                                                              60),
+                                                      const Text("After Owner")
+                                                    ],
+                                                  )
+                                                : const SizedBox()
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                    SizedBox(height: _size.height / 50),
+                                    Divider(
+                                        color: HexColor("E0E0E0"),
+                                        thickness: 2),
+                                    SizedBox(height: _size.height / 70),
                                   ],
-                                )),
-                                FaIcon(FontAwesomeIcons.chevronRight,
-                                    color: transaction.status == "WAITING" || transaction.status == "ACCEPT" || transaction.status ==
-                                                          "CONFIRM" || transaction.status ==
-                                                          "DECLINE" || transaction.status == "REJECT"
-                                                      ? Colors.grey : Colors.black,
-                                    size: 20)
-                              ],
-                            ),
-                          )),
-                      transaction.image_after_user != null
-                          ? SizedBox(height: _size.height / 30)
-                          : SizedBox(height: _size.height / 20),
-                      transaction.image_after_user != null
+                                )
+                              : const SizedBox()
+                          : const SizedBox(),
+                      const Text(
+                        "Condition Check (User)",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: _size.height / 30,
+                      ),
+                      snapshot.data!.data()!.containsKey('image_before_user') !=
+                              true
                           ? TextButton(
                               style: TextButton.styleFrom(
                                   side: BorderSide(
                                       width: 1, color: HexColor("888888"))),
-                              onPressed: transaction.status == "WAITING"
+                              onPressed: transaction.status == "WAITING" ||
+                                      transaction.status == "CONFIRM" ||
+                                      transaction.status == "ACCEPT" ||
+                                      transaction.status == "DECLINE" ||
+                                      transaction.status == "REJECT"
                                   ? null
-                                  : transaction.status == "CONFIRM"
-                                      ? null
-                                      : () {
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder: (context) => ReturnProduct(
+                                  : () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConditionCheckBeforeUser(
                                                   transaction.id!,
                                                   transaction
-                                                          .image_after_user ,
+                                                          .image_before_user ??
+                                                      "",
                                                   transaction
-                                                          .tracking_code_user,
-                                                  idOwner: "")));
-                                        },
+                                                          .description_before_user ??
+                                                      "")));
+                                    },
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: _size.height / 80,
@@ -243,26 +338,52 @@ class _DetailTransaction extends State<DetailTransaction> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          "Post-Condition",
+                                        Text(
+                                          "Pre-Condition",
                                           style: TextStyle(
-                                              color: Colors.black,
+                                              color:
+                                                  transaction.status ==
+                                                              "WAITING" ||
+                                                          transaction.status ==
+                                                              "ACCEPT" ||
+                                                          transaction.status ==
+                                                              "CONFIRM" ||
+                                                          transaction.status ==
+                                                              "DECLINE" ||
+                                                          transaction.status ==
+                                                              "REJECT"
+                                                      ? Colors.grey
+                                                      : Colors.black,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
                                         ),
                                         SizedBox(height: _size.height / 80),
-                                        const Text(
-                                          "This check has been completed",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13),
-                                        )
+                                        transaction.status == "DELIVER"
+                                            ? const Text(
+                                                "This check is ready",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 13),
+                                              )
+                                            : const Text(
+                                                "This check is not ready at this time",
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13),
+                                              )
                                       ],
                                     )),
                                     FaIcon(FontAwesomeIcons.chevronRight,
-                                        color: transaction.status == "WAITING"
-                                            ? null
-                                            : transaction.status == "CONFIRM"
+                                        color:
+                                            transaction.status == "WAITING" ||
+                                                    transaction.status ==
+                                                        "ACCEPT" ||
+                                                    transaction.status ==
+                                                        "CONFIRM" ||
+                                                    transaction.status ==
+                                                        "DECLINE" ||
+                                                    transaction.status ==
+                                                        "REJECT"
                                                 ? Colors.grey
                                                 : Colors.black,
                                         size: 20)
@@ -270,6 +391,133 @@ class _DetailTransaction extends State<DetailTransaction> {
                                 ),
                               ))
                           : const SizedBox(),
+                      snapshot.data!.data()!.containsKey("image_before_user") ==
+                              true
+                          ? snapshot.data!.get("image_before_user") != null
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        snapshot.data!.data()!.containsKey(
+                                                    "image_before_user") ==
+                                                true
+                                            ? snapshot.data!.get(
+                                                        "image_before_user") !=
+                                                    null
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  width: 1,
+                                                                  color: HexColor(
+                                                                      "E0E0E0")),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          width:
+                                                              _size.width / 5,
+                                                          height:
+                                                              _size.height / 10,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          FullScreen(
+                                                                            "firebaseImage",
+                                                                            firebaseImage:
+                                                                                snapshot.data!.get("image_before_user"),
+                                                                            filePath:
+                                                                                "condition-check",
+                                                                          )));
+                                                            },
+                                                            child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                                child: FittedBox(
+                                                                    fit: BoxFit.fill,
+                                                                    child: FirebaseImage(
+                                                                      filePath:
+                                                                          "condition-check/${snapshot.data!.get("image_before_user")}",
+                                                                    ))),
+                                                          )),
+                                                      SizedBox(
+                                                          height: _size.height /
+                                                              60),
+                                                      const Text("Before User")
+                                                    ],
+                                                  )
+                                                : const SizedBox()
+                                            : const SizedBox(),
+                                        SizedBox(width: _size.width / 5),
+                                        snapshot.data!.data()!.containsKey(
+                                                    "image_after_user") ==
+                                                true
+                                            ? snapshot.data!.get(
+                                                        "image_after_user") !=
+                                                    null
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  width: 1,
+                                                                  color: HexColor(
+                                                                      "E0E0E0")),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
+                                                          width:
+                                                              _size.width / 5,
+                                                          height:
+                                                              _size.height / 10,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(context).push(
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          FullScreen(
+                                                                            "firebaseImage",
+                                                                            firebaseImage:
+                                                                                snapshot.data!.get("image_after_user"),
+                                                                            filePath:
+                                                                                "condition-check",
+                                                                          )));
+                                                            },
+                                                            child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                                child: FittedBox(
+                                                                    fit: BoxFit.fill,
+                                                                    child: FirebaseImage(
+                                                                      filePath:
+                                                                          "condition-check/${snapshot.data!.get("image_after_user")}",
+                                                                    ))),
+                                                          )),
+                                                      SizedBox(
+                                                          height: _size.height /
+                                                              60),
+                                                      const Text("After User")
+                                                    ],
+                                                  )
+                                                : const SizedBox()
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                    SizedBox(height: _size.height / 70),
+                                  ],
+                                )
+                              : const SizedBox()
+                          : const SizedBox(),
+                      SizedBox(height: _size.height / 20),
                       transaction.image_after_user != null
                           ? const SizedBox()
                           : transaction.status == "RETURN"
@@ -280,27 +528,37 @@ class _DetailTransaction extends State<DetailTransaction> {
                                       width: _size.width,
                                       height: _size.height / 12,
                                       child: ElevatedButton(
-                                        onPressed: transaction.status == "ACTIVE" && dateFormat.format(
-                                                    transaction.end_date!) ==
-                                                dateFormat
-                                                    .format(DateTime.now()) ? () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        ReturnProduct(
-                                                                          idOwner: transaction.owner!.id,
-                                                                          transaction.id!,
-                                                                          "",
-                                                                          "",
-                                                                          idProduct:
-                                                                              widget.idProduct,
-                                                                          idUser: widget.idUser,
-                                                                          product_image: widget.product_image,
-                                                                          product_name: widget.product_name,
-                                                                          total: transaction.total,
-                                                                        )));
-                                                      } : null,
+                                        onPressed: transaction.status ==
+                                                    "ACTIVE" &&
+                                                dateFormat.format(transaction
+                                                        .end_date!) ==
+                                                    dateFormat
+                                                        .format(DateTime.now())
+                                            ? () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReturnProduct(
+                                                              idOwner:
+                                                                  transaction
+                                                                      .owner!
+                                                                      .id,
+                                                              transaction.id!,
+                                                              "",
+                                                              "",
+                                                              idProduct: widget
+                                                                  .idProduct,
+                                                              idUser:
+                                                                  widget.idUser,
+                                                              product_image: widget
+                                                                  .product_image,
+                                                              product_name: widget
+                                                                  .product_name,
+                                                              total: transaction
+                                                                  .total,
+                                                            )));
+                                              }
+                                            : null,
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: HexColor("4164DE"),
                                         ),
@@ -311,56 +569,59 @@ class _DetailTransaction extends State<DetailTransaction> {
                                             textAlign: TextAlign.center),
                                       )),
                       SizedBox(height: _size.height / 40),
-                          transaction.status == "RETURN" || transaction.status == "DONE" ? const SizedBox()
-                                  : Center(
-                                      child: TextButton(
-                                          onPressed: transaction.status == "ACTIVE" || transaction.status == "COMPLAIN" ? () {
-                                                          if (snapshot.data!
-                                                              .data()!
-                                                              .containsKey(
-                                                                  "complain")) {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) => DetailComplain(
-                                                                      transaction
-                                                                          .complain!
-                                                                          .id,
-                                                                      widget
-                                                                          .product_name,
-                                                                      widget
-                                                                          .product_image,
-                                                                      transaction
-                                                                          .total!,
-                                                                      idProduct: widget.idProduct,
-                                                                      "user")),
-                                                            );
-                                                          } else {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) => ComplainProduct(
-                                                                      transaction
-                                                                          .owner!
-                                                                          .id,
-                                                                      widget
-                                                                          .idTransaction)),
-                                                            );
-                                                          }
-                                                        } : null,
-                                          child: Text(
-                                            haveComplain
-                                                ? "Complain Detail"
-                                                : "Complain Product",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: transaction.status == "ACTIVE" || transaction.status == "COMPLAIN" ? HexColor(
-                                                                "4164DE") : Colors.grey,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                    ),
+                      transaction.status == "RETURN" ||
+                              transaction.status == "DONE"
+                          ? const SizedBox()
+                          : Center(
+                              child: TextButton(
+                                  onPressed: transaction.status == "ACTIVE" ||
+                                          transaction.status == "COMPLAIN"
+                                      ? () {
+                                          if (snapshot.data!
+                                              .data()!
+                                              .containsKey("complain")) {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailComplain(
+                                                          transaction
+                                                              .complain!.id,
+                                                          widget.product_name,
+                                                          widget.product_image,
+                                                          transaction.total!,
+                                                          idProduct:
+                                                              widget.idProduct,
+                                                          idTransaction:
+                                                              transaction.id,
+                                                          idUser: transaction
+                                                              .user!.id,
+                                                          "user")),
+                                            );
+                                          } else {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ComplainProduct(
+                                                          transaction.owner!.id,
+                                                          widget
+                                                              .idTransaction)),
+                                            );
+                                          }
+                                        }
+                                      : null,
+                                  child: Text(
+                                    haveComplain
+                                        ? "Complain Detail"
+                                        : "Complain Product",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: transaction.status == "ACTIVE" ||
+                                                transaction.status == "COMPLAIN"
+                                            ? HexColor("4164DE")
+                                            : Colors.grey,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                            ),
                     ],
                   );
                 }
