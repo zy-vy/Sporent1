@@ -9,7 +9,7 @@ import 'package:sporent/component/image_full_screen.dart';
 
 class ComplainCard extends StatelessWidget {
   const ComplainCard(this.image, this.description, this.date, this.haveLine,
-      {super.key});
+      {super.key,});
 
   final List<dynamic> image;
   final String description;
@@ -34,7 +34,7 @@ class ComplainCard extends StatelessWidget {
             : const SizedBox(),
         Text("Date: $date"),
         SizedBox(height: _size.height / 40),
-        Row(
+        image.isEmpty == false ? Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -74,7 +74,7 @@ class ComplainCard extends StatelessWidget {
                 ],
               ),
           ],
-        ),
+        ) : const SizedBox() ,
         SizedBox(height: _size.height / 40),
         Text(description, style: const TextStyle(fontWeight: FontWeight.w500))
       ],

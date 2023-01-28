@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/component/firebase_image.dart';
@@ -8,16 +8,22 @@ import 'package:sporent/model/complain_detail.dart';
 import 'package:sporent/model/transaction.dart';
 import 'package:sporent/screens/complain_feedback.dart';
 import 'package:sporent/screens/finish_complain.dart';
+import 'package:sporent/screens/transaction_detail.dart';
 
 import '../component/complain_card.dart';
 import '../component/image_full_screen.dart';
 import '../component/transaction_card_detail.dart';
 import '../model/complain.dart';
+import 'manage_complain_admin.dart';
 
 class DetailComplain extends StatefulWidget {
   const DetailComplain(
       this.id, this.product_name, this.product_image, this.total, this.role,
-      {super.key, this.idUser, this.idOwner, this.idTransaction});
+      {super.key,
+      this.idUser,
+      this.idOwner,
+      this.idTransaction,
+      this.idProduct});
 
   final String id;
   final String product_name;
@@ -27,6 +33,7 @@ class DetailComplain extends StatefulWidget {
   final String? idUser;
   final String? idOwner;
   final String? idTransaction;
+  final String? idProduct;
 
   @override
   State<DetailComplain> createState() => _DetailComplainState();
@@ -44,6 +51,25 @@ class _DetailComplainState extends State<DetailComplain> {
 
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              if (widget.role == "admin") {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ManageComplain()));
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => DetailTransaction(
+                        widget.idTransaction!,
+                        widget.product_image,
+                        widget.product_name,
+                        widget.idProduct!,
+                        widget.idUser!)));
+              }
+              // Navigator.of(context)
+              //     .push(MaterialPageRoute(builder: (context) => const BottomBarScreen(indexPage: "3")));
+            },
+          ),
           centerTitle: false,
           title: Transform(
             transform: Matrix4.translationValues(-15.0, 0.0, 0.0),
@@ -188,11 +214,18 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
-                                                        Text(dateFormatTime.format(transaction.date_before_owner!), style: const TextStyle(fontSize: 10))
+                                                        Text(
+                                                            dateFormatTime.format(
+                                                                transaction
+                                                                    .date_before_owner!),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        10))
                                                       ],
                                                     )
                                                   : const SizedBox(),
-                                                  SizedBox(width: _size.width / 7),
+                                              SizedBox(width: _size.width / 7),
                                               transaction.image_after_owner !=
                                                       null
                                                   ? Column(
@@ -245,7 +278,14 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
-                                                        Text(dateFormatTime.format(transaction.date_after_owner!),style: const TextStyle(fontSize: 10))
+                                                        Text(
+                                                            dateFormatTime.format(
+                                                                transaction
+                                                                    .date_after_owner!),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        10))
                                                       ],
                                                     )
                                                   : const SizedBox(),
@@ -320,11 +360,18 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
-                                                        Text(dateFormatTime.format(transaction.date_before_user!),style: const TextStyle(fontSize: 10))
+                                                        Text(
+                                                            dateFormatTime.format(
+                                                                transaction
+                                                                    .date_before_user!),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        10))
                                                       ],
                                                     )
                                                   : const SizedBox(),
-                                                  SizedBox(width: _size.width / 7),
+                                              SizedBox(width: _size.width / 7),
                                               transaction.image_after_user !=
                                                       null
                                                   ? Column(
@@ -371,12 +418,20 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
-                                                        const Text("After User"),
+                                                        const Text(
+                                                            "After User"),
                                                         SizedBox(
                                                             height:
                                                                 _size.height /
                                                                     60),
-                                                        Text(dateFormatTime.format(transaction.date_after_user!),style: const TextStyle(fontSize: 10))
+                                                        Text(
+                                                            dateFormatTime.format(
+                                                                transaction
+                                                                    .date_after_user!),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        10))
                                                       ],
                                                     )
                                                   : const SizedBox(),
@@ -387,9 +442,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                               color: HexColor("E0E0E0"),
                                               thickness: 2),
                                           SizedBox(height: _size.height / 70),
-                                        ]
-                                        
-                                        );
+                                        ]);
                                   }
                                 })
                             : const SizedBox(),
@@ -419,18 +472,32 @@ class _DetailComplainState extends State<DetailComplain> {
                                         const NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data!.docs.length,
                                     itemBuilder: (context, index) {
-                                      ComplainDetail complainDetail =
-                                          ComplainDetail.fromDocument(
-                                              snapshot.data!.docs[index].id,
-                                              snapshot.data!.docs[index]
-                                                  .data());
+                                      ComplainDetail complainDetail;
+                                      List<dynamic> image = [];
+
+                                      if (snapshot.data!.docs[index]
+                                              .get("image") ==
+                                          null) {
+                                        complainDetail =
+                                            ComplainDetail.fromDocumentNoImage(
+                                                snapshot.data!.docs[index].id,
+                                                snapshot.data!.docs[index]
+                                                    .data());
+                                      } else {
+                                        complainDetail =
+                                            ComplainDetail.fromDocument(
+                                                snapshot.data!.docs[index].id,
+                                                snapshot.data!.docs[index]
+                                                    .data());
+                                        image = complainDetail.image!;
+                                      }
                                       bool line = false;
 
                                       if (index != 0) {
                                         line = true;
                                       }
                                       return ComplainCard(
-                                          complainDetail.image!,
+                                          image,
                                           complainDetail.description!,
                                           dateFormat
                                               .format(complainDetail.date!),

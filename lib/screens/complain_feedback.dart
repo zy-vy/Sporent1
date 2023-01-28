@@ -199,11 +199,8 @@ class _ComplainFeedbackState extends State<ComplainFeedback> {
                             onPressed: () {
                               uploadFile(listImages, widget.idComplain,
                                   complainController.text);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const NotifComplain()));
+
+                              Navigator.of(context).pop();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: hexStringToColor("4164DE"),

@@ -89,8 +89,8 @@ class _DetailTransaction extends State<DetailTransaction> {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: _size.height / 40),
-                      // bookingPeriod(dateFormat.format(transaction.start_date!),
-                      //     dateFormat.format(transaction.end_date!), _size),
+                      bookingPeriod(dateFormat.format(transaction.start_date!),
+                          dateFormat.format(transaction.end_date!), _size),
                       SizedBox(height: _size.height / 70),
                       Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
                       DetailTransactionCard(
@@ -185,20 +185,13 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                 color: Colors.black,
                                                 fontSize: 13),
                                           )
-                                        : transaction.status == "ACTIVE"
+                                        : transaction.status == "ACTIVE" || transaction.status == "RETURN" || transaction.status == "DONE"
                                             ? const Text(
                                                 "This check has been completed",
                                                 style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 13),
                                               )
-                                            : transaction.status == "RETURN"
-                                                ? const Text(
-                                                    "This check has been completed",
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 13),
-                                                  )
                                                 : const Text(
                                                     "This check is not ready at this time",
                                                     style: TextStyle(
@@ -318,12 +311,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                             textAlign: TextAlign.center),
                                       )),
                       SizedBox(height: _size.height / 40),
-                      transaction.image_after_user != null
-                          ? const SizedBox()
-                          : transaction.status == "RETURN"
-                              ? const SizedBox()
-                              : transaction.status == "DONE"
-                                  ? const SizedBox()
+                          transaction.status == "RETURN" || transaction.status == "DONE" ? const SizedBox()
                                   : Center(
                                       child: TextButton(
                                           onPressed: transaction.status == "ACTIVE" || transaction.status == "COMPLAIN" ? () {
@@ -345,6 +333,7 @@ class _DetailTransaction extends State<DetailTransaction> {
                                                                           .product_image,
                                                                       transaction
                                                                           .total!,
+                                                                      idProduct: widget.idProduct,
                                                                       "user")),
                                                             );
                                                           } else {

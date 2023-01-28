@@ -23,6 +23,15 @@ class ComplainDetail {
       image: json['image']
     );
   }
+
+  static ComplainDetail fromDocumentNoImage(String id, Map<String, dynamic> json) {
+    return ComplainDetail(
+      id: id,
+      date: json['date'].toDate(),
+      complain: json['complain'],
+      description: json['description'],
+    );
+  }
   
   toJSON() {
     return {
