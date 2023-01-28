@@ -140,10 +140,6 @@ class _DetailComplainState extends State<DetailComplain> {
                                     return const Center(
                                         child: CircularProgressIndicator());
                                   } else {
-                                    TransactionModel transaction =
-                                        TransactionModel.fromDocumentAdminDate(
-                                            snapshot.data!.id,
-                                            snapshot.data!.data()!);
                                     return Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -162,7 +158,8 @@ class _DetailComplainState extends State<DetailComplain> {
                                           ),
                                           Row(
                                             children: [
-                                              transaction.image_before_owner !=
+                                              snapshot.data!.data()!.containsKey("image_before_owner") == true  ?
+                                              snapshot.data!.get("image_before_owner") !=
                                                       null
                                                   ? Column(
                                                       children: [
@@ -188,7 +185,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                     .push(MaterialPageRoute(
                                                                         builder: (context) => FullScreen(
                                                                               "firebaseImage",
-                                                                              firebaseImage: transaction.image_before_owner,
+                                                                              firebaseImage: snapshot.data!.get("image_before_owner"),
                                                                               filePath: "condition-check",
                                                                             )));
                                                               },
@@ -201,7 +198,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                       fit: BoxFit.fill,
                                                                       child: FirebaseImage(
                                                                         filePath:
-                                                                            "condition-check/${transaction.image_before_owner}",
+                                                                            "condition-check/${snapshot.data!.get("image_before_owner")}",
                                                                       ))),
                                                             )),
                                                         SizedBox(
@@ -214,19 +211,20 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
+                                                        snapshot.data!.data()!.containsKey("date_before_owner") == true ?
                                                         Text(
                                                             dateFormatTime.format(
-                                                                transaction
-                                                                    .date_before_owner!),
+                                                                snapshot.data!.get("date_before_owner").toDate()),
                                                             style:
                                                                 const TextStyle(
                                                                     fontSize:
-                                                                        10))
+                                                                        10)) : const SizedBox()
                                                       ],
                                                     )
-                                                  : const SizedBox(),
+                                                  : const SizedBox() : const SizedBox(),
                                               SizedBox(width: _size.width / 7),
-                                              transaction.image_after_owner !=
+                                              snapshot.data!.data()!.containsKey("image_after_owner") == true ?
+                                              snapshot.data!.get("image_after_owner") !=
                                                       null
                                                   ? Column(
                                                       children: [
@@ -252,7 +250,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                     .push(MaterialPageRoute(
                                                                         builder: (context) => FullScreen(
                                                                               "firebaseImage",
-                                                                              firebaseImage: transaction.image_after_owner,
+                                                                              firebaseImage: snapshot.data!.get("image_after_owner"),
                                                                               filePath: "condition-check",
                                                                             )));
                                                               },
@@ -265,7 +263,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                       fit: BoxFit.fill,
                                                                       child: FirebaseImage(
                                                                         filePath:
-                                                                            "condition-check/${transaction.image_after_owner}",
+                                                                            "condition-check/${snapshot.data!.get("image_after_owner")}",
                                                                       ))),
                                                             )),
                                                         SizedBox(
@@ -278,17 +276,17 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
+                                                        snapshot.data!.data()!.containsKey("date_after_owner") == true ? 
                                                         Text(
                                                             dateFormatTime.format(
-                                                                transaction
-                                                                    .date_after_owner!),
+                                                                snapshot.data!.get("date_after_owner").toDate()),
                                                             style:
                                                                 const TextStyle(
                                                                     fontSize:
-                                                                        10))
+                                                                        10)) : const SizedBox()
                                                       ],
                                                     )
-                                                  : const SizedBox(),
+                                                  : const SizedBox() : const SizedBox(),
                                             ],
                                           ),
                                           SizedBox(height: _size.height / 50),
@@ -308,7 +306,8 @@ class _DetailComplainState extends State<DetailComplain> {
                                           ),
                                           Row(
                                             children: [
-                                              transaction.image_before_user !=
+                                              snapshot.data!.data()!.containsKey("image_before_user") == true ? 
+                                              snapshot.data!.get("image_before_user") !=
                                                       null
                                                   ? Column(
                                                       children: [
@@ -334,7 +333,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                     .push(MaterialPageRoute(
                                                                         builder: (context) => FullScreen(
                                                                               "firebaseImage",
-                                                                              firebaseImage: transaction.image_before_user,
+                                                                              firebaseImage: snapshot.data!.get("image_before_user"),
                                                                               filePath: "condition-check",
                                                                             )));
                                                               },
@@ -347,7 +346,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                       fit: BoxFit.fill,
                                                                       child: FirebaseImage(
                                                                         filePath:
-                                                                            "condition-check/${transaction.image_before_user}",
+                                                                            "condition-check/${snapshot.data!.get("image_before_user")}",
                                                                       ))),
                                                             )),
                                                         SizedBox(
@@ -360,19 +359,20 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
+                                                        snapshot.data!.data()!.containsKey("date_before_user") == true ?
                                                         Text(
                                                             dateFormatTime.format(
-                                                                transaction
-                                                                    .date_before_user!),
+                                                                snapshot.data!.get("date_before_user").toDate()),
                                                             style:
                                                                 const TextStyle(
                                                                     fontSize:
-                                                                        10))
+                                                                        10)) : const SizedBox()
                                                       ],
                                                     )
-                                                  : const SizedBox(),
+                                                  : const SizedBox() : const SizedBox(),
                                               SizedBox(width: _size.width / 7),
-                                              transaction.image_after_user !=
+                                              snapshot.data!.data()!.containsKey("image_after_user") == true ?
+                                             snapshot.data!.get("image_after_user") !=
                                                       null
                                                   ? Column(
                                                       children: [
@@ -398,7 +398,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                     .push(MaterialPageRoute(
                                                                         builder: (context) => FullScreen(
                                                                               "firebaseImage",
-                                                                              firebaseImage: transaction.image_after_user,
+                                                                              firebaseImage: snapshot.data!.get("image_after_user"),
                                                                               filePath: "condition-check",
                                                                             )));
                                                               },
@@ -411,7 +411,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                                                       fit: BoxFit.fill,
                                                                       child: FirebaseImage(
                                                                         filePath:
-                                                                            "condition-check/${transaction.image_after_user}",
+                                                                            "condition-check/${snapshot.data!.get("image_after_user")}",
                                                                       ))),
                                                             )),
                                                         SizedBox(
@@ -424,17 +424,17 @@ class _DetailComplainState extends State<DetailComplain> {
                                                             height:
                                                                 _size.height /
                                                                     60),
+                                                        snapshot.data!.data()!.containsKey("date_after_user") == true ?
                                                         Text(
                                                             dateFormatTime.format(
-                                                                transaction
-                                                                    .date_after_user!),
+                                                                snapshot.data!.get("date_after_user").toDate()),
                                                             style:
                                                                 const TextStyle(
                                                                     fontSize:
-                                                                        10))
+                                                                        10)) : const SizedBox()
                                                       ],
                                                     )
-                                                  : const SizedBox(),
+                                                  : const SizedBox() : const SizedBox(),
                                             ],
                                           ),
                                           SizedBox(height: _size.height / 50),
@@ -459,7 +459,7 @@ class _DetailComplainState extends State<DetailComplain> {
                                 .where("complain",
                                     isEqualTo: firestore
                                         .collection("complain")
-                                        .doc(widget.id))
+                                        .doc(widget.id)).orderBy('date')
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
