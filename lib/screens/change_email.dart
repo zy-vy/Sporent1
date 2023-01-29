@@ -83,11 +83,19 @@ class _EditEmailState extends State<EditEmail> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
+                                  FirebaseFirestore.instance
+                                                  .collection("user")
+                                                  .doc(widget.id)
+                                                  .update({
+                                                "email": emailController.text
+                                              });
+                                              
                                   FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: widget.email,
                                           password: widget.password)
                                       .then((value) async {
+                                    
                                     final currentUser =
                                         FirebaseAuth.instance.currentUser;
                                     await currentUser!
@@ -98,12 +106,6 @@ class _EditEmailState extends State<EditEmail> {
                                                     text:
                                                         "Success change email")
                                                 .then((value) {
-                                              FirebaseFirestore.instance
-                                                  .collection("user")
-                                                  .doc(widget.id)
-                                                  .update({
-                                                "email": emailController.text
-                                              });
                                               FirebaseAuth.instance.signOut();
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
