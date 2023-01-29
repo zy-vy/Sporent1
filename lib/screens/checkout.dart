@@ -20,7 +20,11 @@ import '../viewmodel/transaction_viewmodel.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage(
-      {super.key, required this.totalAmount, required this.cartList,required this.totalPrice,required this.totalDeposit});
+      {super.key,
+      required this.totalAmount,
+      required this.cartList,
+      required this.totalPrice,
+      required this.totalDeposit});
 
   final int totalAmount;
 
@@ -461,9 +465,20 @@ class _CheckoutPage extends State<CheckoutPage> {
                                           "Please input correct information...");
                                   return;
                                 }
-                                setState(() {
-                                  index = 1;
-                                });
+                                CoolAlert.show(
+                                  context: context,
+                                  title: "Deposit Agreement",
+                                  text:
+                                      "Your deposit will be return, but if the product is damaged, the deposit will be deducted",
+                                  type: CoolAlertType.confirm,
+                                  onConfirmBtnTap: () {
+                                      setState(() {
+                                        index = 1;
+                                      });
+                                     Navigator.pop(context);
+                                  },
+                                  
+                                );
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -550,47 +565,42 @@ class _CheckoutPage extends State<CheckoutPage> {
             children: [
               transferImage != null
                   ? Stack(children: [
-                                SizedBox(
-                                    width: size.width / 6,
-                                    height: size.width / 6,
-                                    child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            side: BorderSide(
-                                                width: 2,
-                                                color: HexColor("8DA6FE"))),
-                                        onPressed: (() async {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) => FullScreen(
-                                                "file",
-                                                image: transferImage),
-                                          ));
-                                        }),
-                                        child: Image.file(
-                                          transferImage!,
-                                          fit: BoxFit.fill,
-                                        ))),
-                                Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: Container(
-                                        height: 25,
-                                        width: 25,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.blueAccent,
-                                            shape: BoxShape.circle),
-                                        child: IconButton(
-                                          icon: const FaIcon(
-                                              FontAwesomeIcons.xmark,
-                                              size: 10,
-                                              color: Colors.white),
-                                          onPressed: () {
-                                            setState(() {
-                                              transferImage = null;
-                                            });
-                                          },
-                                        ))),
-                              ])
+                      SizedBox(
+                          width: size.width / 6,
+                          height: size.width / 6,
+                          child: TextButton(
+                              style: TextButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 2, color: HexColor("8DA6FE"))),
+                              onPressed: (() async {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      FullScreen("file", image: transferImage),
+                                ));
+                              }),
+                              child: Image.file(
+                                transferImage!,
+                                fit: BoxFit.fill,
+                              ))),
+                      Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                              height: 25,
+                              width: 25,
+                              decoration: const BoxDecoration(
+                                  color: Colors.blueAccent,
+                                  shape: BoxShape.circle),
+                              child: IconButton(
+                                icon: const FaIcon(FontAwesomeIcons.xmark,
+                                    size: 10, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    transferImage = null;
+                                  });
+                                },
+                              ))),
+                    ])
                   : SizedBox(
                       width: size.width / 6,
                       height: size.width / 6,
@@ -629,20 +639,20 @@ class _CheckoutPage extends State<CheckoutPage> {
                           .doc(cartDetail.productRef!.path)
                           .get();
                       Order order = Order(
-                        total: cartDetail.total,
-                        quantity: cartDetail.quantity,
-                        productRef: cartDetail.productRef,
-                        deliveryMethod: _deliveryType,
-                        deliveryLocation: controller.text,
-                        startDate: cartDetail.startDate,
-                        endDate: cartDetail.endDate,
-                        ownerRef: cart.ownerRef,
-                        userRef: cart.userRef,
-                        ktpFile: ktpImage,
-                        paymentFile: transferImage,
-                        balance: product.get("rent_price") * cartDetail.quantity,
-                        deposit: product.get("deposit_price")
-                      );
+                          total: cartDetail.total,
+                          quantity: cartDetail.quantity,
+                          productRef: cartDetail.productRef,
+                          deliveryMethod: _deliveryType,
+                          deliveryLocation: controller.text,
+                          startDate: cartDetail.startDate,
+                          endDate: cartDetail.endDate,
+                          ownerRef: cart.ownerRef,
+                          userRef: cart.userRef,
+                          ktpFile: ktpImage,
+                          paymentFile: transferImage,
+                          balance:
+                              product.get("rent_price") * cartDetail.quantity,
+                          deposit: product.get("deposit_price"));
                       await TransactionViewModel()
                           .checkout(cartDetail, order, null)
                           .then((value) {
@@ -677,5 +687,4 @@ class _CheckoutPage extends State<CheckoutPage> {
       ),
     );
   }
-
 }

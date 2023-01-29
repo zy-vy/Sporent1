@@ -507,7 +507,7 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
                     orderViewModel.acceptPayment(order);
                     CoolAlert.show(context: context, type: CoolAlertType.success).then((value) {
                       setState(() {
-
+                        
                       });
                       Navigator.pop(context);
                     });
