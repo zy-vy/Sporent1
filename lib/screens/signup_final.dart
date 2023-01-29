@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -279,8 +281,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                   padding: const EdgeInsets.all(0),
                                   onPressed: () {
                                     setState(() {
-                                      hidePassword =
-                                          !hidePassword;
+                                      hidePassword = !hidePassword;
                                     });
                                   },
                                   icon: FaIcon(
@@ -503,6 +504,8 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
 
 // '0.0001'.replaceFirst(RegExp(r'0'), ''); // '.0001'
   void phoneAuthentication(String phoneNumber1) async {
+    print("masok ke phone number");
+
     if (phoneNumber1[0] == "0") {
       phoneNumber1 = phoneNumber1.replaceFirst(RegExp(r'0'), '+62');
     }
@@ -511,6 +514,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
     } else {
       phoneNumber1 = phoneNumber1;
     }
+    log(phoneNumber1);
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber1,
       verificationCompleted: (PhoneAuthCredential credential) async {},

@@ -35,9 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future fetchUser() async {
     await Future.delayed(const Duration(seconds: 1));
-    print("tes masuk");
     if (FirebaseAuth.instance.currentUser != null) {
-       print("tes masuk ke sini");
       user = await _userRepository
           .getUserById(FirebaseAuth.instance.currentUser!.uid);
       setState(() {

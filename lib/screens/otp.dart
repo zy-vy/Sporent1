@@ -100,9 +100,10 @@ class _OTP extends State<OTP> {
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(90)),
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
                       onPressed: () async {
-                        String FinalOTP = _OTPController1.text.toString() +
+                        String finalOTP = _OTPController1.text.toString() +
                             _OTPController2.text.toString() +
                             _OTPController3.text.toString() +
                             _OTPController4.text.toString() +
@@ -113,11 +114,8 @@ class _OTP extends State<OTP> {
                           PhoneAuthCredential credential =
                               PhoneAuthProvider.credential(
                                   verificationId: SignUpScreenFinal.verify,
-                                  smsCode: FinalOTP);
+                                  smsCode: finalOTP);
                           await auth.signInWithCredential(credential);
-
-                          
-                          // ignore: use_build_context_synchronously
 
                           CoolAlert.show(
                                   context: context,
@@ -132,11 +130,14 @@ class _OTP extends State<OTP> {
                                     ),
                                   ));
                         } catch (e) {
-                          print("wrong otp");
+                          CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text: "Wrong OTP...");
                         }
                       },
                       child: const Text(
-                        'VERIFY',
+                        'Verify',
                         style: TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
@@ -170,7 +171,8 @@ class _OTP extends State<OTP> {
           showCursor: false,
           readOnly: false,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
           keyboardType: TextInputType.number,
           maxLength: 1,
           decoration: InputDecoration(
@@ -192,14 +194,19 @@ class _OTP extends State<OTP> {
   Row ResendOption(String phoneNumber1) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text("Didn't receive the verification code ? ",
-          style: TextStyle(color: Colors.white70,fontSize: 13)),
+          style: TextStyle(color: Colors.white70, fontSize: 13)),
       GestureDetector(
         onTap: () {
           phoneAuthentication(phoneNumber1);
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              text: "Success send OTP...");
         },
         child: const Text(
           "Resend New Code",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
         ),
       )
     ]);
