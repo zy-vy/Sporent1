@@ -15,12 +15,13 @@ import 'package:sporent/component/bar-profile.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/no_current_user.dart';
 import 'package:sporent/repository/user_repository.dart';
-import 'package:sporent/screens/change-password.dart';
+import 'package:sporent/screens/change_password.dart';
 import 'package:sporent/screens/deposit-information.dart';
 import 'package:sporent/screens/become_owner.dart';
 import 'package:sporent/screens/edit_personal_info.dart';
 import 'package:sporent/screens/help-center.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sporent/screens/password_confirmation.dart';
 import 'package:sporent/screens/profile_owner.dart';
 import 'package:sporent/viewmodel/user_viewmodel.dart';
 
@@ -99,11 +100,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     "All information about deposit",
                                     FontAwesomeIcons.coins,
                                     DepositInformation(user!.id.toString())),
-                                const BarProfile(
+                                BarProfile(
                                     "Change Password",
                                     "Change your old password",
                                     FontAwesomeIcons.lock,
-                                    EditPassword()),
+                                    PasswordConfirmation(user!.email!, "password")),
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       vertical: _size.height / 50),

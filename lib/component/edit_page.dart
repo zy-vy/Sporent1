@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:sporent/screens/signin_screen.dart';
 
 import '../screens/add_product.dart';
 
@@ -60,15 +62,11 @@ class _EditPageState extends State<EditPage> {
                           snapshot.data!.get(widget.firestoreField);
                       widget.controller.selection = TextSelection.fromPosition(
                           TextPosition(offset: widget.controller.text.length));
-
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           topPage(widget.titleForm, _size, widget.descForm),
-                          widget.type == "Phone Number"
-                              ? fieldPhoneForm(
-                                  widget.labelText, widget.controller)
-                              : fieldTextForm(widget.labelText, widget.type,
+                          fieldTextForm(widget.labelText, widget.type,
                                   widget.controller),
                           bottomPageUpdate(
                               _size,
@@ -99,29 +97,6 @@ TextFormField fieldTextForm(
       validator: ((value) {
         if (value!.isEmpty) {
           return "$type must not be empty";
-        }
-        if (type == "Email") {
-          if (!value.contains("@") || !value.endsWith("gmail.com")) {
-            return "Invalid Email";
-          }
-        }
-      }),
-    );
-
-IntlPhoneField fieldPhoneForm(
-        String labelText, TextEditingController controller) =>
-    IntlPhoneField(
-      controller: controller,
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(), labelText: 'Enter your phone number'),
-      initialCountryCode: 'ID',
-      disableLengthCheck: true,
-      validator: ((p0) {
-        if (p0!.number.isEmpty) {
-          return "Phone Number must not be empty";
-        }
-        if (p0.number.length > 11) {
-          return "Invalid Phone Number";
         }
       }),
     );
@@ -173,11 +148,6 @@ Column bottomPageUpdate(
             child: ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  // if (type == "Phone Number") {
-                  //   final AuthCredential = PhoneAuthProvider.credential()
-                  //   FirebaseAuth.instance.currentUser!.updateEmail(controller.text);;
-                  //   // user!.reauthenticateWithCredential(user);
-                  // }
 
                   FirebaseFirestore.instance
                       .collection("user")
@@ -203,28 +173,3 @@ Column bottomPageUpdate(
       ],
     );
 
-Column bottomPage(Size _size, GlobalKey<FormState> _formKey,
-        BuildContext context, Widget page) =>
-    Column(
-      children: [
-        SizedBox(height: _size.height / 20),
-        SizedBox(
-            width: _size.width,
-            height: _size.height / 15,
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => page,
-                    ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HexColor("4164DE"),
-              ),
-              child: const Text("Confirm", textAlign: TextAlign.center),
-            ))
-      ],
-    );

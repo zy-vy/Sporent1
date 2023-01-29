@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/component/bar-profile.dart';
 import 'package:sporent/component/no_current_user.dart';
-import 'package:sporent/screens/change-password.dart';
+import 'package:sporent/screens/change_password.dart';
 import 'package:sporent/screens/deposit-information.dart';
 import 'package:sporent/screens/manage_balance_admin.dart';
 import 'package:sporent/screens/manage_payment_admin.dart';

@@ -1,13 +1,20 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/edit_page.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/color.dart';
 import 'package:sporent/screens/profile.dart';
+import 'package:sporent/screens/signin_screen.dart';
 
 class EditPassword extends StatefulWidget {
-  const EditPassword({super.key});
+  const EditPassword(this.email, this.password, {super.key});
+
+  final String email;
+  final String password;
 
   @override
   State<EditPassword> createState() => _EditPasswordState();
@@ -103,7 +110,47 @@ class _EditPasswordState extends State<EditPassword> {
                     }
                   },
                 ),
-                bottomPage(_size, _formKey, context, const ProfilePage())
+                SizedBox(height: _size.height / 20),
+                SizedBox(
+                    width: _size.width,
+                    height: _size.height / 15,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: widget.email,
+                                  password: widget.password)
+                              .then((value) async {
+                            final currentUser =
+                                FirebaseAuth.instance.currentUser;
+                            await currentUser!
+                                .updatePassword(passController.text)
+                                .then((value) => CoolAlert.show(
+                                            context: context,
+                                            type: CoolAlertType.success,
+                                            text: "Success change password")
+                                        .then((value) {
+                                      FirebaseAuth.instance.signOut();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SignInScreen()));
+                                    }))
+                                .catchError((onError) {
+                              CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  text: "Password error");
+                            });
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: HexColor("4164DE"),
+                      ),
+                      child: const Text("Confirm", textAlign: TextAlign.center),
+                    ))
               ],
             ),
           ),
