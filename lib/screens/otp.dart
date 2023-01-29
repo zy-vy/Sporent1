@@ -121,14 +121,13 @@ class _OTP extends State<OTP> {
                                   context: context,
                                   type: CoolAlertType.success,
                                   text: "Success created account...")
-                              .then((value) => Navigator.of(context).push(
-                                    MaterialPageRoute(
+                              .then((value) => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
                                       builder: (context) =>
                                           const BottomBarScreen(
-                                        indexPage: "0",
-                                      ),
-                                    ),
-                                  ));
+                                            indexPage: "0",
+                                          ))));
                         } catch (e) {
                           CoolAlert.show(
                               context: context,
