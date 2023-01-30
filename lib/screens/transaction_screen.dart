@@ -32,10 +32,10 @@ class _TransactionScreen extends State<TransactionScreen> {
     if (FirebaseAuth.instance.currentUser != null) {
       user = await _userRepository
           .getUserById(FirebaseAuth.instance.currentUser!.uid);
-      setState(()  {
-          isLoggedIn = true;
-          isLoading = false;
-          counter = 1;
+      setState(() {
+        isLoggedIn = true;
+        isLoading = false;
+        counter = 1;
       });
     } else {
       setState(() {
@@ -81,13 +81,18 @@ class _TransactionScreen extends State<TransactionScreen> {
                             .collection("transaction")
                             .where("user",
                                 isEqualTo:
-                                    firestore.collection("user").doc(user!.id)).orderBy('issue_date', descending: true)
+                                    firestore.collection("user").doc(user!.id))
+                            .orderBy('issue_date', descending: true)
                             .snapshots(),
                         builder: ((context, snapshot) {
                           if (!snapshot.hasData) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
+                          }
+                          if (snapshot.data!.docs.isEmpty) {
+                            return const Center(
+                                child: Text("There is no transaction"));
                           } else {
                             return ListView.builder(
                                 itemCount: snapshot.data!.docs.length,
