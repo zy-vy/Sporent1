@@ -186,7 +186,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             decoration: InputDecoration(
                               errorStyle: TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
-                                Icons.person_outline,
+                                Icons.email_outlined,
                                 color: Colors.white70,
                               ),
                               labelText: "Enter Email",
@@ -232,7 +232,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             decoration: InputDecoration(
                               errorStyle: TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
-                                Icons.person_outline,
+                                Icons.phone,
                                 color: Colors.white70,
                               ),
                               labelText: "Enter Phone Number",
@@ -313,8 +313,8 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                               if (value!.isEmpty) {
                                 return "Password Cannot be Empty";
                               }
-                              if (value.length < 8) {
-                                return "Password must more than 8 characters";
+                              if (value.length < 6) {
+                                return "Password must more than 6 characters";
                               }
                               if (value.length > 15) {
                                 return "Password Too Long";
@@ -390,6 +390,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                 //     _phoneNumberTextController.value.text);
                                 String checking = " ";
                                 if (formKey.currentState!.validate()) {
+                                  // FirebaseAuth.instance..settings.appVerificationDisabledForTesting = true;
+                                  
+
                                   FirebaseAuth.instance
                                       .createUserWithEmailAndPassword(
                                           email: _emailTextController.text,
@@ -406,7 +409,14 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         is_owner: false,
                                         deposit: 0,
                                         phonenumber:
-                                            _phoneNumberTextController.text);
+                                            _phoneNumberTextController.text,
+                                        owner_name: "",
+                                        owner_image: "",
+                                        owner_balance: 0,
+                                        owner_municipality: "",
+                                        owner_address: "",
+                                        owner_description: "");
+
                                     createUser(user);
                                     phoneAuthentication(
                                         _phoneNumberTextController.value.text);
@@ -416,7 +426,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         MaterialPageRoute(
                                             builder: (context) => OTP(
                                                 _phoneNumberTextController
-                                                    .value.text)));
+                                                    .value.text,
+                                                _emailTextController.text,
+                                                _passwordTextController.text)));
                                   }).onError((error, stackTrace) {
                                     if (error.toString().contains("email")) {
                                       _showAlertDialog("Email Already In Use");
@@ -446,7 +458,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                           borderRadius:
                                               BorderRadius.circular(10)))),
                               child: const Text(
-                                'CREATE ACCOUNT',
+                                'Create Account',
                                 style: TextStyle(
                                     color: Colors.black87,
                                     fontWeight: FontWeight.bold,
@@ -514,11 +526,13 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
     } else {
       phoneNumber1 = phoneNumber1;
     }
-    log(phoneNumber1);
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber1,
       verificationCompleted: (PhoneAuthCredential credential) async {},
-      verificationFailed: (FirebaseAuthException e) {},
+      verificationFailed: (FirebaseAuthException e) {
+        inspect("ini errornyo");
+        e.printError();
+      },
       codeSent: (String verificationId, int? resendToken) {
         SignUpScreenFinal.verify = verificationId;
         Navigator.pushNamed(context, "otp");
