@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
 import 'package:sporent/screens/bottom_bar.dart';
@@ -11,8 +12,10 @@ import 'package:sporent/screens/signup_screen.dart';
 import 'package:sporent/utils/colors.dart';
 
 class OTP extends StatefulWidget {
-  const OTP(this.phoneNumber1, {super.key});
+  const OTP(this.phoneNumber1, this.email, this.password, {super.key});
   final String phoneNumber1;
+  final String email;
+  final String password;
 
   @override
   State<OTP> createState() => _OTP();
@@ -115,19 +118,28 @@ class _OTP extends State<OTP> {
                               PhoneAuthProvider.credential(
                                   verificationId: SignUpScreenFinal.verify,
                                   smsCode: finalOTP);
-                          await auth.signInWithCredential(credential);
-
-                          CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.success,
-                                  text: "Success created account...")
-                              .then((value) => Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const BottomBarScreen(
-                                            indexPage: "0",
-                                          ))));
+                          await auth
+                              .signInWithCredential(credential)
+                              .then((value) {
+                            FirebaseAuth.instance.signOut();
+                            FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: widget.email,
+                                    password: widget.password)
+                                .then((value) {
+                              CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text: "Success created account...")
+                                  .then((value) => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const BottomBarScreen(
+                                                indexPage: "0",
+                                              ))));
+                            });
+                          });
                         } catch (e) {
                           CoolAlert.show(
                               context: context,

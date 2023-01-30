@@ -1,23 +1,36 @@
 
 class userModel {
-  final String? id;
-  final String name;
-  final String birthdate;
-  final String email;
-  final String image;
-  final bool is_owner;
-  final int deposit;
-  final String phonenumber;
+  String? id;
+  String? name;
+  String? birthdate;
+  String? email;
+  String? image;
+  bool? is_owner;
+  int? deposit;
+  String? phonenumber;
+  String? owner_name;
+  String? owner_image;
+  int? owner_balance;
+  String? owner_municipality;
+  String? owner_address;
+  String? owner_description;
 
-  const userModel(
+  userModel(
       {this.id,
-      required this.name,
-      required this.birthdate,
-      required this.email,
-      required this.image,
-      required this.is_owner,
-      required this.deposit,
-      required this.phonenumber});
+       this.name,
+       this.birthdate,
+       this.email,
+       this.image,
+       this.is_owner,
+       this.deposit,
+       this.phonenumber,
+       this.owner_name,
+       this.owner_image,
+       this.owner_balance,
+       this.owner_municipality,
+       this.owner_address,
+       this.owner_description
+       });
 
   toJSON() {
     return {
@@ -28,6 +41,12 @@ class userModel {
       "is_owner": is_owner,
       "deposit" : deposit,
       "phone_number": phonenumber,
+       "owner_name": owner_name,
+       "owner_image": owner_image,
+       "owner_balance": owner_balance,
+       "owner_municipality": owner_municipality,
+       "owner_address": owner_address,
+       "owner_description": owner_description
     };
   }
 }
