@@ -93,7 +93,7 @@ class HeadingRecommend extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("Product Recommendation",
+          const Text("Product",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           Align(
             alignment: Alignment.bottomRight,
@@ -136,7 +136,7 @@ class HeadingCategory extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("Popular Categories",
+          const Text("Categories",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           InkWell(
             onTap: () {
