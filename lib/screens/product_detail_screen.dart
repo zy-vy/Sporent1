@@ -14,13 +14,13 @@ import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/review_component.dart';
+import 'package:sporent/controller/auth_controller.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
 import 'package:sporent/screens/owner_detail.dart';
 import 'package:sporent/screens/signin_screen.dart';
 import 'package:sporent/screens/user_review_product.dart';
 
-import '../component/loading.dart';
 import '../controller/test_user.dart';
 import '../model/cart.dart';
 import '../model/cart_detail.dart';
@@ -190,7 +190,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           final difference = daysBetween(
                                                   startDate!, endDate!) +
                                               1;
-                                          log("--- diff $difference");
+
+                                          var user = await AuthController().getCurrentUser();
+                                          if (user == null){
+                                            CoolAlert.show(
+                                                context: context,
+                                                type: CoolAlertType.error,
+                                                text:
+                                                "Sorry, something went wrong...\nPlease Sign in...");
+                                            return;
+                                          }
+                                          else if ( user.toReference().path == widget._product.owner?.path){
+                                            CoolAlert.show(
+                                                context: context,
+                                                type: CoolAlertType.error,
+                                                text:
+                                                "Unable to rent your own product");
+                                            return;
+                                          }
                                           await CartController()
                                               .addToCart(
                                                   widget._product,
