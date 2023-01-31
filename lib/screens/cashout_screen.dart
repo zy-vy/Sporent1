@@ -136,11 +136,33 @@ class _CashoutScreenState extends State<CashoutScreen> {
                           SizedBox(height: _size.height / 23),
                           fieldText("Account Name", "Enter your account name",
                               _size, accountNameController),
-                          fieldText(
-                              "Account Number",
-                              "Enter your account number",
-                              _size,
-                              accountNumberController),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Account Number",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500)),
+                              SizedBox(height: _size.height / 50),
+                              TextFormField(
+                                controller: accountNumberController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: "Enter account number"),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Account number must not be empty";
+                                  }
+                                },
+                              ),
+                              SizedBox(height: _size.height / 23),
+                            ],
+                          ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
