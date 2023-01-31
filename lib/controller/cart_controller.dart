@@ -15,6 +15,11 @@ class CartController {
     UserLocal? user = await AuthController().getCurrentUser();
     //log("=== user ${user?.name}", level: 3);
     var ownerRef = product.owner;
+
+    if (user?.toReference().path == ownerRef?.path){
+      throw Error();
+    }
+
     Cart? cart;
     cart = await getCart(ownerRef!);
     DocumentReference? cartDoc = cart?.toReference();
