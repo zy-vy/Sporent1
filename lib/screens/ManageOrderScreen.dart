@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,7 @@ class ManageOrderScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: StreamBuilder(
-        stream: orderViewModel.getAllOrderByOwner(userViewModel.user!.id!),
+        stream: orderViewModel.getAllOrderByOwner(FirebaseAuth.instance.currentUser!.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
