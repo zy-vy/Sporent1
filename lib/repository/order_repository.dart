@@ -19,7 +19,7 @@ class OrderRepository {
 
   Stream<List<Order>> getAllOrderByOwner (String ownerId){
     var ownerRef = FirebaseFirestore.instance.doc("/user/$ownerId");
-    return firestore.where("owner",isEqualTo: ownerRef).snapshots().map((snapshot) {
+    return firestore.where("owner",isEqualTo: ownerRef).orderBy("issue_date",descending:true).snapshots().map((snapshot) {
       List<Order> orderList = Order.fromSnapshot(snapshot.docs);
       return orderList;
     });

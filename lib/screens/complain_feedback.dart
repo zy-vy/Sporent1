@@ -239,12 +239,14 @@ Future uploadFile(
         .set(complainDetail);
   } else {
     for (int i = 0; i < listImages.length; i++) {
-      Reference reference = FirebaseStorage.instance
-          .ref()
-          .child('complain-images/${refComplainDetail.id + i.toString()}');
-      await reference.putFile(listImages[i]!);
-      String urlImage = await reference.getDownloadURL();
-      _arrImageUrls.add(urlImage);
+      if(listImages[i]!=null){
+        Reference reference = FirebaseStorage.instance
+            .ref()
+            .child('complain-images/${refComplainDetail.id + i.toString()}');
+        await reference.putFile(listImages[i]!);
+        String urlImage = await reference.getDownloadURL();
+        _arrImageUrls.add(urlImage);
+      }
     }
 
     final complainDetail = ComplainDetail(

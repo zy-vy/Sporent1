@@ -17,7 +17,7 @@ class ManageOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final UserViewModel userViewModel = UserViewModel();
+    final UserViewModel userViewModel = UserViewModel();
     final OrderViewModel orderViewModel = OrderViewModel();
     var size = MediaQuery.of(context).size.width;
     var dateFormat = DateFormat('d MMMM ' 'yyyy');
