@@ -68,7 +68,7 @@ class _PasswordConfirmationState extends State<PasswordConfirmation> {
                                 ? FontAwesomeIcons.eye
                                 : FontAwesomeIcons.eyeSlash,
                             size: 20)),
-                    hintText: "Minimum 8 characters",
+                    hintText: "Enter password",
                   ),
                   onEditingComplete: () {
                     setState(() {
@@ -78,9 +78,6 @@ class _PasswordConfirmationState extends State<PasswordConfirmation> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Password must not be empty";
-                    }
-                    if (!(value.length > 8)) {
-                      return "Password is too short, should more than 8 characters";
                     }
                   },
                 ),
