@@ -44,7 +44,7 @@ class ManageComplain extends StatelessWidget {
             padding: EdgeInsets.symmetric(
                 vertical: _size.height / 30, horizontal: _size.width / 18),
             child: StreamBuilder(
-              stream: firestore.collection("complain").snapshots(),
+              stream: firestore.collection("complain").orderBy('date', descending: true).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
