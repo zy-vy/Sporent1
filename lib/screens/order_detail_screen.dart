@@ -426,7 +426,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             order.product!.name!,
                             order.product!.img!,
                             order.total!,
-                            "owner")),
+                            "owner",
+                            order: order)),
                   );
                 },
                 style: ElevatedButton.styleFrom(

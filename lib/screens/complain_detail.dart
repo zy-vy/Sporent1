@@ -8,12 +8,14 @@ import 'package:sporent/model/complain_detail.dart';
 import 'package:sporent/model/transaction.dart';
 import 'package:sporent/screens/complain_feedback.dart';
 import 'package:sporent/screens/finish_complain.dart';
+import 'package:sporent/screens/order_detail_screen.dart';
 import 'package:sporent/screens/transaction_detail.dart';
 
 import '../component/complain_card.dart';
 import '../component/image_full_screen.dart';
 import '../component/transaction_card_detail.dart';
 import '../model/complain.dart';
+import '../model/order.dart';
 import 'manage_complain_admin.dart';
 
 class DetailComplain extends StatefulWidget {
@@ -23,7 +25,8 @@ class DetailComplain extends StatefulWidget {
       this.idUser,
       this.idOwner,
       this.idTransaction,
-      this.idProduct});
+      this.idProduct,
+      this.order});
 
   final String id;
   final String product_name;
@@ -34,6 +37,7 @@ class DetailComplain extends StatefulWidget {
   final String? idOwner;
   final String? idTransaction;
   final String? idProduct;
+  final Order? order;
 
   @override
   State<DetailComplain> createState() => _DetailComplainState();
@@ -57,7 +61,12 @@ class _DetailComplainState extends State<DetailComplain> {
               if (widget.role == "admin") {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const ManageComplain()));
-              } else {
+              } 
+              if(widget.role == "owner"){
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OrderDetailScreen(order: widget.order!)));
+              }
+              if(widget.role == "user"){
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => DetailTransaction(
                         widget.idTransaction!,
@@ -66,8 +75,6 @@ class _DetailComplainState extends State<DetailComplain> {
                         widget.idProduct!,
                         widget.idUser!)));
               }
-              // Navigator.of(context)
-              //     .push(MaterialPageRoute(builder: (context) => const BottomBarScreen(indexPage: "3")));
             },
           ),
           centerTitle: false,
