@@ -242,6 +242,7 @@ Future uploadFile(
 
   final complain = Complain(
           status: "In Progress",
+          date: DateTime.now(),
           transaction:
               FirebaseFirestore.instance.collection("transaction").doc(id))
       .toJSON();
