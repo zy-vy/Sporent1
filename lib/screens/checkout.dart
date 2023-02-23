@@ -538,11 +538,15 @@ class _CheckoutPage extends State<CheckoutPage> {
                 children: const [
                   Text(
                     "BCA",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                   ),
-                  Text("5278763119",
+                  Text(
+                    "Jifi",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                  ),
+                  Text("5271783397",
                       style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 15))
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 14))
                 ],
               )
             ],

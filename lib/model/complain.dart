@@ -32,6 +32,7 @@ class Complain {
 
   toJSON() {
     return {
+      "date": date,
       "status": status,
       "transaction": transaction,
     };
