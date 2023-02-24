@@ -61,7 +61,7 @@ class _CartListTestState extends State<CartListTest> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       // return Text("data1");
-                      return CartDetailTile(cartDetail: listCartDetail![index]!);
+                      return CartDetailTile(cartDetail: listCartDetail![index]);
                     },)
                 ],
               ),

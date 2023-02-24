@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +30,13 @@ class ProductCardRenter extends StatelessWidget {
                   vertical: _size.width / 20, horizontal: _size.height / 50),
               child: Row(
                 children: [
-                  SizedBox(
-                      width: _size.width / 5,
+                  CachedNetworkImage(
                       height: _size.height / 8,
-                      child: FirebaseImage(
-                          filePath: "product-images/${product.img}")),
-                  SizedBox(width: _size.width / 60),
+                      width: _size.width / 5,
+                      imageUrl: product.img!,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator()),
+                  SizedBox(width: _size.width / 40),
                   Expanded(
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +47,8 @@ class ProductCardRenter extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.normal)),
                       SizedBox(height: _size.height / 70),
-                      Text("${currencyFormatter.format(product.rentPrice)}/Day",
+                      Text(
+                          "${currencyFormatter.format(product.rent_price)}/Day",
                           style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -109,13 +112,15 @@ showDeleteButton(BuildContext context, String id) {
     child: ElevatedButton(
       onPressed: () {
         final product = FirebaseFirestore.instance
-            .collection('product-renter')
-            .doc(id).delete();
+            .collection('product')
+            .doc(id)
+            .delete();
 
         final ref = FirebaseStorage.instance
             .ref()
             .child('product-images/')
-            .child(id).delete();
+            .child(id)
+            .delete();
 
         Navigator.of(context).pop();
       },

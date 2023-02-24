@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/authentication/models/user_model.dart';
 import 'package:sporent/repository/user_repository.dart';
@@ -25,11 +29,15 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _passwordConfirmTextController =
+      TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
   TextEditingController _birthDateTextController = TextEditingController();
   TextEditingController _phoneNumberTextController = TextEditingController();
   final userRepo = Get.put(UserRepository());
+  bool hidePassword = true;
+  bool hidePasswordConfirm = true;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +86,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle: TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.person_outline,
                                 color: Colors.white70,
@@ -99,7 +108,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                 : TextInputType.emailAddress,
                             validator: (value) {
                               if (value!.isEmpty ||
-                                  !RegExp(r'^[a-z A-Z]+$').hasMatch(value!)) {
+                                  !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                                 return "Enter Correct Name";
                               } else {
                                 return null;
@@ -118,6 +127,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle: TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
                                 Icons.calendar_month_outlined,
                                 color: Colors.white70,
@@ -174,8 +184,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle: TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
-                                Icons.person_outline,
+                                Icons.email_outlined,
                                 color: Colors.white70,
                               ),
                               labelText: "Enter Email",
@@ -196,7 +207,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             validator: (value) {
                               if (value!.isEmpty ||
                                   !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}')
-                                      .hasMatch(value!)) {
+                                      .hasMatch(value)) {
                                 return "Enter Correct Email";
                               }
                               // ignore: unrelated_type_equality_checks
@@ -219,8 +230,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle: TextStyle(color: HexColor("FF6862")),
                               prefixIcon: const Icon(
-                                Icons.person_outline,
+                                Icons.phone,
                                 color: Colors.white70,
                               ),
                               labelText: "Enter Phone Number",
@@ -241,7 +253,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                             validator: (value) {
                               if (value!.isEmpty ||
                                   !RegExp(r'^(\+62|62|0)8[1-9][0-9]{6,9}$')
-                                      .hasMatch(value!)) {
+                                      .hasMatch(value)) {
                                 return "Enter Correct Phone Number";
                               }
                               // ignore: unrelated_type_equality_checks
@@ -257,13 +269,27 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                           ),
                           TextFormField(
                             controller: _passwordTextController,
-                            obscureText: true,
+                            obscureText: hidePassword,
                             enableSuggestions: !true,
                             autocorrect: !true,
                             cursorColor: Colors.white,
                             style:
                                 TextStyle(color: Colors.white.withOpacity(0.9)),
                             decoration: InputDecoration(
+                              errorStyle: TextStyle(color: HexColor("FF6862")),
+                              suffixIcon: IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  onPressed: () {
+                                    setState(() {
+                                      hidePassword = !hidePassword;
+                                    });
+                                  },
+                                  icon: FaIcon(
+                                      hidePassword == true
+                                          ? FontAwesomeIcons.eye
+                                          : FontAwesomeIcons.eyeSlash,
+                                      size: 20,
+                                      color: Colors.white)),
                               prefixIcon: const Icon(
                                 Icons.lock_outlined,
                                 color: Colors.white70,
@@ -287,10 +313,65 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                               if (value!.isEmpty) {
                                 return "Password Cannot be Empty";
                               }
+                              if (value.length < 6) {
+                                return "Password must more than 6 characters";
+                              }
                               if (value.length > 15) {
                                 return "Password Too Long";
                               } else {
                                 return null;
+                              }
+                            },
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _passwordConfirmTextController,
+                            obscureText: hidePasswordConfirm,
+                            enableSuggestions: !true,
+                            autocorrect: !true,
+                            cursorColor: Colors.white,
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.9)),
+                            decoration: InputDecoration(
+                              errorStyle: TextStyle(color: HexColor("FF6862")),
+                              suffixIcon: IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  onPressed: () {
+                                    setState(() {
+                                      hidePasswordConfirm =
+                                          !hidePasswordConfirm;
+                                    });
+                                  },
+                                  icon: FaIcon(
+                                      hidePasswordConfirm == true
+                                          ? FontAwesomeIcons.eye
+                                          : FontAwesomeIcons.eyeSlash,
+                                      size: 20,
+                                      color: Colors.white)),
+                              prefixIcon: const Icon(
+                                Icons.lock_outlined,
+                                color: Colors.white70,
+                              ),
+                              labelText: "Enter Password Confirm",
+                              labelStyle: TextStyle(
+                                  color: Colors.white.withOpacity(0.9)),
+                              filled: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              fillColor: Colors.white.withOpacity(0.3),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                      width: 0, style: BorderStyle.none)),
+                            ),
+                            keyboardType: true
+                                ? TextInputType.visiblePassword
+                                : TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value != _passwordTextController.text) {
+                                return "Password not match";
                               }
                             },
                           ),
@@ -309,6 +390,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                 //     _phoneNumberTextController.value.text);
                                 String checking = " ";
                                 if (formKey.currentState!.validate()) {
+                                  // FirebaseAuth.instance..settings.appVerificationDisabledForTesting = true;
+                                  
+
                                   FirebaseAuth.instance
                                       .createUserWithEmailAndPassword(
                                           email: _emailTextController.text,
@@ -316,7 +400,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                               _passwordTextController.text)
                                       .then((value) {
                                     final user = userModel(
-                                      id: value.user?.uid,
+                                        id: value.user?.uid,
                                         name: _userNameTextController.text,
                                         birthdate:
                                             _birthDateTextController.text,
@@ -325,8 +409,14 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         is_owner: false,
                                         deposit: 0,
                                         phonenumber:
-                                            _phoneNumberTextController.text
-                                    );
+                                            _phoneNumberTextController.text,
+                                        owner_name: "",
+                                        owner_image: "",
+                                        owner_balance: 0,
+                                        owner_municipality: "",
+                                        owner_address: "",
+                                        owner_description: "");
+
                                     createUser(user);
                                     phoneAuthentication(
                                         _phoneNumberTextController.value.text);
@@ -336,7 +426,9 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                         MaterialPageRoute(
                                             builder: (context) => OTP(
                                                 _phoneNumberTextController
-                                                    .value.text)));
+                                                    .value.text,
+                                                _emailTextController.text,
+                                                _passwordTextController.text)));
                                   }).onError((error, stackTrace) {
                                     if (error.toString().contains("email")) {
                                       _showAlertDialog("Email Already In Use");
@@ -347,8 +439,6 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                           "Password minimum 6 Character");
                                       checking = "error";
                                     }
-                                    print(checking);
-                                    print("Error ${error.toString()}");
                                   });
                                 }
                               },
@@ -368,7 +458,7 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
                                           borderRadius:
                                               BorderRadius.circular(10)))),
                               child: const Text(
-                                'CREATE ACCOUNT',
+                                'Create Account',
                                 style: TextStyle(
                                     color: Colors.black87,
                                     fontWeight: FontWeight.bold,
@@ -426,6 +516,8 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
 
 // '0.0001'.replaceFirst(RegExp(r'0'), ''); // '.0001'
   void phoneAuthentication(String phoneNumber1) async {
+    print("masok ke phone number");
+
     if (phoneNumber1[0] == "0") {
       phoneNumber1 = phoneNumber1.replaceFirst(RegExp(r'0'), '+62');
     }
@@ -437,7 +529,10 @@ class _SignUpScreenFinalState extends State<SignUpScreenFinal> {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber1,
       verificationCompleted: (PhoneAuthCredential credential) async {},
-      verificationFailed: (FirebaseAuthException e) {},
+      verificationFailed: (FirebaseAuthException e) {
+        inspect("ini errornyo");
+        e.printError();
+      },
       codeSent: (String verificationId, int? resendToken) {
         SignUpScreenFinal.verify = verificationId;
         Navigator.pushNamed(context, "otp");

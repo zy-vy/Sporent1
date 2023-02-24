@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +9,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/component/image_full_screen.dart';
 import 'package:sporent/component/item_price.dart';
 import 'package:sporent/component/item_title.dart';
 import 'package:sporent/component/review_component.dart';
+import 'package:sporent/controller/auth_controller.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/model/product.dart';
-// import 'package:easy_image_viewer/easy_image_viewer.dart';
-// import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
-import 'package:sporent/screens/renter_detail.dart';
+import 'package:sporent/screens/owner_detail.dart';
+import 'package:sporent/screens/signin_screen.dart';
 import 'package:sporent/screens/user_review_product.dart';
 
 import '../controller/test_user.dart';
@@ -27,29 +28,38 @@ import '../model/category.dart';
 import '../model/review.dart';
 import '../model/user.dart';
 
-import '../util/provider/cart_notifier.dart';
+class ProductDetailScreen extends StatefulWidget {
 
-class ProductDetailScreen extends StatelessWidget {
-  ProductDetailScreen({Key? key, required Product product})
-      : _product = product,
+  ProductDetailScreen({Key? key, required Product product, bool? isLogin})
+      : _product = product, _isLogin = isLogin,
         super(key: key);
 
   final Product _product;
+  final bool? _isLogin;
 
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final productPath = "product-images/";
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  bool isLoading = true;
+
   @override
   Widget build(BuildContext context) {
+    double total = 0;
     NumberFormat currencyFormatter =
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
-
+    File? temp;
     Size size = MediaQuery.of(context).size;
     DateTime? startDate =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var dateFormat = DateFormat('dd-MM-yyyy');
     DateTime? endDate;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -63,7 +73,7 @@ class ProductDetailScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(
               horizontal: size.width / 15, vertical: size.width / 25),
           child: FloatingActionButton(
-              onPressed: () {
+              onPressed: widget._isLogin == true ? () {
                 showModalBottomSheet(
                     context: context,
                     builder: (context) => StatefulBuilder(builder:
@@ -180,13 +190,44 @@ class ProductDetailScreen extends StatelessWidget {
                                           final difference = daysBetween(
                                                   startDate!, endDate!) +
                                               1;
-                                          log("--- diff $difference");
-                                          await CartController().addToCart(_product, startDate!,
-                                              endDate!, difference).then((value) => 
-                                              CoolAlert.show(context: context, type: CoolAlertType.success,text: "Added to Cart !",autoCloseDuration: const Duration(seconds: 3))
-                                          ).onError((error, stackTrace) => CoolAlert.show(context: context, type: CoolAlertType.error,text: "Sorry, something went wrong..."));
-                                        }
 
+                                          var user = await AuthController().getCurrentUser();
+                                          if (user == null){
+                                            CoolAlert.show(
+                                                context: context,
+                                                type: CoolAlertType.error,
+                                                text:
+                                                "Sorry, something went wrong...\nPlease Sign in...");
+                                            return;
+                                          }
+                                          else if ( user.toReference().path == widget._product.owner?.path){
+                                            CoolAlert.show(
+                                                context: context,
+                                                type: CoolAlertType.error,
+                                                text:
+                                                "Unable to rent your own product");
+                                            return;
+                                          }
+                                          await CartController()
+                                              .addToCart(
+                                                  widget._product,
+                                                  startDate!,
+                                                  endDate!,
+                                                  difference)
+                                              .then((value) => CoolAlert.show(
+                                                  context: context,
+                                                  type: CoolAlertType.success,
+                                                  text: "Added to Cart !",
+                                                  autoCloseDuration:
+                                                      const Duration(
+                                                          seconds: 3)))
+                                              .onError((error, stackTrace) =>
+                                                  CoolAlert.show(
+                                                      context: context,
+                                                      type: CoolAlertType.error,
+                                                      text:
+                                                          "Sorry, something went wrong...\nPlease Sign in..."));
+                                        }
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: HexColor("4164DE")),
@@ -196,6 +237,13 @@ class ProductDetailScreen extends StatelessWidget {
                             ),
                           );
                         }));
+              } : (){
+                CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                onConfirmBtnTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignInScreen())),
+                                text:
+                                    "You must login first");
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -215,17 +263,18 @@ class ProductDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: size.width,
-              height: size.height / 2,
-              child: FirebaseImage(filePath: "$productPath${_product.id}.jpg"),
-            ),
+            CachedNetworkImage(
+                imageUrl: widget._product.img!,
+                width: size.width,
+                height: size.height / 2,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator()),
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: size.width / 20, vertical: size.width / 35),
               child: ItemTitle(
-                  text: _product.name ?? "",
-                  fontSize: 22,
+                  text: widget._product.name ?? "",
+                  fontSize: 24,
                   fontweight: FontWeight.w500,
                   maxLines: 2,
                   textOverflow: TextOverflow.ellipsis),
@@ -233,40 +282,62 @@ class ProductDetailScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: size.width / 20),
               child: ItemPrice(
-                price: _product.rentPrice,
-
-                fontSize: 30,
+                price: widget._product.rent_price,
+                fontSize: 25,
                 trail: true,
                 color: "121212",
               ),
             ),
             Container(
-
               padding: EdgeInsets.symmetric(
                   horizontal: size.width / 20, vertical: size.width / 35),
               child: Row(
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(right: size.width / 20),
-                    child: Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(right: size.width / 80),
-                            child: FaIcon(FontAwesomeIcons.solidStar,
-                                color: HexColor("ED8A19"))),
-                        const Text("4.8 (235)",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15))
-                      ],
-                    ),
-                  ),
+                  StreamBuilder(
+                      stream: firestore
+                          .collection("review")
+                          .where('product',
+                              isEqualTo: firestore
+                                  .collection("product")
+                                  .doc(widget._product.id))
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else {
+                          for (var element in snapshot.data!.docs) {
+                            total += element.get("star");
+                          }
+                          total /= snapshot.data!.docs.length;
+                          if (snapshot.data!.docs.isEmpty) {
+                            total = 0;
+                          }
+                          return Container(
+                            margin: EdgeInsets.only(right: size.width / 20),
+                            child: Row(
+                              children: [
+                                Container(
+                                    margin:
+                                        EdgeInsets.only(right: size.width / 80),
+                                    child: FaIcon(FontAwesomeIcons.solidStar,
+                                        color: HexColor("ED8A19"))),
+                                Text("$total (${snapshot.data!.docs.length})",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15))
+                              ],
+                            ),
+                          );
+                        }
+                      }),
                   StreamBuilder(
                     stream: firestore
                         .collection("transaction")
                         .where("product",
                             isEqualTo: firestore
                                 .collection("product")
-                                .doc(_product.id))
+                                .doc(widget._product.id))
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -275,14 +346,14 @@ class ProductDetailScreen extends StatelessWidget {
                         );
                       }
                       if (snapshot.data!.docs.isEmpty) {
-                        return Text("Telah dipinjam sebanyak 0",
+                        return Text("Rented 0 times",
                             style: TextStyle(
                                 color: HexColor("585858"),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13));
                       } else {
                         var total = snapshot.data!.docs.length;
-                        return Text("Telah dipinjam sebanyak $total",
+                        return Text("Rented $total times",
                             style: TextStyle(
                                 color: HexColor("585858"),
                                 fontWeight: FontWeight.w600,
@@ -297,10 +368,10 @@ class ProductDetailScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                   horizontal: size.width / 20, vertical: size.width / 35),
               child: ItemTitle(
-                  text: _product.description ?? "",
+                  text: widget._product.description ?? "",
                   fontSize: 14,
                   fontweight: FontWeight.normal,
-                  maxLines: 5),
+                  maxLines: 40),
             ),
             StreamBuilder(
               stream: firestore.collection('category').snapshots(),
@@ -311,7 +382,7 @@ class ProductDetailScreen extends StatelessWidget {
                   );
                 } else {
                   DocumentReference categoryReference =
-                      firestore.doc(_product.category.toString());
+                      firestore.doc(widget._product.category.toString());
                   var currentCategory =
                       categoryReference.id.replaceAll(')', '');
                   for (int i = 0; i < snapshot.data!.docs.length; i++) {
@@ -329,7 +400,7 @@ class ProductDetailScreen extends StatelessWidget {
                       children: [
                         Container(
                           margin: EdgeInsets.only(right: size.width / 50),
-                          child: const Text("Kategori:",
+                          child: const Text("Category:",
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.normal)),
                         ),
@@ -346,8 +417,9 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             Divider(color: HexColor("E6E6E6"), thickness: 3),
             StreamBuilder(
-              stream: firestore.collection("user")
-                  .doc(_product.owner.id)
+              stream: firestore
+                  .collection("user")
+                  .doc(widget._product.owner!.id)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -355,9 +427,14 @@ class ProductDetailScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  var id = snapshot.data!.id;
-                  var image = snapshot.data!.get("owner_image");
-                  var name = snapshot.data!.get("owner_name");
+                  String id = "", name = "", image = "";
+                  try {
+                    id = snapshot.data!.id;
+                    image = snapshot.data!.get("owner_image");
+                    name = snapshot.data!.get("owner_name");
+                  } catch (e) {
+                    return const SizedBox();
+                  }
                   var location = snapshot.data!.get("owner_municipality");
                   return Container(
                     padding: EdgeInsets.symmetric(
@@ -365,13 +442,23 @@ class ProductDetailScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          height: size.height / 13,
-                          width: size.width / 6,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(image), fit: BoxFit.fill),
-                              borderRadius: BorderRadius.circular(100)),
+                        GestureDetector(
+                          child: ClipOval(
+                              child: CachedNetworkImage(
+                                  height: size.height / 13,
+                                  width: size.width / 6,
+                                  imageUrl: image,
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator())),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    FullScreen("url", url: image),
+                              ),
+                            );
+                          },
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -395,7 +482,7 @@ class ProductDetailScreen extends StatelessWidget {
                           child: ElevatedButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => RenterDetail(id)));
+                                    builder: (context) => OwnerDetail(id, widget._isLogin!)));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: HexColor("4164DE"),
@@ -430,10 +517,11 @@ class ProductDetailScreen extends StatelessWidget {
                       children: <TextSpan>[
                         const TextSpan(
                           text:
-                              "Untuk peminjaman barang ini, diperlukan deposito sebesar ",
+                              "To rent this item, you must prepare deposit of ",
                         ),
                         TextSpan(
-                            text: currencyFormatter.format(_product.deposit),
+                            text: currencyFormatter
+                                .format(widget._product.deposit_price),
                             style: const TextStyle(fontWeight: FontWeight.bold))
                       ])),
             ),
@@ -441,7 +529,7 @@ class ProductDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     horizontal: size.width / 20, vertical: size.width / 35),
                 child: const Text(
-                  "Deposit hanya bertujuan untuk jaminan peminjaman barang, nantinya deposit akan dikembalikan setelah barang pinjaman dikembalikan",
+                  "The deposit is only intended to guarantee product to be safe, later the deposit will be returned after the product are returned",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                   textAlign: TextAlign.justify,
                 )),
@@ -459,7 +547,8 @@ class ProductDetailScreen extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UserReview(_product.id)));
+                            builder: (context) =>
+                                UserReview(widget._product.id)));
                       },
                       child: Text("See more",
                           style: TextStyle(color: HexColor("8B8E8F")))),
@@ -470,8 +559,9 @@ class ProductDetailScreen extends StatelessWidget {
                 stream: firestore
                     .collection('review')
                     .where('product',
-                        isEqualTo:
-                            firestore.collection("product").doc(_product.id))
+                        isEqualTo: firestore
+                            .collection("product")
+                            .doc(widget._product.id))
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -489,7 +579,8 @@ class ProductDetailScreen extends StatelessWidget {
                         snapshot.data!.docs[0].data());
 
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: size.width / 20),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width / 20),
                       child: ReviewComponent(review, false),
                     );
                   }

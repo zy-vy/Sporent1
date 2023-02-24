@@ -1,16 +1,21 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sporent/reusable_widgets/reusable_widget.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/homepage.dart';
 import 'package:sporent/screens/signup_final.dart';
 import 'package:sporent/screens/signup_screen.dart';
 import 'package:sporent/utils/colors.dart';
 
 class OTP extends StatefulWidget {
-  const OTP(this.phoneNumber1, {super.key});
+  const OTP(this.phoneNumber1, this.email, this.password, {super.key});
   final String phoneNumber1;
+  final String email;
+  final String password;
 
   @override
   State<OTP> createState() => _OTP();
@@ -54,7 +59,7 @@ class _OTP extends State<OTP> {
                   ),
                   const Text(
                     "Enter the Verification Number",
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: Colors.white),
                   ),
                   const SizedBox(
                     height: 60,
@@ -98,31 +103,52 @@ class _OTP extends State<OTP> {
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(90)),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
                       onPressed: () async {
-                        String FinalOTP = _OTPController1.text.toString() +
+                        String finalOTP = _OTPController1.text.toString() +
                             _OTPController2.text.toString() +
                             _OTPController3.text.toString() +
                             _OTPController4.text.toString() +
                             _OTPController5.text.toString() +
                             _OTPController6.text.toString();
-                        print(FinalOTP);
+
                         try {
                           PhoneAuthCredential credential =
                               PhoneAuthProvider.credential(
                                   verificationId: SignUpScreenFinal.verify,
-                                  smsCode: FinalOTP);
-                          await auth.signInWithCredential(credential);
-                          // ignore: use_build_context_synchronously
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                                  smsCode: finalOTP);
+                          await auth
+                              .signInWithCredential(credential)
+                              .then((value) {
+                            FirebaseAuth.instance.signOut();
+                            FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: widget.email,
+                                    password: widget.password)
+                                .then((value) {
+                              CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text: "Success created account...")
+                                  .then((value) => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const BottomBarScreen(
+                                                indexPage: "0",
+                                              ))));
+                            });
+                          });
                         } catch (e) {
-                          print("wrong otp");
+                          CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              text: "Wrong OTP...");
                         }
                       },
                       child: const Text(
-                        'VERIFY',
+                        'Verify',
                         style: TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
@@ -156,17 +182,18 @@ class _OTP extends State<OTP> {
           showCursor: false,
           readOnly: false,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
           keyboardType: TextInputType.number,
           maxLength: 1,
           decoration: InputDecoration(
-            counter: Offstage(),
+            counter: const Offstage(),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: Colors.black12),
+              borderSide: const BorderSide(width: 2, color: Colors.white),
               borderRadius: BorderRadius.circular(12),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: Colors.purple),
+              borderSide: const BorderSide(width: 2, color: Colors.purple),
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -178,14 +205,19 @@ class _OTP extends State<OTP> {
   Row ResendOption(String phoneNumber1) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text("Didn't receive the verification code ? ",
-          style: TextStyle(color: Colors.white70)),
+          style: TextStyle(color: Colors.white70, fontSize: 13)),
       GestureDetector(
         onTap: () {
           phoneAuthentication(phoneNumber1);
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              text: "Success send OTP...");
         },
         child: const Text(
           "Resend New Code",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
         ),
       )
     ]);

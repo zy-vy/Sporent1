@@ -7,46 +7,44 @@ import 'package:flutter/material.dart';
 class Product {
   static String? path = "product";
   static String? imagePath = "product-images";
-  @required
   String? id;
-  @required
   String? img;
-  @required
   String? name;
-  @required
-  int? rentPrice;
-  @required
-  int? deposit;
-  @required
+  int? rent_price;
+  int? deposit_price;
   String? location;
-  @required
-  DocumentReference<Map<String, dynamic>> owner;
-  @required
-  DocumentReference<Map<String, dynamic>> category;
-  @required
-  DocumentReference<Map<String, dynamic>> subcategory;
-  @required
+  DocumentReference<Map<String, dynamic>>? owner;
+  DocumentReference<Map<String, dynamic>>? category;
+  DocumentReference<Map<String, dynamic>>? subcategory;
   String? description;
-
-  DocumentReference? ownerRef;
   File? imageFile;
 
-  Product(this.id, this.img, this.name, this.rentPrice, this.deposit,
-      this.location, this.owner, this.category, this.subcategory, this.description,{this.ownerRef});
+  Product(
+      {this.id,
+      this.img,
+      this.name,
+      this.rent_price,
+      this.deposit_price,
+      this.location,
+      this.owner,
+      this.category,
+      this.subcategory,
+      this.description,
+      this.imageFile});
 
   static Product fromDocument(String id, Map<String, dynamic> json) {
     return Product(
-      id,
-      json['img'],
-      json['name'],
-      json['rent_price'],
-      json['deposit_price'],
-      json['location'],
-      json['owner'],
-      json['category'],
-      json['subcategory'],
-      json['description'],
-      ownerRef: json['owner']
+      id: id,
+      img: json['img'],
+      name: json['name'],
+      rent_price: json['rent_price'],
+      deposit_price: json['deposit_price'],
+      location: json['location'],
+      owner: json['owner'],
+      category: json['category'],
+      subcategory: json['subcategory'],
+      description: json['description'],
+      
     );
   }
 
@@ -56,21 +54,19 @@ class Product {
   }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "img" : img,
+        "img": img,
         "name": name,
-        "rent_price": rentPrice,
-        "deposit_price": deposit,
+        "rent_price": rent_price,
+        "deposit_price": deposit_price,
         "location": location,
-        "owner" : owner,
+        "owner": owner,
         "category": category,
-        "subcategory" : subcategory,
+        "subcategory": subcategory,
         "description": description
       };
 
-  DocumentReference toReference (){
+  DocumentReference toReference() {
     var path = "product/$id";
     return FirebaseFirestore.instance.doc(path);
   }
-
 }

@@ -8,11 +8,12 @@ class ProductGridview extends StatelessWidget {
   const ProductGridview({
     Key? key,
     required this.productCount,
-    required this.listDocs,
+    required this.listDocs, required this.isLogin,
   }) : super(key: key);
 
   final int? productCount;
   final List<QueryDocumentSnapshot<Map<String, dynamic>>>? listDocs;
+  final bool isLogin;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +34,9 @@ class ProductGridview extends StatelessWidget {
 
           Product product = Product.fromDocument(
               listDocs![index].id, listDocs![index].data());
-         
+
           return Center(
-            child: ProductCard(product: product),
+            child: ProductCard(product: product, isLogin: isLogin),
           );
         });
   }

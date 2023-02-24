@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +18,7 @@ import '../model/subcategory.dart';
 class EditProduct extends StatefulWidget {
   const EditProduct(this.productId, {super.key});
 
-    final String productId;
+  final String productId;
 
   @override
   State<EditProduct> createState() => _EditProductState();
@@ -78,10 +80,12 @@ class _EditProductState extends State<EditProduct> {
                 var docProduct = snapshot.data;
                 if (temp == 0) {
                   nameController.text = docProduct!.get('name');
-                  priceController.text = docProduct.get('rent_price').toString();
+                  priceController.text =
+                      docProduct.get('rent_price').toString();
                   descriptionController.text = docProduct.get('description');
                   locationController.text = docProduct.get('location');
-                  depositController.text = docProduct['deposit_price'].toString();
+                  depositController.text =
+                      docProduct['deposit_price'].toString();
                   DocumentReference categoryReference =
                       firestore.doc(docProduct.get('category').toString());
                   var currentCategory =
@@ -122,7 +126,7 @@ class _EditProductState extends State<EditProduct> {
                           photo(_size, image, docProduct),
                           fieldText("Product Name", "Enter product name", _size,
                               nameController),
-                          fieldPrice("Product Price", "Enter product price",
+                          fieldPrice("Rent Price", "Enter rent price",
                               _size, priceController),
                           fieldPrice("Deposit Price", "Enter deposit price",
                               _size, depositController),
@@ -292,20 +296,6 @@ Column fieldPrice(String title, String desc, Size _size,
       ],
     );
 
-SnackBar snackbar(Size _size) => SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.symmetric(
-          vertical: _size.height / 40, horizontal: _size.width / 40),
-      content: SizedBox(
-          height: _size.height / 20,
-          child: Padding(
-            padding: EdgeInsets.only(top: _size.height / 80),
-            child: const Text('Sucess Update Product!',
-                style: TextStyle(fontSize: 20)),
-          )),
-      duration: const Duration(seconds: 5),
-    );
-
 SizedBox confirmButton(
         Size _size,
         String id,
@@ -343,6 +333,8 @@ SizedBox confirmButton(
                   .child(id);
               await ref.putFile(image);
 
+              final String link = await ref.getDownloadURL();
+
               if (productCategory != null && productSubcategory != null) {
                 FirebaseFirestore.instance
                     .collection("product")
@@ -355,7 +347,7 @@ SizedBox confirmButton(
                   "location": location.text,
                   "category": categoryReference,
                   "subcategory": subcategoryReference,
-                  "img": id
+                  "img": link
                 });
               }
               if (productCategory == null && productSubcategory != null) {
@@ -369,7 +361,7 @@ SizedBox confirmButton(
                   "description": description.text,
                   "location": location.text,
                   "subcategory": subcategoryReference,
-                  "img": id
+                  "img": link
                 });
               }
 
@@ -384,7 +376,7 @@ SizedBox confirmButton(
                   "description": description.text,
                   "location": location.text,
                   "category": categoryReference,
-                  "img": id
+                  "img": link
                 });
               }
 
@@ -398,7 +390,7 @@ SizedBox confirmButton(
                   "deposit_price": int.parse(deposit.text),
                   "description": description.text,
                   "location": location.text,
-                  "image": id
+                  "img": link
                 });
               }
             } else {
@@ -458,9 +450,11 @@ SizedBox confirmButton(
               }
             }
 
-            ScaffoldMessenger.of(context).showSnackBar(snackbar(_size));
-
-            Navigator.pop(context);
+            CoolAlert.show(
+                    context: context,
+                    type: CoolAlertType.success,
+                    text: "Success edit product....")
+                .then((value) => Navigator.pop(context));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: HexColor("4164DE"),
@@ -482,8 +476,10 @@ Column photo(Size _size, File? image,
                     side: BorderSide(width: 2, color: HexColor("868686")))),
             child: image != null
                 ? Image.file(image)
-                : FirebaseImage(
-                    filePath: "product-images/${docProduct!.get('id')}")),
+                : CachedNetworkImage(
+                    imageUrl: docProduct!.get("img"),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator())),
         SizedBox(height: _size.height / 23),
       ],
     );

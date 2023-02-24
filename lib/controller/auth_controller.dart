@@ -36,19 +36,21 @@ class AuthController {
 
   Future<void> signIn() async {
     if (firebaseAuth.currentUser == null) {
-      GoogleSignInAccount? account = await GoogleSignIn().signIn();
-
-      if (account != null) {
-        // log("+++ email ${account.email}",level: 1);
-        GoogleSignInAuthentication auth = await account.authentication;
-        OAuthCredential credential = GoogleAuthProvider. credential(
-            accessToken: auth.accessToken, idToken: auth.idToken);
-        await firebaseAuth.signInWithCredential(credential);
-
-
-      }
+      // GoogleSignInAccount? account = await GoogleSignIn().signIn();
+      //
+      // if (account != null) {
+      //   // log("+++ email ${account.email}",level: 1);
+      //   GoogleSignInAuthentication auth = await account.authentication;
+      //   OAuthCredential credential = GoogleAuthProvider. credential(
+      //       accessToken: auth.accessToken, idToken: auth.idToken);
+      //   await firebaseAuth.signInWithCredential(credential);
+      //
+      //
+      // }
     }
-    _userLocal = await userController.createUserFromAuth(firebaseAuth.currentUser!);
+    else {
+      _userLocal = await userController.createUserFromAuth(firebaseAuth.currentUser!);
+    }
   }
 
 //error modal

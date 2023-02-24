@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sporent/component/type_list.dart';
 import 'package:sporent/model/category.dart';
 
-class TypeScreen extends StatelessWidget {
-  const TypeScreen({Key? key, required Category category}) : _category = category, super(key: key);
+class AllProductCategory extends StatelessWidget {
+  const AllProductCategory({Key? key, required Category category}) : _category = category, super(key: key);
 
   final Category _category;
   

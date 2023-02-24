@@ -6,10 +6,12 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/model/category.dart';
 import 'package:sporent/repository/category_repository.dart';
 import 'package:sporent/screens/category_screen.dart';
-import 'package:sporent/screens/type_screen.dart';
+import 'package:sporent/screens/all_product_category.dart';
 
 class PopularCategory extends StatefulWidget {
-  const PopularCategory({Key? key}) : super(key: key);
+  const PopularCategory(this.isLogin, {Key? key}) : super(key: key);
+
+  final bool isLogin;
 
   @override
   State<PopularCategory> createState() => _PopularCategoryState();
@@ -24,7 +26,7 @@ class _PopularCategoryState extends State<PopularCategory> {
     CategoryRepository categoryRepository = CategoryRepository();
     return Container(
       margin: EdgeInsets.symmetric(vertical: _size.height / 100),
-      padding: EdgeInsets.only(left: _size.width/50),
+      padding: EdgeInsets.only(left: _size.width / 50),
       height: _size.height / 8,
       width: double.infinity,
       child: StreamBuilder(
@@ -36,10 +38,13 @@ class _PopularCategoryState extends State<PopularCategory> {
               child: CircularProgressIndicator(),
             );
           }
-          // var docs = snapshot.data!.docs;
-          // List<Category> listCategory = Category.fromSnapshot(docs);
           List<Category> listCategory = snapshot.data!;
-          List<IconData> icon = [FontAwesomeIcons.basketball, FontAwesomeIcons.volleyball, FontAwesomeIcons.personBiking, FontAwesomeIcons.dumbbell];
+          List<IconData> icon = [
+            FontAwesomeIcons.basketball,
+            FontAwesomeIcons.volleyball,
+            FontAwesomeIcons.personBiking,
+            FontAwesomeIcons.dumbbell
+          ];
           return ListView.builder(
             itemCount: 4,
             scrollDirection: Axis.horizontal,
@@ -52,24 +57,27 @@ class _PopularCategoryState extends State<PopularCategory> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CategoryScreen(category),
+                          builder: (context) => CategoryScreen(category, widget.isLogin),
                         ));
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(right: _size.width/10),
+                    padding: EdgeInsets.only(right: _size.width / 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
-                          width: _size.height/15,
-                          height: _size.height/15,
-                          decoration:
-                              BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: HexColor("828282")),
-                                color: Colors.white, ),
-                          child:  Center(child: FaIcon(icon[index], color: HexColor("646262"),))
-                          ),
+                            width: _size.height / 15,
+                            height: _size.height / 15,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: HexColor("828282")),
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                                child: FaIcon(
+                              icon[index],
+                              color: HexColor("646262"),
+                            ))),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Center(child: Text("${category.olahraga}")),

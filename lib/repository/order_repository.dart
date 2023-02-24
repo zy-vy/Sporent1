@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sporent/model/order.dart';
-import 'package:sporent/repository/user_repository.dart';
 
 class OrderRepository {
   final firestore = FirebaseFirestore.instance.collection(Order.path);
@@ -20,7 +19,7 @@ class OrderRepository {
 
   Stream<List<Order>> getAllOrderByOwner (String ownerId){
     var ownerRef = FirebaseFirestore.instance.doc("/user/$ownerId");
-    return firestore.where("owner",isEqualTo: ownerRef).snapshots().map((snapshot) {
+    return firestore.where("owner",isEqualTo: ownerRef).orderBy("issue_date",descending:true).snapshots().map((snapshot) {
       List<Order> orderList = Order.fromSnapshot(snapshot.docs);
       return orderList;
     });

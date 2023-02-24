@@ -7,7 +7,6 @@ import 'package:sporent/component/cart_tile.dart';
 import 'package:sporent/controller/cart_controller.dart';
 import 'package:sporent/viewmodel/user_viewmodel.dart';
 
-import '../component/total_checkout.dart';
 import '../controller/test_user.dart';
 import '../model/cart.dart';
 
@@ -18,6 +17,7 @@ class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserViewModel>(context,listen: false).user!;
+    
     var cartController = CartController();
     return StreamBuilder(
       stream: cartController.getCartList(user),
@@ -31,7 +31,7 @@ class CartList extends StatelessWidget {
           return const Center(child: Text("Your cart is Empty"));
         }
         var listCart = snapshot.data;
-        return Container(
+        return SizedBox(
           height: double.infinity,
           child: ListView.builder(
 

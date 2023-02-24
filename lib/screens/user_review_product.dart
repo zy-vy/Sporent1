@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sporent/component/review_component.dart';
-
-import '../component/item_title.dart';
-import '../component/product_gridview.dart';
 import '../model/review.dart';
 
 class UserReview extends StatelessWidget {
@@ -17,6 +14,7 @@ class UserReview extends StatelessWidget {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    double total = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,48 +40,47 @@ class UserReview extends StatelessWidget {
               }
               if (snapshot.data!.docs.isEmpty) {
                 return const Center(
-                  child: Text("This Product Don't Have Review"),
-                );
+                    child: Text("This Product Don't Have Review"));
               } else {
-                return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      Review review = Review.fromDocument(
-                          snapshot.data!.docs[index].id,
-                          snapshot.data!.docs[index].data());
-
-                      var length = snapshot.data!.docs.length;
-
-                      return Column(
+                for (var element in snapshot.data!.docs) {
+                  total += element.get("star");
+                }
+                total /= snapshot.data!.docs.length;
+                return Column(
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                  margin:
-                                      EdgeInsets.only(right: _size.width / 80),
-                                  child: FaIcon(FontAwesomeIcons.solidStar,
-                                      size: 40, color: HexColor("ED8A19"))),
-                              const Text("4.8",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25)),
-                              SizedBox(width: _size.width / 50),
-                              Text("$length Rating ",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: HexColor("8D8888")))
-                            ],
-                          ),
-                          Padding(
+                          Container(
+                              margin: EdgeInsets.only(right: _size.width / 80),
+                              child: FaIcon(FontAwesomeIcons.solidStar,
+                                  size: 40, color: HexColor("ED8A19"))),
+                          Text(total.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25)),
+                          SizedBox(width: _size.width / 50),
+                          Text("${snapshot.data!.docs.length} Rating ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15,
+                                  color: HexColor("8D8888"))),
+                        ]),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          Review review = Review.fromDocument(
+                              snapshot.data!.docs[index].id,
+                              snapshot.data!.docs[index].data());
+                          return Padding(
                             padding: EdgeInsets.only(top: _size.height / 50),
                             child: ReviewComponent(review, true),
-                          )
-                        ],
-                      );
-                    });
+                          );
+                        })
+                  ],
+                );
               }
             },
           )),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,8 +43,31 @@ class _AddProductState extends State<AddProduct> {
   bool haveData = false;
   bool haveImage = false;
   List<File?> listImages = [];
+  List<DropdownMenuItem> locationItem = const [
+     DropdownMenuItem(
+      value: "Central Jakarta",
+      child: Text("Central Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "East Jakarta",
+      child: Text("East Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "North Jakarta",
+      child: Text("North Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "South Jakarta",
+      child: Text("South Jakarta"),
+    ),
+    DropdownMenuItem(
+      value: "West Jakarta",
+      child: Text("West Jakarta"),
+    ),
+  ];
   DocumentReference<Map<String, dynamic>>? referenceCategory;
   final _formKey = GlobalKey<FormState>();
+  String? productLocation;
 
   Future openGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -93,12 +117,9 @@ class _AddProductState extends State<AddProduct> {
                           decoration: ShapeDecoration(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  side: haveImage == true
-                                      ? const BorderSide(
-                                          width: 2, color: Colors.red)
-                                      : BorderSide(
+                                  side: BorderSide(
                                           width: 2,
-                                          color: HexColor("868686")))),
+                                          color: haveImage == true ? HexColor("C2413C") : HexColor("868686")))),
                           child: TextButton(
                             onPressed: () async {
                               await openGallery();
@@ -121,7 +142,7 @@ class _AddProductState extends State<AddProduct> {
                                     width: 25,
                                     decoration: BoxDecoration(
                                         color: haveImage == true
-                                            ? Colors.red
+                                            ? HexColor("C2413C")
                                             : Colors.blueAccent,
                                         shape: BoxShape.circle),
                                     child: IconButton(
@@ -141,10 +162,10 @@ class _AddProductState extends State<AddProduct> {
                           ? Column(
                               children: [
                                 SizedBox(height: _size.height / 80),
-                                const Text(
+                                Text(
                                   "Image must not be empty",
                                   style: TextStyle(
-                                      color: Colors.red, fontSize: 13),
+                                      color: HexColor("C2413C"), fontSize: 13),
                                 ),
                               ],
                             )
@@ -152,7 +173,7 @@ class _AddProductState extends State<AddProduct> {
                       SizedBox(height: _size.height / 23),
                       fieldText("Product Name", "Enter product name", _size,
                           nameController),
-                      fieldPrice("Product Price", "Enter product price", _size,
+                      fieldPrice("Rent Price", "Enter rent price", _size,
                           priceController),
                       fieldPrice("Deposit Price", "Enter deposit price", _size,
                           depositController),
@@ -259,8 +280,25 @@ class _AddProductState extends State<AddProduct> {
                         },
                       ),
                       SizedBox(height: _size.height / 23),
-                      fieldText("Location", "Enter product location", _size,
-                          locationController),
+                      const Text("Product Location",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500)),
+                      SizedBox(height: _size.height / 50),
+                      DropdownButtonFormField(
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Select location'),
+                          items: locationItem,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Location must not be empty";
+                            }
+                          },
+                          onChanged: (value) => setState(() {
+                                productLocation = value!;
+                                haveData = true;
+                              })),
+                      SizedBox(height: _size.height / 23),
                       fieldText(
                           "Product Description",
                           "Enter product description",
@@ -285,16 +323,19 @@ class _AddProductState extends State<AddProduct> {
                                     name: nameController.text,
                                     price: price,
                                     deposit: deposit,
-                                    location: locationController.text,
+                                    location: productLocation,
                                     owner: widget.id,
                                     category: productCategory,
                                     subcategory: productSubcategory,
                                     description: descriptionController.text);
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    snackbar(_size, "Sucess Add Product!"));
+                                CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.success,
+                                      text:
+                                          "Success add product...")
+                                .then((value) => Navigator.pop(context));
 
-                                Navigator.pop(context);
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -336,20 +377,21 @@ Future addProduct(
   final ref = FirebaseStorage.instance
       .ref()
       .child('product-images/')
-      .child(docProduct.id);
+      .child("${docProduct.id}.jpg");
   await ref.putFile(image!);
 
+  final String link = await ref.getDownloadURL();
+
   var productRenter = Product(
-          docProduct.id,
-          docProduct.id,
-          name,
-          price,
-          deposit,
-          location,
-          ownerReference,
-          categoryReference,
-          subcategoryReference,
-          description)
+          img: link,
+          name: name,
+          rent_price: price,
+          deposit_price: deposit,
+          location: location,
+          owner: ownerReference,
+          category: categoryReference,
+          subcategory: subcategoryReference,
+          description: description)
       .toJson();
 
   await docProduct.set(productRenter);
@@ -377,6 +419,11 @@ Column fieldText(String title, String desc, Size _size,
             }
             if (value.length < 5) {
               return "$title must more than 5 characters";
+            }
+            if (title == "Owner Name") {
+              if (value.length > 10) {
+                return "$title must less than 10 charactes";
+              }
             }
           },
         ),
@@ -409,17 +456,4 @@ Column fieldPrice(String title, String desc, Size _size,
         ),
         SizedBox(height: _size.height / 23),
       ],
-    );
-
-SnackBar snackbar(Size _size, String text) => SnackBar(
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.symmetric(
-          vertical: _size.height / 40, horizontal: _size.width / 40),
-      content: SizedBox(
-          height: _size.height / 20,
-          child: Padding(
-            padding: EdgeInsets.only(top: _size.height / 80),
-            child: Text(text, style: const TextStyle(fontSize: 20)),
-          )),
-      duration: const Duration(seconds: 5),
     );

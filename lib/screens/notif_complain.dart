@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sporent/reusable_widgets/reusable_widget.dart';
-import 'package:sporent/screens/signup_final.dart';
+import 'package:sporent/screens/bottom_bar.dart';
 import 'package:sporent/screens/transaction_screen.dart';
 
 import '../utils/colors.dart';
@@ -37,7 +36,7 @@ class _NotifComplain extends State<NotifComplain> {
             vertical: _size.height / 10, horizontal: _size.width / 13),
         child: Column(
           children: [
-            const Image(image: AssetImage("assets/images/fornotif.png")),
+            CachedNetworkImage(imageUrl: "https://firebasestorage.googleapis.com/v0/b/sporent-80b28.appspot.com/o/notification%2FNotificationSuccess.png?alt=media&token=cb0223bf-0884-45a6-9f2e-39c72ab5cd42", placeholder: (context, url) => const CircularProgressIndicator(),),
             SizedBox(height: _size.height / 100),
             RichText(
                 textAlign: TextAlign.center,
@@ -73,7 +72,7 @@ class _NotifComplain extends State<NotifComplain> {
                       backgroundColor: hexStringToColor("4164DE")),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const TransactionScreen()));
+                        builder: (context) => const BottomBarScreen(indexPage: "1",)));
                   },
                   child: const Text("Back to Home",
                       style: TextStyle(

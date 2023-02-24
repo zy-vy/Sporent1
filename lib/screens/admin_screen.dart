@@ -5,9 +5,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:sporent/component/bar-profile.dart';
 import 'package:sporent/component/no_current_user.dart';
-import 'package:sporent/screens/change-password.dart';
+import 'package:sporent/screens/change_password.dart';
 import 'package:sporent/screens/deposit-information.dart';
 import 'package:sporent/screens/manage_balance_admin.dart';
+import 'package:sporent/screens/manage_payment_admin.dart';
+import 'package:sporent/screens/manage_complain_admin.dart';
 import 'package:sporent/screens/profile.dart';
 import 'package:sporent/screens/signin_screen.dart';
 
@@ -40,7 +42,12 @@ class AdminProfile extends StatelessWidget {
                       "Manage Complain",
                       "Show all complain product",
                       FontAwesomeIcons.circleQuestion,
-                      EditPassword()),
+                      ManageComplain()),
+                  const BarProfile(
+                      "Manage Payment",
+                      "Show all waiting transaction",
+                      FontAwesomeIcons.receipt,
+                      ManagePaymentAdmin()),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: _size.height / 50),
                     child: TextButton(

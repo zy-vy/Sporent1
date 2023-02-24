@@ -1,11 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sporent/component/firebase_image.dart';
 import 'package:sporent/utils/colors.dart';
 
 class DetailTransactionCard extends StatelessWidget {
-  const DetailTransactionCard(this.fontTitle, this.fontProduct,
-      this.fontDuration, this.fontTotal, this.text, this.image, this.name, this.total,
+  const DetailTransactionCard(
+      this.fontTitle,
+      this.fontProduct,
+      this.fontDuration,
+      this.fontTotal,
+      this.text,
+      this.image,
+      this.name,
+      this.total,
       {super.key});
 
   final double? fontTitle;
@@ -20,7 +28,7 @@ class DetailTransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-     NumberFormat currencyFormatter =
+    NumberFormat currencyFormatter =
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
     return Column(
@@ -41,14 +49,15 @@ class DetailTransactionCard extends StatelessWidget {
                   SizedBox(height: _size.height / 50),
                   Row(
                     children: [
-                      SizedBox(
+                      CachedNetworkImage(
+                          imageUrl: image,
                           width: _size.width / 3,
                           height: _size.height / 5.8,
-                          child:
-                              FirebaseImage(filePath: "product-images/$image")),
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator()),
                       SizedBox(width: _size.width / 15),
-                      Expanded(child: 
-                      Column(
+                      Expanded(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -68,7 +77,7 @@ class DetailTransactionCard extends StatelessWidget {
                           ),
                           SizedBox(height: _size.height / 95),
                           Text(
-                           currencyFormatter.format(total),
+                            currencyFormatter.format(total),
                             style: TextStyle(
                                 fontSize: fontTotal,
                                 fontWeight: FontWeight.bold,
@@ -79,7 +88,6 @@ class DetailTransactionCard extends StatelessWidget {
                     ],
                   ),
                 ])),
-        Divider(color: hexStringToColor("E0E0E0"), thickness: 2),
       ],
     );
   }

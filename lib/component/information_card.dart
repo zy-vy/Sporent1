@@ -31,6 +31,7 @@ class _InformationCardState extends State<InformationCard> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     bool showLine;
+    String image = "";
     Deposit deposit = Deposit();
     Balance balance = Balance();
     Request request = Request();
@@ -47,14 +48,19 @@ class _InformationCardState extends State<InformationCard> {
         stream: widget.type == "request"
             ? firestore
                 .collection(widget.type)
+                .orderBy('date', descending: true)
                 .where(name_field,
                     isEqualTo: firestore.collection("user").doc(widget.id))
                 .where("type", isEqualTo: widget.field)
                 .snapshots()
             : widget.type == "admin"
-                ? firestore.collection("request").snapshots()
+                ? firestore
+                    .collection("request")
+                    .orderBy('date', descending: true)
+                    .snapshots()
                 : firestore
                     .collection(widget.type)
+                    .orderBy('date', descending: true)
                     .where(name_field,
                         isEqualTo: firestore.collection("user").doc(widget.id))
                     .snapshots(),
@@ -84,7 +90,10 @@ class _InformationCardState extends State<InformationCard> {
                 } else {
                   request = Request.fromDocument(snapshot.data!.docs[index].id,
                       snapshot.data!.docs[index].data());
-                  print(request.id);
+                  if (snapshot.data!.docs[index].data().containsKey("image") ==
+                      true) {
+                    image = snapshot.data!.docs[index].get("image");
+                  }
                 }
 
                 if (index == 0) {
@@ -99,8 +108,15 @@ class _InformationCardState extends State<InformationCard> {
                     : widget.type == "balance"
                         ? DetailInformationCard(showLine, "balance",
                             balance: balance)
-                        : DetailInformationCard(showLine, "request",
-                            request: request);
+                        : TextButton(
+                            style: TextButton.styleFrom(foregroundColor: Colors.black),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => DetailInformation(
+                                      request, "user", image)));
+                            },
+                            child: DetailInformationCard(showLine, "request",
+                                request: request));
               },
             );
           }
