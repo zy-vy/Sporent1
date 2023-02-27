@@ -1,4 +1,4 @@
-# sporent
+# Sporent
 
 Tugas Akhir
 
