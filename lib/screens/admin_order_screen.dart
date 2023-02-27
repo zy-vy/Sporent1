@@ -149,22 +149,15 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
             Row(
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Expanded(child: Text("Courier")),
-                Expanded(child: Text("${order.deliveryMethod}"))
+                const Expanded(child: Text("Name")),
+                Expanded(child: Text("${order.user!.name}"))
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Expanded(child: Text("Recipient")),
-                Expanded(child: Text(order.user?.name ?? ""))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Expanded(child: Text("Address")),
-                Expanded(child: Text(order.deliveryLocation ?? ""))
+                const Expanded(child: Text("Date of Birth")),
+                Expanded(child: Text("${order.user!.birthdate}"))
               ],
             ),
           ],
