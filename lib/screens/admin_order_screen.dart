@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -139,28 +140,35 @@ class _AdminDetailScreenState extends State<AdminOrderScreen> {
       Container(
         margin:
         EdgeInsets.symmetric(horizontal: size / 15, vertical: size / 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            heading("Delivery information"),
-            SizedBox(
-              height: size / 20,
-            ),
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Expanded(child: Text("Name")),
-                Expanded(child: Text("${order.user!.name}"))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Expanded(child: Text("Date of Birth")),
-                Expanded(child: Text("${order.user!.birthdate}"))
-              ],
-            ),
-          ],
+        child:                   StreamBuilder(stream: FirebaseFirestore.instance.doc(order.userRef!.path).snapshots(),builder: (context, snapshot) =>
+
+            Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              heading("Delivery information"),
+              SizedBox(
+                height: size / 20,
+              ),
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Expanded(child: Text("Name")),
+                  Expanded(child:
+                        Text(snapshot.hasData? snapshot.data?.get("name"): "")
+
+                    )
+
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Expanded(child: Text("Date of Birth")),
+                  Expanded(child: Text(snapshot.hasData? snapshot.data?.get("birthdate"): ""))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       Divider(color: HexColor("E0E0E0"), thickness: 2,indent: size/15, endIndent: 15,),
